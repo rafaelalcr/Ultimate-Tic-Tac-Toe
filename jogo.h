@@ -8,7 +8,7 @@ typedef struct jogo dados;
 struct jogo {
     int resminitab[N*N];    // resultados dos mini tabuleiros
     int restabfinal;        // resultado do tabuleiro final
-    //int n_jogos;
+    int contador_jogos;
     //int ganhou;
 };
 

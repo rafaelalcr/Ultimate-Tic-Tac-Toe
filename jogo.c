@@ -3,7 +3,7 @@
 void jogar(dados *r) {
     char **mat = NULL;
     int njogador, n_jogadas, n_jogos = 0, ganhou;
-
+    r->contador_jogos = 0;
     do {
         ganhou = 0;
         n_jogadas = 0;
@@ -28,6 +28,7 @@ void jogar(dados *r) {
         libertaMat(mat, N);
 
         n_jogos++;
+        r->contador_jogos++;
 
     } while (n_jogos < N * N);
 }
@@ -112,10 +113,15 @@ void escreve_resultadoFinal(int ganhou) {
 
 void resultadosJogos(dados r, int njogos) {
     printf("------- RESULTADO DOS JOGOS --------\n\n");
-    for(int i=0; i < njogos; i++) {
-        printf("Jogador %d ganhou o jogo %d\n", r.resminitab[i], i+1);
+    if(r.contador_jogos == 0) {
+        printf("Sem resultados.\n\n");
     }
-    tabuleiroFinal(&r);
+    else {
+        for(int i=0; i < njogos; i++) {
+            printf("Jogador %d ganhou o jogo %d\n", r.resminitab[i], i+1);
+        }
+        tabuleiroFinal(&r);
+    }
 }
 
 void tabuleiroFinal(dados *r) {
