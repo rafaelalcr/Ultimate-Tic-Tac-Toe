@@ -2,7 +2,7 @@
 
 void jogar(dados *r) {
     char **mat = NULL;
-    int njogador = 1, n_jogadas = 0, n_jogos = 0, ganhou = 0;
+    int njogador, n_jogadas, n_jogos = 0, ganhou;
 
     do {
         ganhou = 0;
@@ -125,13 +125,13 @@ void tabuleiroFinal(dados *r) {
     mat = criaMat(N, N);
     for(int i=0; i < N*N; i++) {
         if(r->resminitab[i] == 1) {                 // Se o jogador 1 ganhou
-            setPos(mat, (i-1)/N, (i-1)%N, 'X');
+            setPos(mat, i/N, i%N, 'X');
         }
         else if(r->resminitab[i] == 2) {            // Se o jogador 2 ganhou
-            setPos(mat, (i-1)/N, (i-1)%N, 'O');
+            setPos(mat, i/N, i%N, 'O');
         }
         else if(r->resminitab[i] == 0) {            // Se empatou
-            setPos(mat, (i-1)/N, (i-1)%N, '#');
+            setPos(mat, i/N, i%N, '#');
         }
     }
 
@@ -139,7 +139,7 @@ void tabuleiroFinal(dados *r) {
         r->restabfinal = 1;
     else if(verifica(mat, N) == -1)
         r->restabfinal = 2;
-    else
+    else if(verifica(mat, N) == 0)
         r->restabfinal = 0;
 
     mostraMat(mat, N, N);
