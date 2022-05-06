@@ -1,6 +1,6 @@
 #include "jogo.h"
 
-void jogar(dados *r) {
+void jogarJogador(dados *r) {
     char **mat = NULL;
     int njogador, n_jogadas, n_jogos = 0, ganhou;
     r->contador_jogos = 0;
@@ -37,7 +37,7 @@ void jogar(dados *r) {
 
 void escolhe_jogada(char **p, int n, int jogador) {
     int pos;
-    printf("\nVez do jogador %d\n", jogador);
+    printf("\n-> Vez do jogador %d\n", jogador);
     do{
         printf("Posicao: ");
         scanf("%d", &pos);

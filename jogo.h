@@ -9,10 +9,9 @@ struct jogo {
     int resminitab[N*N];    // resultados dos mini tabuleiros
     int restabfinal;        // resultado do tabuleiro final
     int contador_jogos;
-    //int ganhou;
 };
 
-void jogar(dados *r);
+void jogarJogador(dados *r);
 void escolhe_jogada(char **p, int n, int jogador);
 int verifica(char **p, int n);
 void escreve_resultado(int ganhou);

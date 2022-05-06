@@ -9,8 +9,10 @@ void menu() {
         printf("------------------------------------\n\n");
         printf("1 - Jogador 1 vs Jogador 2\n");
         printf("2 - Jogador vs Computador\n");
-        printf("3 - Resultados\n");
-        printf("4 - Terminar Jogo\n");
+        printf("    Resultados: \n");
+        printf("        3 - Jogador 1 vs Jogador 2\n");
+        printf("        4 - Jogador vs Computador\n");
+        printf("5 - Terminar Jogo\n");
         printf("------------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opcao);
@@ -18,15 +20,19 @@ void menu() {
 
         switch (opcao) {
             case 1:
-                jogar(&r);
+                jogarJogador(&r);
                 break;
             case 2:
+                jogarComputador(&r);
                 break;
             case 3:
                 resultadosJogos(r, 9);
                 break;
             case 4:
+                resultadosJogosComputador(r, 9);
+                break;
+            case 5:
                 break;
         }
-    } while (opcao != 4);
+    } while (opcao != 5);
 }
