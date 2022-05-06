@@ -2,10 +2,10 @@
 
 void jogar(dados *r) {
     char **mat = NULL;
-    int njogador = 1, n_jogadas = 0, n_jogos = 0;
+    int njogador = 1, n_jogadas = 0, n_jogos = 0, ganhou = 0;
 
     do {
-        r->ganhou = 0;
+        ganhou = 0;
         n_jogadas = 0;
         njogador = 1;
 
@@ -16,15 +16,15 @@ void jogar(dados *r) {
             escolhe_jogada(mat, N, njogador);
             n_jogadas++;
             if(verifica(mat, N) == 1 || verifica(mat, N) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
-                r->ganhou = njogador;
+                ganhou = njogador;
                 r->resminitab[n_jogos] = njogador;
             }
             else
                 njogador = njogador % 2 + 1;
-        }while(r->ganhou == 0 && n_jogadas < N*N);
+        }while(ganhou == 0 && n_jogadas < N*N);
 
         mostraMat(mat, N, N);
-        escreve_resultado(r->ganhou);
+        escreve_resultado(ganhou);
         libertaMat(mat, N);
 
         n_jogos++;
@@ -102,10 +102,18 @@ void escreve_resultado(int ganhou) {
         printf("\nGanhou o jogador %d.\n\n", ganhou);
 }
 
+void escreve_resultadoFinal(int ganhou) {
+    printf("\n---------- RESULTADO FINAL ---------\n");
+    if(ganhou == 0)
+        printf("\nEmpate.\n\n");
+    else
+        printf("\nGanhou o jogador %d.\n\n", ganhou);
+}
+
 void resultadosJogos(dados r, int njogos) {
-    printf("-------- RESULTADO DOS JOGOS ---------\n\n");
+    printf("------- RESULTADO DOS JOGOS --------\n\n");
     for(int i=0; i < njogos; i++) {
-        printf("Jogador %d ganhou o jogo %d\n", r.resminitab[i], i);
+        printf("Jogador %d ganhou o jogo %d\n", r.resminitab[i], i+1);
     }
     tabuleiroFinal(&r);
 }
@@ -113,7 +121,6 @@ void resultadosJogos(dados r, int njogos) {
 void tabuleiroFinal(dados *r) {
     char **mat = NULL;
     printf("\n--------- TABULEIRO FINAL ----------\n\n");
-    preeche(r);
     r->restabfinal = 0;
     mat = criaMat(N, N);
     for(int i=0; i < N*N; i++) {
@@ -124,23 +131,20 @@ void tabuleiroFinal(dados *r) {
             setPos(mat, (i-1)/N, (i-1)%N, 'O');
         }
         else if(r->resminitab[i] == 0) {            // Se empatou
-            setPos(mat, (i-1)/N, (i-1)%N, '?');
+            setPos(mat, (i-1)/N, (i-1)%N, '#');
         }
     }
+
     if(verifica(mat, N) == 1)
         r->restabfinal = 1;
     else if(verifica(mat, N) == -1)
         r->restabfinal = 2;
     else
         r->restabfinal = 0;
+
     mostraMat(mat, N, N);
-    escreve_resultado(r->restabfinal);
+    escreve_resultadoFinal(r->restabfinal);
     libertaMat(mat, N);
     putchar('\n');
 }
 
-void preeche(dados *r) {
-    for(int i=0; i<N*N; i++) {
-        r->resminitab[i] = 1;
-    }
-}
