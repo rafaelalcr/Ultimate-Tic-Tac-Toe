@@ -4,7 +4,9 @@ void menu() {
     dados r;
     int opcao;
     do {
-        printf("--------------- MENU ---------------\n\n");
+        printf("------------------------------------\n");
+        printf("|               MENU               |\n");
+        printf("------------------------------------\n\n");
         printf("1 - Jogador 1 vs Jogador 2\n");
         printf("2 - Jogador vs Computador\n");
         printf("3 - Resultados\n");

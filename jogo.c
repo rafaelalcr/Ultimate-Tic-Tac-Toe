@@ -9,7 +9,9 @@ void jogar(dados *r) {
         n_jogadas = 0;
         njogador = 1;
 
-        printf("--------- INICIO DO JOGO %d --------\n\n", n_jogos + 1);
+        printf("------------------------------------\n");
+        printf("|         INICIO DO JOGO %d         |\n", n_jogos + 1);
+        printf("------------------------------------\n\n");
         mat = criaMat(N, N);
         do {
             mostraMat(mat, N, N);
@@ -96,7 +98,9 @@ int verifica(char **p, int n) {
 }
 
 void escreve_resultado(int ganhou) {
-    printf("\n------------- RESULTADO ------------\n");
+    printf("------------------------------------\n");
+    printf("|             RESULTADO            |\n");
+    printf("------------------------------------\n\n");
     if(ganhou == 0)
         printf("\nEmpate.\n\n");
     else
@@ -104,7 +108,9 @@ void escreve_resultado(int ganhou) {
 }
 
 void escreve_resultadoFinal(int ganhou) {
-    printf("\n---------- RESULTADO FINAL ---------\n");
+    printf("------------------------------------\n");
+    printf("|          RESULTADO FINAL         |\n");
+    printf("------------------------------------\n\n");
     if(ganhou == 0)
         printf("\nEmpate.\n\n");
     else
@@ -112,7 +118,9 @@ void escreve_resultadoFinal(int ganhou) {
 }
 
 void resultadosJogos(dados r, int njogos) {
-    printf("------- RESULTADO DOS JOGOS --------\n\n");
+    printf("------------------------------------\n");
+    printf("|        RESULTADO DOS JOGOS       |\n");
+    printf("------------------------------------\n\n");
     if(r.contador_jogos == 0) {
         printf("Sem resultados.\n\n");
     }
@@ -126,7 +134,9 @@ void resultadosJogos(dados r, int njogos) {
 
 void tabuleiroFinal(dados *r) {
     char **mat = NULL;
-    printf("\n--------- TABULEIRO FINAL ----------\n\n");
+    printf("------------------------------------\n");
+    printf("|          TABULEIRO FINAL         |\n");
+    printf("------------------------------------\n\n");
     r->restabfinal = 0;
     mat = criaMat(N, N);
     for(int i=0; i < N*N; i++) {
