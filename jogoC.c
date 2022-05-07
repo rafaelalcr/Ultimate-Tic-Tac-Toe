@@ -96,6 +96,8 @@ void resultadosJogosComputador(dadosC r, int njogos) {
                 printf("Jogador ganhou o jogo %d\n", i+1);
             else if(r.resminitab[i] == 2)
                 printf("Computador ganhou o jogo %d\n", i+1);
+            else if(r.resminitab[i] == 0)
+                printf("Empate no jogo %d\n", i+1);
         }
         tabuleiroFinalComputador(&r);
     }
