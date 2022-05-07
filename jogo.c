@@ -126,7 +126,12 @@ void resultadosJogos(dados r, int njogos) {
     }
     else {
         for(int i=0; i < njogos; i++) {
-            printf("Jogador %d ganhou o jogo %d\n", r.resminitab[i], i+1);
+            if(r.resminitab[i] == 0) {
+                printf("Empate no jogo %d\n", i+1);
+            }
+            else {
+                printf("Jogador %d ganhou o jogo %d\n", r.resminitab[i], i+1);
+            }
         }
         tabuleiroFinal(&r);
     }
