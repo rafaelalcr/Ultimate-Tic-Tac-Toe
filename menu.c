@@ -1,7 +1,8 @@
 #include "menu.h"
 
 void menu() {
-    dados r;
+    jogo r;
+    jogoC s;
     int opcao;
     do {
         printf("------------------------------------\n");
@@ -20,16 +21,16 @@ void menu() {
 
         switch (opcao) {
             case 1:
-                jogarJogador(&r);
+                jogar_jogador(&r);
                 break;
             case 2:
-                jogarComputador(&r);
+                jogarComputador(&s);
                 break;
             case 3:
-                resultadosJogos(r, 9);
+                resultados_jogos(r, 9);
                 break;
             case 4:
-                resultadosJogosComputador(r, 9);
+                resultadosJogosComputador(s, 9);
                 break;
             case 5:
                 break;

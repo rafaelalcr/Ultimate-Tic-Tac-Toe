@@ -5,6 +5,5 @@
 #include "jogoC.h"
 
 void menu();
-void submenu();
 
 #endif //TP2022_MENU_H

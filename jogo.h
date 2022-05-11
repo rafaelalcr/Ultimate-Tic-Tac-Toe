@@ -2,21 +2,30 @@
 #define TP2022_JOGO_H
 
 #include "matdin.h"
+#include "utils.h"
 #define N 3
 
-typedef struct jogo dados;
-struct jogo {
+typedef struct jogos jogo, *pjogo;
+struct jogos {
     int resminitab[N*N];    // resultados dos mini tabuleiros
     int restabfinal;        // resultado do tabuleiro final
-    int contador_jogos;
+    int contadorjogos;
+    //int njogador;
+    //int contadorjogadas;
+    //int vencedor;
+    int posicaojogada;
+    pjogo prox;
 };
 
-void jogarJogador(dados *r);
-void escolhe_jogada(char **p, int n, int jogador);
+void jogar_jogador(jogo *r);
+void tabuleiro_inicial(int posicao);
+void escolhe_jogada(jogo *r, char **p, int n, int n_jogador);
+void escolhe_tabuleiro(int posicao);
 int verifica(char **p, int n);
 void escreve_resultado(int ganhou);
 void escreve_resultadoFinal(int ganhou);
-void resultadosJogos(dados r, int n_jogos);
-void tabuleiroFinal(dados *r);
+void resultados_jogos(jogo r, int n_jogos);
+void tabuleiro_final(jogo *r);
+void criaFicheiroTXT();
 
 #endif //TP2022_JOGO_H
