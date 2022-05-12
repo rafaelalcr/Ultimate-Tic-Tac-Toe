@@ -22,17 +22,18 @@ void menu() {
         switch (opcao) {
             case 1:
                 jogar_jogador(&r);
+                //jogar(&r);
                 break;
             case 2:
                 jogarComputador(&s);
                 break;
             case 3:
-                resultados_jogos(r, 9);
+                resultados_jogos(r);
                 break;
             case 4:
                 resultadosJogosComputador(s, 9);
                 break;
-            case 5:
+            default:
                 break;
         }
     } while (opcao != 5);
