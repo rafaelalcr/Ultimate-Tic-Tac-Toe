@@ -10,7 +10,7 @@ void jogar(jogo *r) {
         r->jogador = 1;
 
         mat = criaMat(N, N);
-        escolhe_tabuleiro(r->contadorjogos+1);
+        printf("\n\nJogar para o tabuleiro %d.\n\n", r->contadorjogos+1);
         do {
             mostraMat(mat, N, N);
             escolhe_jogada(r, mat, N, r->jogador);
@@ -31,14 +31,55 @@ void jogar(jogo *r) {
     } while (r->contadorjogos < N * N);
 }
 
+void jogar2(jogo *r) {
+    char **mat = NULL;
+
+    r->contadorjogos = 0;
+
+    printf("------------------------------------\n");
+    printf("|          INICIO DO JOGO          |\n");
+    printf("------------------------------------\n");
+
+    initRandom();
+    r->tabuleiro = intUniformRnd(1, 9);
+    escolhe_tabuleiro(r->tabuleiro);
+
+    do {
+        r->vencedor = 0;
+        r->jogadas = 0;
+        r->jogador = 1;
+
+        mat = criaMat(N, N);
+
+        do {
+            mostraMat(mat, N, N);
+            escolhe_jogada(r, mat, M, r->jogador);
+            r->jogadas++;
+            if(verifica(mat, M) == 1 || verifica(mat, M) == -1) {
+                r->vencedor = r->jogador;
+                r->vencedortab[r->contadorjogos] = r->jogador;  // guarda num array quem ganha cada jogo
+                escreve_resultado(r->vencedor);
+                escolhe_tabuleiro(r->posicaojogada);
+                r->contadorjogos++;                             // número de jogos já terminados
+            }
+            else {
+                r->jogador = r->jogador % 2 + 1;
+                escolhe_tabuleiro(r->posicaojogada);
+            }
+        }while(r->jogadas < N*N);
+
+        mostraMat(mat, N, N);
+
+    } while (r->contadorjogos < M * M);
+
+    libertaMat(mat, N);
+}
+
+/*
 void jogar_jogador(jogo *r) {
-    pjogo p = NULL;
 
     char **t1 = NULL, **t2 = NULL, **t3 = NULL, **t4 = NULL, **t5 = NULL;
     char **t6 = NULL, **t7 = NULL, **t8 = NULL, **t9 = NULL;
-
-    t1 = criaMat(N, N); t2 = criaMat(N, N); t3 = criaMat(N, N); t4 = criaMat(N, N); t5 = criaMat(N, N);
-    t6 = criaMat(N, N); t7 = criaMat(N, N); t8 = criaMat(N, N); t9 = criaMat(N, N);
 
     r->contadorjogos = 0;
 
@@ -51,17 +92,23 @@ void jogar_jogador(jogo *r) {
         r->jogadas = 0;
         r->jogador = 1;
 
+        t1 = criaMat(N, N); t2 = criaMat(N, N);
+        t3 = criaMat(N, N); t4 = criaMat(N, N);
+        t5 = criaMat(N, N); t6 = criaMat(N, N);
+        t7 = criaMat(N, N); t8 = criaMat(N, N);
+        t9 = criaMat(N, N);
+
         if(r->posicaojogada == 1) {
             do {
                 printf("Tabuleiro 1\n");
                 mostraMat(t1, N, N);
                 escolhe_jogada(r, t1, N, r->jogador);
-                /*for(int i=0; i<N*N; i++) {          // verificar se o tabuleiro para onde se vai jogar está disponivel
+                for(int i=0; i<N*N; i++) {          // verificar se o tabuleiro para onde se vai jogar está disponivel
                     if(r->posicaojogada == r->vencedortab[i]) {
                         printf("Jogo do tabuleiro %d ja foi terminado.\n", r->posicaojogada);
                         escolhe_jogada(r, t1, N, r->jogador);
                     }
-                }*/
+                }
                 mostraMat(t1, N, N);
 
                 if(verifica(t1, N) == 1 || verifica(t1, N) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
@@ -76,7 +123,6 @@ void jogar_jogador(jogo *r) {
                     escolhe_tabuleiro(r->posicaojogada);                // vai para o tabuleiro seguinte
                 }
             }while(r->vencedor == 0 && r->jogadas < N*N);
-            p = p->prox;                                            // vai para a matriz seguinte
         }
         else if(r->posicaojogada == 2) {
             do {
@@ -97,7 +143,6 @@ void jogar_jogador(jogo *r) {
                     escolhe_tabuleiro(r->posicaojogada);
                 }
             }while(r->vencedor == 0 && r->jogadas < N*N);
-            p = p->prox;
         }
         else if(r->posicaojogada == 3) {
             do {
@@ -118,7 +163,6 @@ void jogar_jogador(jogo *r) {
                     escolhe_tabuleiro(r->posicaojogada);
                 }
             }while(r->vencedor == 0 && r->jogadas < N*N);
-            p = p->prox;
         }
         else if(r->posicaojogada == 4) {
             do {
@@ -139,7 +183,6 @@ void jogar_jogador(jogo *r) {
                     escolhe_tabuleiro(r->posicaojogada);
                 }
             }while(r->vencedor == 0 && r->jogadas < N*N);
-            p = p->prox;
         }
         else if(r->posicaojogada == 5) {
             do {
@@ -160,7 +203,6 @@ void jogar_jogador(jogo *r) {
                     escolhe_tabuleiro(r->posicaojogada);
                 }
             }while(r->vencedor == 0 && r->jogadas < N*N);
-            p = p->prox;
         }
         else if(r->posicaojogada == 6) {
             do {
@@ -181,7 +223,6 @@ void jogar_jogador(jogo *r) {
                     escolhe_tabuleiro(r->posicaojogada);
                 }
             }while(r->vencedor == 0 && r->jogadas < N*N);
-            p = p->prox;
         }
         else if(r->posicaojogada == 7) {
             do {
@@ -202,7 +243,6 @@ void jogar_jogador(jogo *r) {
                     escolhe_tabuleiro(r->posicaojogada);
                 }
             }while(r->vencedor == 0 && r->jogadas < N*N);
-            p = p->prox;
         }
         else if(r->posicaojogada == 8) {
             do {
@@ -223,7 +263,6 @@ void jogar_jogador(jogo *r) {
                     escolhe_tabuleiro(r->posicaojogada);
                 }
             }while(r->vencedor == 0 && r->jogadas < N*N);
-            p = p->prox;
         }
         else if(r->posicaojogada == 9) {
             do {
@@ -244,35 +283,88 @@ void jogar_jogador(jogo *r) {
                     escolhe_tabuleiro(r->posicaojogada);
                 }
             }while(r->vencedor == 0 && r->jogadas < N*N);
-            p = p->prox;
         }
+
+        libertaMat(t1, 3);  libertaMat(t2, 3);
+        libertaMat(t3, 3);  libertaMat(t4, 3);
+        libertaMat(t5, 3);  libertaMat(t6, 3);
+        libertaMat(t7, 3);  libertaMat(t8, 3);
+        libertaMat(t9, 3);
 
     } while(r->contadorjogos < N*N);
 
-    libertaMat(t1, 3);  libertaMat(t2, 3);  libertaMat(t3, 3);  libertaMat(t4, 3);  libertaMat(t5, 3);
-    libertaMat(t6, 3);  libertaMat(t7, 3);  libertaMat(t8, 3);  libertaMat(t9, 3);
 }
+*/
 
 void escolhe_jogada(jogo *r, char **p, int n, int n_jogador) {
-
     printf("\n-> Vez do jogador %d\n", n_jogador);
+
     do{
         printf("Posicao: ");
         scanf("%d", &r->posicaojogada);
         putchar('\n');
     }while(r->posicaojogada<1 || r->posicaojogada>n*n || p[(r->posicaojogada-1)/n][(r->posicaojogada-1)%n] != '_');
 
-    if(n_jogador == 1)
-        setPos(p, (r->posicaojogada-1)/n, (r->posicaojogada-1)%n, 'X');
-    else
-        setPos(p, (r->posicaojogada-1)/n, (r->posicaojogada-1)%n, 'O');
+    if(r->tabuleiro == 1) {
+        if(n_jogador == 1)
+            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+0, 'X');
+        else
+            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+0, 'O');
+    }
+    else if(r->tabuleiro == 2) {
+        if(n_jogador == 1)
+            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+3, 'X');
+        else
+            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+3, 'O');
+    }
+    else if(r->tabuleiro == 3) {
+        if(n_jogador == 1)
+            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+6, 'X');
+        else
+            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+6, 'O');
+    }
+    else if(r->tabuleiro == 4) {
+        if(n_jogador == 1)
+            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+0, 'X');
+        else
+            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+0, 'O');
+    }
+    else if(r->tabuleiro == 5) {
+        if(n_jogador == 1)
+            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+3, 'X');
+        else
+            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+3, 'O');
+    }
+    else if(r->tabuleiro == 6) {
+        if(n_jogador == 1)
+            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+6, 'X');
+        else
+            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+6, 'O');
+    }
+    else if(r->tabuleiro == 7) {
+        if(n_jogador == 1)
+            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+0, 'X');
+        else
+            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+0, 'O');
+    }
+    else if(r->tabuleiro == 8) {
+        if(n_jogador == 1)
+            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+3, 'X');
+        else
+            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+3, 'O');
+    }
+    else if(r->tabuleiro == 9) {
+        if(n_jogador == 1)
+            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+6, 'X');
+        else
+            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+6, 'O');
+    }
 
+    r->tabuleiro = r->posicaojogada;
 }
 
 void escolhe_tabuleiro(int posicao) {
-    printf("------------------------------------\n");
-    printf("|              JOGO %d             |\n", posicao);
-    printf("------------------------------------\n\n");
+    printf("\n-> Jogar para o tabuleiro %d\n\n", posicao);
 }
 
 int verifica(char **p, int n) {
@@ -323,13 +415,16 @@ int verifica(char **p, int n) {
 }
 
 void escreve_resultado(int ganhou) {
-    printf("------------------------------------\n");
+    printf("\n------------------------------------\n");
     printf("|             RESULTADO            |\n");
     printf("------------------------------------\n\n");
     if(ganhou == 0)
         printf("\nEmpate.\n\n");
     else
         printf("\nGanhou o jogador %d.\n\n", ganhou);
+    printf("\n------------------------------------\n");
+    printf("|        CONTINUACAO DO JOGO       |\n");
+    printf("------------------------------------\n");
 }
 
 void escreve_resultadoFinal(int ganhou) {
@@ -388,18 +483,6 @@ void tabuleiro_final(jogo *r) {
     escreve_resultadoFinal(r->vencedortabfinal);
     libertaMat(mat, N);
     putchar('\n');
-}
-
-pjogo adicionatabuleiro(pjogo p) {
-    pjogo novo;
-    if((novo = malloc(sizeof(pjogo))) == NULL)
-        printf("Erro na alocacao de memoria\n");
-    else {
-        jogar_jogador(novo);
-        novo->prox = p;
-        p = novo;
-    }
-    return p;
 }
 
 void criaFicheiroTXT() {

@@ -22,7 +22,7 @@ char** criaMat(int nLin, int nCol){
         }
         for(j=0; j<nCol; j++)
             p[i][j] = '_';
-    }
+        }
 
     return p;
 }
@@ -36,10 +36,19 @@ char getPos(char **p, int x, int y){
 }
 
 char mostraMat(char **p, int nLin, int nCol){
+    printf("  ______________    ______________    ______________\n");
     for(int i=0; i<nLin; i++){
-        for(int j=0; j<nCol; j++)
-            printf("%c\t", p[i][j]);
+        printf(" | ");
+        for(int j=0; j<nCol; j++) {
+            printf("%c ", p[i][j]);
+            if(j == 2 || j == 5)
+                printf(" | ");
+            printf(" | ");
+        }
         putchar('\n');
+        if(i == 2 || i == 5)
+            printf("  ______________    ______________    ______________\n");
     }
+    printf("  ______________    ______________    ______________\n");
 }
 

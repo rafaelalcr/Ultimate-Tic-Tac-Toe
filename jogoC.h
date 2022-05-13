@@ -14,6 +14,7 @@ struct jogosC {
     int njogador;
     int contadorjogadas;
     int vencedor;
+    int posicao;
     pjogoC prox;
 };
 
