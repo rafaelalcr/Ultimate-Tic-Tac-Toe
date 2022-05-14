@@ -12,7 +12,7 @@ void libertaMat(char** p, int nLin);
 char** criaMat(int nLin, int nCol);
 
 // Imprime o conteúdo de uma matriz dinâmica de caracteres
-char mostraMat(char **p, int nLin, int nCol);
+void mostraMat(char **p, int nLin, int nCol);
 
 // Coloca o caracter c na posição (x, y) de uma matriz dinâmica de caracteres
 void setPos(char **p, int x, int y, char c);

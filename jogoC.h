@@ -4,7 +4,7 @@
 #include "jogo.h"
 #include "utils.h"
 #include "matdin.h"
-#define N 3
+#define N 9
 
 typedef struct jogosC jogoC, *pjogoC;
 struct jogosC {
@@ -20,6 +20,7 @@ struct jogosC {
 
 void jogarComputador(jogoC *r);
 void escolhe_jogadaComputador(char **p, int n, int n_jogador);
+int verificaComputador(char **p, int n);
 void escreve_resultadoComputador(int ganhou);
 void escreve_resultadoFinalComputador(int ganhou);
 void resultadosJogosComputador(jogoC r, int n_jogos);

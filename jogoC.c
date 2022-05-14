@@ -19,7 +19,7 @@ void jogarComputador(jogoC *r) {
             mostraMat(mat, N, N);
             escolhe_jogadaComputador(mat, N, n_jogador);
             n_jogadas++;
-            if(verifica(mat, N) == 1 || verifica(mat, N) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
+            if(verificaComputador(mat, N) == 1 || verificaComputador(mat, N) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
                 ganhou = n_jogador;
                 r->resminitab[n_jogos] = n_jogador;
             }
@@ -59,6 +59,53 @@ void escolhe_jogadaComputador(char **p, int n, int n_jogador) {
         setPos(p, (pos-1)/n, (pos-1)%n, 'X');
     else
         setPos(p, (pos-1)/n, (pos-1)%n, 'O');
+}
+
+int verificaComputador(char **p, int n) {
+    int linha, coluna;
+    int contador;   // Se chegar a 3 então há 3 'X' em linha/coluna/diagonal
+    // Se chegar a -3 então há 3 'O' em linha/coluna/diagonal
+    // Verifica as N linhas
+    for(linha = 0; linha < n; ++linha) {
+        contador = 0;
+        for(coluna=0; coluna < n; ++coluna) {
+            contador += (p[linha][coluna] == 'X')?  1 :
+                        (p[linha][coluna] == 'O')? -1 : 0;
+        }
+        if (contador == n || contador == -n)        // Se contador = 3 'X' ou 3 'O'
+            return contador / abs(contador);        // Returna 1 ou -1
+    }
+
+    // Verifica as N colunas
+    for(coluna = 0; coluna < n; ++coluna) {
+        contador = 0;
+        for(linha=0; linha < n; ++linha) {
+            contador += (p[linha][coluna] == 'X')?  1 :
+                        (p[linha][coluna] == 'O')? -1 : 0;
+        }
+        if (contador == n || contador == -n)    // Se contador = 3 'X' ou 3 'O'
+            return contador / abs(contador);    // Returna 1 ou -1
+    }
+
+    // Verifica a Diagonal de cima para baixo da esquerda para direita
+    contador = 0;
+    for(coluna = 0; coluna < n; ++coluna) {
+        contador += (p[coluna][coluna] == 'X')?  1 :
+                    (p[coluna][coluna] == 'O')? -1 : 0;
+    }
+    if (contador == n || contador == -n)        // Se contador = 3 'X' ou 3 'O'
+        return contador / abs(contador);        // Returna 1 ou -1
+
+    // Verifica a Diagonal de baixo para cima da esquerda para direita
+    contador = 0;
+    for(coluna = 0; coluna < n; ++coluna) {
+        contador += (p[coluna][2-coluna] == 'X')?  1 :
+                    (p[coluna][2-coluna] == 'O')? -1 : 0;
+    }
+    if (contador == n || contador == -n)        // Se contador = 3 'X' ou 3 'O'
+        return contador / abs(contador);        // Returna 1 ou -1
+
+    return 0;
 }
 
 void escreve_resultadoComputador(int ganhou) {

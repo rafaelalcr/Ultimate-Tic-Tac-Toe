@@ -3,6 +3,7 @@
 
 #include "matdin.h"
 #include "utils.h"
+#include "resultados.h"
 #define N 9
 #define M 3
 
@@ -16,26 +17,26 @@ struct jogos {
     int vencedor;               // qual o número do vencedor
     int jogadas;                // número de jogadas
     int tabuleiro;              // número do tabuleiro
+    int aux;
 };
-
+/*
 typedef struct jogadas jogada, *pjogada;
 struct jogadas {
     int jogador;                // número do jogador que fez a jogada
     int tabuleiro;              // número do tabuleiro em que foi feita a jogada
     int posicao;                // posição da jogada
     pjogada prox;
-};
+};*/
 
-void jogar(jogo *r);
 void jogar2(jogo *r);
-void jogar_jogador(jogo *r);
 void escolhe_jogada(jogo *r, char **p, int n, int n_jogador);
 void escolhe_tabuleiro(int posicao);
-int verifica(char **p, int n);
-void escreve_resultado(int ganhou);
-void escreve_resultadoFinal(int ganhou);
-void resultados_jogos(jogo r);
-void tabuleiro_final(jogo *r);
-void criaFicheiroTXT();
+
+int verificaLinha(char **p, int n);
+int verificaColuna(char **p, int n);
+int verificaDiagonal(char **p, int n);
+//int verifica(char **p, int n);
+//void jogar(jogo *r);
+//void jogar_jogador(jogo *r);
 
 #endif //TP2022_JOGO_H

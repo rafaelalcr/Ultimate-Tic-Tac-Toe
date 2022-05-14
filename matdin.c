@@ -35,7 +35,7 @@ char getPos(char **p, int x, int y){
     return p[x][y];
 }
 
-char mostraMat(char **p, int nLin, int nCol){
+void mostraMat(char **p, int nLin, int nCol){
     printf("  ______________    ______________    ______________\n");
     for(int i=0; i<nLin; i++){
         printf(" | ");
