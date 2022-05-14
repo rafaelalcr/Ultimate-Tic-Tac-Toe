@@ -58,11 +58,11 @@ void tabuleiro_final(jogo *r) {
             setPos(mat, i/N, i%N, '#');
     }
 
-    if(verifica(mat, N) == 1)
+    if(verificaLinha(mat, N) == 1 || verificaColuna(mat, N) == 1 || verificaDiagonal(mat, N) == 1)
         r->vencedortabfinal = 1;
-    else if(verifica(mat, N) == -1)
+    else if(verificaLinha(mat, N) == -1 || verificaColuna(mat, N) == -1 || verificaDiagonal(mat, N) == -1)
         r->vencedortabfinal = 2;
-    else if(verifica(mat, N) == 0)
+    else if(verificaLinha(mat, N) == 0 || verificaColuna(mat, N) == 0 || verificaDiagonal(mat, N) == 0)
         r->vencedortabfinal = 0;
 
     mostraMat(mat, N, N);
