@@ -171,11 +171,11 @@ void tabuleiroFinalComputador(jogoC *r) {
         }
     }
 
-    if(verifica(mat, N) == 1)
+    if(verifica_final(mat, N) == 1)
         r->restabfinal = 1;
-    else if(verifica(mat, N) == -1)
+    else if(verifica_final(mat, N) == -1)
         r->restabfinal = 2;
-    else if(verifica(mat, N) == 0)
+    else if(verifica_final(mat, N) == 0)
         r->restabfinal = 0;
 
     mostraMat(mat, N, N);

@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include "jogo.h"
 #include "jogoC.h"
-#include "resultados.h"
 
 void menu();
 

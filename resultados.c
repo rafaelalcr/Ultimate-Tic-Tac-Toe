@@ -1,13 +1,13 @@
-#include "resultados.h"
+/*#include "resultados.h"
 
-void escreve_resultado(jogo *r, int ganhou) {
+void escreve_resultado(jogo r, int ganhou) {
     printf("\n------------------------------------\n");
     printf("|             RESULTADO            |\n");
     printf("------------------------------------\n\n");
     if(ganhou == 0)
-        printf("\nEmpate no jogo %d.\n\n", r->aux);
+        printf("\nEmpate no jogo %d.\n\n", r.aux);
     else
-        printf("\nO jogador %d ganhou o jogo %d.\n\n", ganhou, r->aux);
+        printf("\nO jogador %d ganhou o jogo %d.\n\n", ganhou, r.aux);
     printf("\n------------------------------------\n");
     printf("|        CONTINUACAO DO JOGO       |\n");
     printf("------------------------------------\n");
@@ -112,4 +112,4 @@ void tabuleiro_final(jogo *r) {
     escreve_resultadoFinal(r->vencedortabfinal);
     libertaMat(mat, N);
     putchar('\n');
-}
+}*/

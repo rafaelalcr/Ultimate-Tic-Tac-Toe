@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include "matdin.h"
 #include "utils.h"
-#include "resultados.h"
 #define N 9
 #define M 3
 
@@ -34,8 +33,14 @@ void jogar_jogador(jogo *r);
 void escolhe_jogada(jogo *r, char **p, int n, int n_jogador);
 void escolhe_tabuleiro(int posicao);
 
-int linha(char **p, int n, int tabuleiro);
-int coluna(char **p, int n, int tabuleiro);
-int diagonal(char **p, int n, int tabuleiro);
+int linha(jogo *r, char **p, int n);
+int coluna(jogo *r, char **p, int n);
+int diagonal(jogo *r, char **p, int n);
+
+void escreve_resultado(jogo r, int ganhou);
+void escreve_resultadoFinal(int ganhou);
+void resultados_jogos(jogo r);
+int verifica_final(char **p, int n);
+void tabuleiro_final(jogo *r);
 
 #endif //TP2022_JOGO_H
