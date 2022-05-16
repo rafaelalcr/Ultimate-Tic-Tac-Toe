@@ -21,8 +21,7 @@ void menu() {
 
         switch (opcao) {
             case 1:
-                //jogar_jogador(&r);
-                jogar2(&r);
+                jogar_jogador(&r);
                 break;
             case 2:
                 jogarComputador(&s);

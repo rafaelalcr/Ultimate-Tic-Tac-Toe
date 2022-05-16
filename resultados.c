@@ -40,6 +40,49 @@ void resultados_jogos(jogo r) {
     }
 }
 
+int verifica_final(char **p, int n) {
+    int linha, coluna;
+    int contador;
+
+    for(linha = 0; linha < n; ++linha) {
+        contador = 0;
+        for (coluna = 0; coluna < n; ++coluna) {
+            contador += (p[linha][coluna] == 'X') ? 1 :
+                        (p[linha][coluna] == 'O') ? -1 : 0;
+        }
+        if (contador == n || contador == -n)
+            return contador / abs(contador);
+    }
+
+    for (coluna = 0; coluna < n; ++coluna) {
+        contador = 0;
+        for (linha = 0; linha < n; ++linha) {
+            contador += (p[linha][coluna] == 'X') ? 1 :
+                        (p[linha][coluna] == 'O') ? -1 : 0;
+        }
+        if (contador == n || contador == -n)
+            return contador / abs(contador);
+    }
+
+    contador = 0;
+    for(coluna = 0; coluna < n; ++coluna) {
+        contador += (p[coluna][coluna] == 'X')?  1 :
+                    (p[coluna][coluna] == 'O')? -1 : 0;
+    }
+    if (contador == n || contador == -n)
+        return contador / abs(contador);
+
+    contador = 0;
+    for (coluna = 0; coluna < n; ++coluna) {
+        contador += (p[coluna][2 - coluna] == 'X') ? 1 :
+                    (p[coluna][2 - coluna] == 'O') ? -1 : 0;
+    }
+    if (contador == n || contador == -n)
+        return contador / abs(contador);
+
+    return 0;
+}
+
 void tabuleiro_final(jogo *r) {
     char **mat = NULL;
     printf("------------------------------------\n");
@@ -58,11 +101,11 @@ void tabuleiro_final(jogo *r) {
             setPos(mat, i/N, i%N, '#');
     }
 
-    if(verificaLinha(mat, N) == 1 || verificaColuna(mat, N) == 1 || verificaDiagonal(mat, N) == 1)
+    if(verifica_final(mat, N) == 1)
         r->vencedortabfinal = 1;
-    else if(verificaLinha(mat, N) == -1 || verificaColuna(mat, N) == -1 || verificaDiagonal(mat, N) == -1)
+    else if(verifica_final(mat, N) == -1)
         r->vencedortabfinal = 2;
-    else if(verificaLinha(mat, N) == 0 || verificaColuna(mat, N) == 0 || verificaDiagonal(mat, N) == 0)
+    else if(verifica_final(mat, N) == 0)
         r->vencedortabfinal = 0;
 
     mostraMat(mat, N, N);

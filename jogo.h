@@ -1,6 +1,8 @@
 #ifndef TP2022_JOGO_H
 #define TP2022_JOGO_H
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "matdin.h"
 #include "utils.h"
 #include "resultados.h"
@@ -28,15 +30,12 @@ struct jogadas {
     pjogada prox;
 };*/
 
-void jogar2(jogo *r);
+void jogar_jogador(jogo *r);
 void escolhe_jogada(jogo *r, char **p, int n, int n_jogador);
 void escolhe_tabuleiro(int posicao);
 
-int verificaLinha(char **p, int n);
-int verificaColuna(char **p, int n);
-int verificaDiagonal(char **p, int n);
-//int verifica(char **p, int n);
-//void jogar(jogo *r);
-//void jogar_jogador(jogo *r);
+int linha(char **p, int n, int tabuleiro);
+int coluna(char **p, int n, int tabuleiro);
+int diagonal(char **p, int n, int tabuleiro);
 
 #endif //TP2022_JOGO_H
