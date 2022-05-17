@@ -18,7 +18,7 @@ struct jogos {
     int vencedor;               // qual o número do vencedor
     int jogadas;                // número de jogadas
     int tabuleiro;              // número do tabuleiro
-    int aux;
+    int aux;                    // variável auxiliar para guardar o número do tabuleiro anterior
 };
 /*
 typedef struct jogadas jogada, *pjogada;

@@ -30,12 +30,9 @@ void jogar_jogador(jogo *r) {
                     r->vencedortab[r->aux] = r->jogador;  // guarda num array quem ganha cada jogo
                     escreve_resultado(r, r->vencedor);
                     r->contadorjogos++;                  // número de jogos já terminados
-                    escolhe_tabuleiro(r->posicaojogada);
             }
-            else {
-                r->jogador = r->jogador % 2 + 1;
-                escolhe_tabuleiro(r->posicaojogada);
-            }
+            r->jogador = r->jogador % 2 + 1;
+            escolhe_tabuleiro(r->posicaojogada);
         }while(r->jogadas < N*N);
 
         mostraMat(mat, N, N);
@@ -49,11 +46,11 @@ void escolhe_jogada(jogo *r, char **p, int n, int n_jogador) {
     r->aux = 0;
     printf("\n-> Vez do jogador %d\n", n_jogador);
 
-    //do{
+    do{
         printf("Posicao: ");
         scanf("%d", &r->posicaojogada);
         putchar('\n');
-    //}while(r->posicaojogada<1 || r->posicaojogada>n*n || p[(r->posicaojogada-1)/n][(r->posicaojogada-1)%n] != '_');
+    }while(p[(r->posicaojogada-1)/N][(r->posicaojogada-1)%N] != '_');
 
     if(r->tabuleiro == 1) {
         if(n_jogador == 1)
