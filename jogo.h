@@ -33,11 +33,11 @@ void jogar_jogador(jogo *r);
 void escolhe_jogada(jogo *r, char **p, int n, int n_jogador);
 void escolhe_tabuleiro(int posicao);
 
-int linha(jogo *r, char **p, int n);
-int coluna(jogo *r, char **p, int n);
-int diagonal(jogo *r, char **p, int n);
+int linha(char **p, int n);
+int coluna(char **p, int n);
+int diagonal(char **p, int n);
 
-void escreve_resultado(jogo r, int ganhou);
+void escreve_resultado(jogo *r, int ganhou);
 void escreve_resultadoFinal(int ganhou);
 void resultados_jogos(jogo r);
 int verifica_final(char **p, int n);
