@@ -26,9 +26,10 @@ void jogar_jogador(jogo *r) {
             r->jogadas++;
             if(verifica(mat, r->aux) == 1 || verifica(mat, r->aux) == -1) {
                     r->vencedor = r->jogador;
-                    r->vencedortab[r->aux] = r->jogador;  // guarda num array quem ganha cada jogo
+                    r->vencedortab[r->aux] = r->jogador;    // guarda num array quem ganha cada jogo
+                    r->minitab[r->contadorjogos] = r->aux;  // guarda a ordem dos tabuleiros terminados
                     escreve_resultado(r, r->vencedor);
-                    r->contadorjogos++;                  // número de jogos já terminados
+                    r->contadorjogos++;                     // número de jogos já terminados
             }
             r->jogador = r->jogador % 2 + 1;
             escolhe_tabuleiro(r->posicaojogada);
@@ -170,7 +171,7 @@ int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax) {
     }
 
     contador = 0;
-    for(coluna = ncol; coluna < colMax; ++coluna) {     // Verifica a Diagonal de cima para baixo da esquerda para direita
+    for(coluna = ncol; coluna < colMax; ++coluna) {   // Verifica a Diagonal de cima para baixo da esquerda para direita
         contador += (p[coluna][coluna] == 'X')?  1 :
                     (p[coluna][coluna] == 'O')? -1 : 0;
     }
@@ -178,7 +179,7 @@ int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax) {
         return contador / abs(contador);
 
     contador = 0;
-    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica a Diagonal de baixo para cima da esquerda para direita
+    for (coluna = ncol; coluna < colMax; ++coluna) {  // Verifica a Diagonal de baixo para cima da esquerda para direita
         contador += (p[coluna][2 - coluna] == 'X') ? 1 :
                     (p[coluna][2 - coluna] == 'O') ? -1 : 0;
     }
@@ -202,7 +203,7 @@ void escreve_resultado(jogo *r, int ganhou) {
 }
 
 void escreve_resultadoFinal(int ganhou) {
-    printf("------------------------------------\n");
+    printf("\n------------------------------------\n");
     printf("|          RESULTADO FINAL         |\n");
     printf("------------------------------------\n\n");
     if(ganhou == 0)
@@ -218,11 +219,11 @@ void resultados_jogos(jogo r) {
     if(r.contadorjogos == 0)
         printf("Sem resultados.\n\n");
     else {
-        for(int i=0; i < N*N; i++) {
+        for(int i=0; i < N; i++) {
             if(r.vencedortab[i] == 0)
                 printf("Houve um empate no jogo %d\n", i+1);
             else
-                printf("Jogador %d ganhou o jogo %d\n", r.vencedortab[i], i+1);
+                printf("Jogador %d ganhou o jogo %d\n", r.vencedortab[i], r.minitab[i]);
         }
         tabuleiro_final(&r);
     }
@@ -230,7 +231,7 @@ void resultados_jogos(jogo r) {
 
 void tabuleiro_final(jogo *r) {
     char **mat = NULL;
-    printf("------------------------------------\n");
+    printf("\n------------------------------------\n");
     printf("|          TABULEIRO FINAL         |\n");
     printf("------------------------------------\n\n");
 
