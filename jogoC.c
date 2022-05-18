@@ -170,14 +170,14 @@ void tabuleiroFinalComputador(jogoC *r) {
             setPos(mat, i/N, i%N, '#');
         }
     }
-
-    if(verifica_final(mat, N) == 1)
+/*
+    if(linha(mat, N) == 1 || coluna(mat, N) == 1 || diagonal(mat, N) == 1)
         r->restabfinal = 1;
-    else if(verifica_final(mat, N) == -1)
+    else if(linha(mat, N) == -1 || coluna(mat, N) == -1 || diagonal(mat, N) == -1)
         r->restabfinal = 2;
-    else if(verifica_final(mat, N) == 0)
+    else if(linha(mat, N) == 0 || coluna(mat, N) == 0 || diagonal(mat, N) == 0)
         r->restabfinal = 0;
-
+*/
     mostraMat(mat, N, N);
     escreve_resultadoFinalComputador(r->restabfinal);
     libertaMat(mat, N);

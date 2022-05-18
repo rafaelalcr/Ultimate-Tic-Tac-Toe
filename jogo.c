@@ -13,19 +13,18 @@ void jogar_jogador(jogo *r) {
     r->tabuleiro = intUniformRnd(1, 9);
     escolhe_tabuleiro(r->tabuleiro);
 
+    mat = criaMat(N, N);
+
     do {
         r->vencedor = 0;
         r->jogadas = 0;
         r->jogador = 1;
 
-        mat = criaMat(N, N);
-
         do {
             mostraMat(mat, N, N);
             escolhe_jogada(r, mat, M, r->jogador);
             r->jogadas++;
-            if(linha(mat, M) == 1 || coluna(mat, M) == 1 || diagonal(mat, M) == 1 ||
-                linha(mat, M) == -1 || coluna(mat, M) == -1 || diagonal(mat, M) == -1) {
+            if(verifica(mat, r->aux) == 1 || verifica(mat, r->aux) == -1) {
                     r->vencedor = r->jogador;
                     r->vencedortab[r->aux] = r->jogador;  // guarda num array quem ganha cada jogo
                     escreve_resultado(r, r->vencedor);
@@ -33,24 +32,28 @@ void jogar_jogador(jogo *r) {
             }
             r->jogador = r->jogador % 2 + 1;
             escolhe_tabuleiro(r->posicaojogada);
-        }while(r->jogadas < N*N);
+        }while(r->vencedor == 0 || r->jogadas < N*N);
 
         mostraMat(mat, N, N);
 
-    } while (r->contadorjogos < M * M);
+    } while (r->contadorjogos < N);
 
     libertaMat(mat, N);
+}
+
+void escolhe_tabuleiro(int posicao) {
+    printf("\n-> Jogar para o tabuleiro %d\n\n", posicao);
 }
 
 void escolhe_jogada(jogo *r, char **p, int n, int n_jogador) {
     r->aux = 0;
     printf("\n-> Vez do jogador %d\n", n_jogador);
 
-    do{
+    //do{
         printf("Posicao: ");
         scanf("%d", &r->posicaojogada);
         putchar('\n');
-    }while(p[(r->posicaojogada-1)/N][(r->posicaojogada-1)%N] != '_');
+    //}while(p[(r->posicaojogada-1)/N][(r->posicaojogada-1)%N] != '_');
 
     if(r->tabuleiro == 1) {
         if(n_jogador == 1)
@@ -119,282 +122,70 @@ void escolhe_jogada(jogo *r, char **p, int n, int n_jogador) {
     r->tabuleiro = r->posicaojogada;
 }
 
-int linha(char **p, int n) {
-    //jogo r;
-    int linha, coluna;
-    int contador;       // Se chegar a 3 então há 3 'X' em linha. Se chegar a -3 então há 3 'O' em linha
+int verifica(char **p, int tabuleiro) {
+    if(tabuleiro == 1)
+        return verifica_tabuleiro(p, 0, 3, 0, 3);
+    else if(tabuleiro == 2)
+        return verifica_tabuleiro(p, 0, 3, 3, 6);
+    else if(tabuleiro == 3)
+        return verifica_tabuleiro(p, 0, 3, 6, 9);
+    else if(tabuleiro == 4)
+        return verifica_tabuleiro(p, 3, 6, 0, 3);
+    else if(tabuleiro == 5)
+        return verifica_tabuleiro(p, 3, 6, 3, 6);
+    else if(tabuleiro == 6)
+        return verifica_tabuleiro(p, 3, 6, 6, 9);
+    else if(tabuleiro == 7)
+        return verifica_tabuleiro(p, 6, 9, 0, 3);
+    else if(tabuleiro == 8)
+        return verifica_tabuleiro(p, 6, 9, 3, 6);
+    else if(tabuleiro == 9)
+        return verifica_tabuleiro(p, 6, 9, 6, 9);
 
-    //if(r.tabuleiro == 1) {
-        for(linha = 0; linha < n; ++linha) {
-            contador = 0;
-            for (coluna = 0; coluna < n; ++coluna) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)        // Se contador = 3 'X' ou 3 'O'
-                return contador / abs(contador);        // Returna 1 ou -1
-        }
-    //}
-    //else if(r.tabuleiro == 2) {
-        for(linha = 0; linha < n; ++linha) {
-            contador = 0;
-            for(coluna=n; coluna < 6; ++coluna) {
-                contador += (p[linha][coluna] == 'X')?  1 :
-                            (p[linha][coluna] == 'O')? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 3) {
-        for (linha = 0; linha < n; ++linha) {
-            contador = 0;
-            for (coluna = 6; coluna < 9; ++coluna) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 4) {
-        for (linha = n; linha < 6; ++linha) {
-            contador = 0;
-            for (coluna = 0; coluna < n; ++coluna) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 5) {
-        for (linha = n; linha < 6; ++linha) {
-            contador = 0;
-            for (coluna = n; coluna < 6; ++coluna) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 6) {
-        for (linha = n; linha < 6; ++linha) {
-            contador = 0;
-            for (coluna = 6; coluna < 9; ++coluna) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 7) {
-        for (linha = 6; linha < 9; ++linha) {
-            contador = 0;
-            for (coluna = 0; coluna < n; ++coluna) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 8) {
-        for (linha = 6; linha < 9; ++linha) {
-            contador = 0;
-            for (coluna = n; coluna < 6; ++coluna) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 9) {
-        for (linha = 6; linha < 9; ++linha) {
-            contador = 0;
-            for (coluna = 6; coluna < 9; ++coluna) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
     return 0;
 }
 
-int coluna(char **p, int n) {
-    //jogo r;
+int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax) {
     int linha, coluna;
     int contador;
 
-    //if(r.tabuleiro == 1) {
-        for (coluna = 0; coluna < n; ++coluna) {
-            contador = 0;
-            for (linha = 0; linha < n; ++linha) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
+    for(linha = nlin; linha < linMax; ++linha) {
+        contador = 0;
+        for (coluna = ncol; coluna < colMax; ++coluna) {
+            contador += (p[linha][coluna] == 'X') ? 1 :
+                        (p[linha][coluna] == 'O') ? -1 : 0;
         }
-    // }
-    //else if(r.tabuleiro == 2) {
-        for (coluna = n; coluna < 6; ++coluna) {
-            contador = 0;
-            for (linha = 0; linha < n; ++linha) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 3) {
-        for (coluna = 6; coluna < 9; ++coluna) {
-            contador = 0;
-            for (linha = 0; linha < n; ++linha) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 4) {
-        for (coluna = 0; coluna < n; ++coluna) {
-            contador = 0;
-            for (linha = n; linha < 6; ++linha) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 5) {
-        for (coluna = n; coluna < 6; ++coluna) {
-            contador = 0;
-            for (linha = n; linha < 6; ++linha) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 6) {
-        for (coluna = 6; coluna < 9; ++coluna) {
-            contador = 0;
-            for (linha = n; linha < 6; ++linha) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 7) {
-        for (coluna = 0; coluna < n; ++coluna) {
-            contador = 0;
-            for (linha = 6; linha < 9; ++linha) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 8) {
-        for (coluna = n; coluna < 6; ++coluna) {
-            contador = 0;
-            for (linha = 6; linha < 9; ++linha) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    //else if(r.tabuleiro == 9) {
-        for (coluna = 6; coluna < 9; ++coluna) {
-            contador = 0;
-            for (linha = 6; linha < 9; ++linha) {
-                contador += (p[linha][coluna] == 'X') ? 1 :
-                            (p[linha][coluna] == 'O') ? -1 : 0;
-            }
-            if (contador == n || contador == -n)
-                return contador / abs(contador);
-        }
-    //}
-    return 0;
-}
+        if (contador == 3 || contador == -3)        // Se contador = 3 'X' ou 3 'O'
+            return contador / abs(contador);        // Returna 1 ou -1
+    }
 
-int diagonal(char **p, int n) {
-    //jogo r;
-    int coluna;
-    int contador;
+    for (coluna = ncol; coluna < colMax; ++coluna) {
+        contador = 0;
+        for (linha = nlin; linha < linMax; ++linha) {
+            contador += (p[linha][coluna] == 'X') ? 1 :
+                        (p[linha][coluna] == 'O') ? -1 : 0;
+        }
+        if (contador == 3 || contador == -3)
+            return contador / abs(contador);
+    }
 
-    //if(r.tabuleiro == 1 || r.tabuleiro == 4 || r.tabuleiro == 7) {
-        contador = 0;
-        for(coluna = 0; coluna < n; ++coluna) {     // Verifica a Diagonal de cima para baixo da esquerda para direita
-            contador += (p[coluna][coluna] == 'X')?  1 :
-                        (p[coluna][coluna] == 'O')? -1 : 0;
-        }
-        if (contador == n || contador == -n)
-            return contador / abs(contador);
+    contador = 0;
+    for(coluna = ncol; coluna < colMax; ++coluna) {     // Verifica a Diagonal de cima para baixo da esquerda para direita
+        contador += (p[coluna][coluna] == 'X')?  1 :
+                    (p[coluna][coluna] == 'O')? -1 : 0;
+    }
+    if (contador == 3 || contador == -3)
+        return contador / abs(contador);
 
-        contador = 0;
-        for (coluna = 0; coluna < n; ++coluna) {    // Verifica a Diagonal de baixo para cima da esquerda para direita
-            contador += (p[coluna][2 - coluna] == 'X') ? 1 :
-                        (p[coluna][2 - coluna] == 'O') ? -1 : 0;
-        }
-        if (contador == n || contador == -n)
-            return contador / abs(contador);
-    //}
-    //else if(r.tabuleiro == 2 || r.tabuleiro == 5 || r.tabuleiro == 8) {
-        contador = 0;
-        for (coluna = n; coluna < 6; ++coluna) {
-            contador += (p[coluna][coluna] == 'X') ? 1 :
-                        (p[coluna][coluna] == 'O') ? -1 : 0;
-        }
-        if (contador == n || contador == -n)
-            return contador / abs(contador);
-
-        contador = 0;
-        for (coluna = n; coluna < 6; ++coluna) {
-            contador += (p[coluna][2 - coluna] == 'X') ? 1 :
-                        (p[coluna][2 - coluna] == 'O') ? -1 : 0;
-        }
-        if (contador == n || contador == -n)
-            return contador / abs(contador);
-    // }
-    //else if(r.tabuleiro == 3 || r.tabuleiro == 6 || r.tabuleiro == 9) {
-        contador = 0;
-        for (coluna = 6; coluna < 9; ++coluna) {
-            contador += (p[coluna][coluna] == 'X') ? 1 :
-                        (p[coluna][coluna] == 'O') ? -1 : 0;
-        }
-        if (contador == n || contador == -n)
-            return contador / abs(contador);
-
-        contador = 0;
-        for (coluna = 6; coluna < 9; ++coluna) {
-            contador += (p[coluna][2 - coluna] == 'X') ? 1 :
-                        (p[coluna][2 - coluna] == 'O') ? -1 : 0;
-        }
-        if (contador == n || contador == -n)
-            return contador / abs(contador);
-    //}
+    contador = 0;
+    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica a Diagonal de baixo para cima da esquerda para direita
+        contador += (p[coluna][2 - coluna] == 'X') ? 1 :
+                    (p[coluna][2 - coluna] == 'O') ? -1 : 0;
+    }
+    if (contador == 3 || contador == -3)
+        return contador / abs(contador);
 
     return 0;
-}
-
-void escolhe_tabuleiro(int posicao) {
-    printf("\n-> Jogar para o tabuleiro %d\n\n", posicao);
 }
 
 void escreve_resultado(jogo *r, int ganhou) {
@@ -437,49 +228,6 @@ void resultados_jogos(jogo r) {
     }
 }
 
-int verifica_final(char **p, int n) {
-    int linha, coluna;
-    int contador;
-
-    for(linha = 0; linha < n; ++linha) {
-        contador = 0;
-        for (coluna = 0; coluna < n; ++coluna) {
-            contador += (p[linha][coluna] == 'X') ? 1 :
-                        (p[linha][coluna] == 'O') ? -1 : 0;
-        }
-        if (contador == n || contador == -n)
-            return contador / abs(contador);
-    }
-
-    for (coluna = 0; coluna < n; ++coluna) {
-        contador = 0;
-        for (linha = 0; linha < n; ++linha) {
-            contador += (p[linha][coluna] == 'X') ? 1 :
-                        (p[linha][coluna] == 'O') ? -1 : 0;
-        }
-        if (contador == n || contador == -n)
-            return contador / abs(contador);
-    }
-
-    contador = 0;
-    for(coluna = 0; coluna < n; ++coluna) {
-        contador += (p[coluna][coluna] == 'X')?  1 :
-                    (p[coluna][coluna] == 'O')? -1 : 0;
-    }
-    if (contador == n || contador == -n)
-        return contador / abs(contador);
-
-    contador = 0;
-    for (coluna = 0; coluna < n; ++coluna) {
-        contador += (p[coluna][2 - coluna] == 'X') ? 1 :
-                    (p[coluna][2 - coluna] == 'O') ? -1 : 0;
-    }
-    if (contador == n || contador == -n)
-        return contador / abs(contador);
-
-    return 0;
-}
-
 void tabuleiro_final(jogo *r) {
     char **mat = NULL;
     printf("------------------------------------\n");
@@ -498,11 +246,11 @@ void tabuleiro_final(jogo *r) {
             setPos(mat, i/N, i%N, '#');
     }
 
-    if(verifica_final(mat, N) == 1)
+    if(verifica_tabuleiro(mat, 0, 3, 0, 3) == 1)
         r->vencedortabfinal = 1;
-    else if(verifica_final(mat, N) == -1)
+    else if(verifica_tabuleiro(mat, 0, 3, 0, 3) == -1)
         r->vencedortabfinal = 2;
-    else if(verifica_final(mat, N) == 0)
+    else if(verifica_tabuleiro(mat, 0, 3, 0, 3) == 0)
         r->vencedortabfinal = 0;
 
     mostraMat(mat, N, N);

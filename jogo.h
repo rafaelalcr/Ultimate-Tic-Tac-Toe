@@ -33,14 +33,12 @@ void jogar_jogador(jogo *r);
 void escolhe_jogada(jogo *r, char **p, int n, int n_jogador);
 void escolhe_tabuleiro(int posicao);
 
-int linha(char **p, int n);
-int coluna(char **p, int n);
-int diagonal(char **p, int n);
+int verifica(char **p, int tabuleiro);
+int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax);
 
 void escreve_resultado(jogo *r, int ganhou);
 void escreve_resultadoFinal(int ganhou);
 void resultados_jogos(jogo r);
-int verifica_final(char **p, int n);
 void tabuleiro_final(jogo *r);
 
 #endif //TP2022_JOGO_H
