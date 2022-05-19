@@ -38,8 +38,8 @@ int verifica(char **p, int tabuleiro);
 int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax);
 
 void escreve_resultado(jogo *r, int ganhou);
-void escreve_resultadoFinal(int ganhou);
 void resultados_jogos(jogo r);
 void tabuleiro_final(jogo *r);
+void escreve_resultadoFinal(int ganhou);
 
 #endif //TP2022_JOGO_H

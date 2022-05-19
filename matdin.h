@@ -20,5 +20,8 @@ void setPos(char **p, int x, int y, char c);
 // Obtém o caracter armazenado na posição (x, y) de uma matriz de caracteres
 char getPos(char **p, int x, int y);
 
+// Imprime o conteúdo da matriz final
+void mostraMatFinal(char **p, int nLin, int nCol);
+
 
 #endif //TP2022_MATDIN_H

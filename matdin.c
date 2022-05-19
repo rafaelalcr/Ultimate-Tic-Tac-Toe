@@ -52,3 +52,16 @@ void mostraMat(char **p, int nLin, int nCol){
     printf("  ______________    ______________    ______________\n\n");
 }
 
+void mostraMatFinal(char **p, int nLin, int nCol){
+    printf("  ______________\n");
+    for(int i=0; i<nLin; i++){
+        printf(" | ");
+        for(int j=0; j<nCol; j++) {
+            printf("%c ", p[i][j]);
+            printf(" | ");
+        }
+        putchar('\n');
+    }
+    printf("  ______________\n\n");
+}
+
