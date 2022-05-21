@@ -1,3 +1,5 @@
+// Rafaela Fonseca Santos nº 2017019717
+
 #ifndef TP2022_JOGO_H
 #define TP2022_JOGO_H
 
@@ -21,6 +23,7 @@ struct jogos {
     int tabuleiro;              // número do tabuleiro inicial e depois utilizado para verificação da escolha da jogada
     int aux;                    // variável auxiliar para guardar o número do tabuleiro anterior
 };
+
 /*
 typedef struct jogadas jogada, *pjogada;
 struct jogadas {
@@ -31,13 +34,14 @@ struct jogadas {
 };*/
 
 void jogar_jogador(jogo *r);
-void escolhe_jogada(jogo *r, char **p, int n, int n_jogador);
+void jogada(jogo *r, char **p, int n, int n_jogador);
+void escolhe_jogada(jogo *r, char **p, int n, int x, int y, int n_jogador);
 void escolhe_tabuleiro(int posicao);
 
 int verifica(char **p, int tabuleiro);
 int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax);
 
-void escreve_resultado(jogo *r, int ganhou);
+void escreve_resultado(jogo r, int ganhou);
 void resultados_jogos(jogo r);
 void tabuleiro_final(jogo *r);
 void escreve_resultadoFinal(int ganhou);

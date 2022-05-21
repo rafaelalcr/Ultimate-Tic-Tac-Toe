@@ -1,3 +1,5 @@
+// Rafaela Fonseca Santos nº 2017019717
+
 #include "menu.h"
 
 int main() {
@@ -13,3 +15,4 @@ int main() {
 //  -> a sucessão de jogadas realizadas devem ser mantidas numa lista ligada simples
 //  -> encontrar forma de conseguir passar para o tabuleiro seguinte consoante a posição jogada, nada haver com listas ligadas
 //  -> lista ligada é só para as jogadas, ou seja, utilizar o p->prox e p->ant para as visualização das jogadas
+//  -> impedir nas jogadas que vá para um tabuleiro terminado

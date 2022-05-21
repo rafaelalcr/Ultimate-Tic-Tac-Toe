@@ -1,3 +1,5 @@
+// Rafaela Fonseca Santos nº 2017019717
+
 #include "jogo.h"
 
 void jogar_jogador(jogo *r) {
@@ -22,13 +24,15 @@ void jogar_jogador(jogo *r) {
 
         do {
             mostraMat(mat, N, N);
-            escolhe_jogada(r, mat, M, r->jogador);
+            jogada(r, mat, M, r->jogador);
             r->jogadas++;
             if(verifica(mat, r->aux) == 1 || verifica(mat, r->aux) == -1) {
                 r->vencedor = r->jogador;
                 r->vencedortab[r->aux] = r->jogador;    // guarda num array quem ganha cada jogo
                 r->minitab[r->contadorjogos] = r->aux;  // guarda a ordem dos tabuleiros terminados
-                escreve_resultado(r, r->vencedor);
+                r->contadorjogos++;                     // número de jogos já terminados
+                printf("Numero de jogos terminados: %d\n", r->contadorjogos);
+                escreve_resultado(*r, r->vencedor);
             }
             r->jogador = r->jogador % 2 + 1;
             escolhe_tabuleiro(r->posicaojogada);
@@ -45,166 +49,95 @@ void escolhe_tabuleiro(int posicao) {
     printf("\n-> Jogar para o tabuleiro %d\n\n", posicao);
 }
 
-void escolhe_jogada(jogo *r, char **p, int n, int n_jogador) {
+void jogada(jogo *r, char **p, int n, int n_jogador) {
     r->aux = 0;
     printf("\n-> Vez do jogador %d\n", n_jogador);
 
-    if(r->tabuleiro == 1) {
-        do{
-            printf("Posicao: ");
-            scanf("%d", &r->posicaojogada);
-            putchar('\n');
-        }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n][(r->posicaojogada-1)%n] != '_');
-
-        if(n_jogador == 1)
-            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+0, 'X');
-        else
-            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+0, 'O');
-
-        r->aux = 1;
+    switch (r->tabuleiro) {
+        case 1:
+            escolhe_jogada(r, p, n, 0, 0, n_jogador);
+            r->aux = 1;
+            break;
+        case 2:
+            escolhe_jogada(r, p, n, 0, 3, n_jogador);
+            r->aux = 2;
+            break;
+        case 3:
+            escolhe_jogada(r, p, n, 0, 6, n_jogador);
+            r->aux = 3;
+            break;
+        case 4:
+            escolhe_jogada(r, p, n, 3, 0, n_jogador);
+            r->aux = 4;
+            break;
+        case 5:
+            escolhe_jogada(r, p, n, 3, 3, n_jogador);
+            r->aux = 5;
+            break;
+        case 6:
+            escolhe_jogada(r, p, n, 3, 6, n_jogador);
+            r->aux = 6;
+            break;
+        case 7:
+            escolhe_jogada(r, p, n, 6, 0, n_jogador);
+            r->aux = 7;
+            break;
+        case 8:
+            escolhe_jogada(r, p, n, 6, 3, n_jogador);
+            r->aux = 8;
+            break;
+        case 9:
+            escolhe_jogada(r, p, n, 6, 6, n_jogador);
+            r->aux = 9;
+        default:
+            break;
     }
-    else if(r->tabuleiro == 2) {
-        do{
-            printf("Posicao: ");
-            scanf("%d", &r->posicaojogada);
-            putchar('\n');
-        }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n][(r->posicaojogada-1)%n+3] != '_');
+}
 
-        if(n_jogador == 1)
-            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+3, 'X');
-        else
-            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+3, 'O');
+void escolhe_jogada(jogo *r, char **p, int n, int x, int y, int n_jogador) {
+    do{
+        printf("Posicao: ");
+        scanf("%d", &r->posicaojogada);
+        putchar('\n');
+    }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n+x][(r->posicaojogada-1)%n+y] != '_');
 
-        r->aux = 2;
-    }
-    else if(r->tabuleiro == 3) {
-        do{
-            printf("Posicao: ");
-            scanf("%d", &r->posicaojogada);
-            putchar('\n');
-        }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n][(r->posicaojogada-1)%n+6] != '_');
-
-        if(n_jogador == 1)
-            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+6, 'X');
-        else
-            setPos(p, (r->posicaojogada-1)/n+0, (r->posicaojogada-1)%n+6, 'O');
-
-        r->aux = 3;
-    }
-    else if(r->tabuleiro == 4) {
-        do{
-            printf("Posicao: ");
-            scanf("%d", &r->posicaojogada);
-            putchar('\n');
-        }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n+3][(r->posicaojogada-1)%n] != '_');
-
-        if(n_jogador == 1)
-            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+0, 'X');
-        else
-            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+0, 'O');
-
-        r->aux = 4;
-    }
-    else if(r->tabuleiro == 5) {
-        do{
-            printf("Posicao: ");
-            scanf("%d", &r->posicaojogada);
-            putchar('\n');
-        }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n+3][(r->posicaojogada-1)%n+3] != '_');
-
-        if(n_jogador == 1)
-            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+3, 'X');
-        else
-            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+3, 'O');
-
-        r->aux = 5;
-    }
-    else if(r->tabuleiro == 6) {
-        do{
-            printf("Posicao: ");
-            scanf("%d", &r->posicaojogada);
-            putchar('\n');
-        }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n+3][(r->posicaojogada-1)%n+6] != '_');
-
-        if(n_jogador == 1)
-            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+6, 'X');
-        else
-            setPos(p, (r->posicaojogada-1)/n+3, (r->posicaojogada-1)%n+6, 'O');
-
-        r->aux = 6;
-    }
-    else if(r->tabuleiro == 7) {
-        do{
-            printf("Posicao: ");
-            scanf("%d", &r->posicaojogada);
-            putchar('\n');
-        }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n+6][(r->posicaojogada-1)%n] != '_');
-
-        if(n_jogador == 1)
-            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+0, 'X');
-        else
-            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+0, 'O');
-
-        r->aux = 7;
-    }
-    else if(r->tabuleiro == 8) {
-        do{
-            printf("Posicao: ");
-            scanf("%d", &r->posicaojogada);
-            putchar('\n');
-        }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n+6][(r->posicaojogada-1)%n+3] != '_');
-
-        if(n_jogador == 1)
-            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+3, 'X');
-        else
-            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+3, 'O');
-
-        r->aux = 8;
-    }
-    else if(r->tabuleiro == 9) {
-        do{
-            printf("Posicao: ");
-            scanf("%d", &r->posicaojogada);
-            putchar('\n');
-        }while(r->posicaojogada < 1 || r->posicaojogada > N || p[(r->posicaojogada-1)/n+6][(r->posicaojogada-1)%n+6] != '_');
-
-        if(n_jogador == 1)
-            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+6, 'X');
-        else
-            setPos(p, (r->posicaojogada-1)/n+6, (r->posicaojogada-1)%n+6, 'O');
-
-        r->aux = 9;
-    }
+    if(n_jogador == 1)
+        setPos(p, (r->posicaojogada-1)/n+x, (r->posicaojogada-1)%n+y, 'X');
+    else
+        setPos(p, (r->posicaojogada-1)/n+x, (r->posicaojogada-1)%n+y, 'O');
 
     r->tabuleiro = r->posicaojogada;
 }
 
 int verifica(char **p, int tabuleiro) {
-    if(tabuleiro == 1)
-        return verifica_tabuleiro(p, 0, 3, 0, 3);
-    else if(tabuleiro == 2)
-        return verifica_tabuleiro(p, 0, 3, 3, 6);
-    else if(tabuleiro == 3)
-        return verifica_tabuleiro(p, 0, 3, 6, 9);
-    else if(tabuleiro == 4)
-        return verifica_tabuleiro(p, 3, 6, 0, 3);
-    else if(tabuleiro == 5)
-        return verifica_tabuleiro(p, 3, 6, 3, 6);
-    else if(tabuleiro == 6)
-        return verifica_tabuleiro(p, 3, 6, 6, 9);
-    else if(tabuleiro == 7)
-        return verifica_tabuleiro(p, 6, 9, 0, 3);
-    else if(tabuleiro == 8)
-        return verifica_tabuleiro(p, 6, 9, 3, 6);
-    else if(tabuleiro == 9)
-        return verifica_tabuleiro(p, 6, 9, 6, 9);
-
-    return 0;
+    switch (tabuleiro) {
+        case 1:
+            return verifica_tabuleiro(p, 0, 3, 0, 3);
+        case 2:
+            return verifica_tabuleiro(p, 0, 3, 3, 6);
+        case 3:
+            return verifica_tabuleiro(p, 0, 3, 6, 9);
+        case 4:
+            return verifica_tabuleiro(p, 3, 6, 0, 3);
+        case 5:
+            return verifica_tabuleiro(p, 3, 6, 3, 6);
+        case 6:
+            return verifica_tabuleiro(p, 3, 6, 6, 9);
+        case 7:
+            return verifica_tabuleiro(p, 6, 9, 0, 3);
+        case 8:
+            return verifica_tabuleiro(p, 6, 9, 3, 6);
+        case 9:
+            return verifica_tabuleiro(p, 6, 9, 6, 9);
+        default:
+            return 0;
+    }
 }
 
 int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax) {
     int linha, coluna;
-    int contador;
+    int contador;   // Se chegar a 3 então há 3 'X' em linha/coluna/diagonal
+                    // Se chegar a -3 então há 3 'O' em linha/coluna/diagonal
 
     for(linha = nlin; linha < linMax; ++linha) {
         contador = 0;
@@ -245,28 +178,25 @@ int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax) {
     return 0;
 }
 
-void escreve_resultado(jogo *r, int ganhou) {
+void escreve_resultado(jogo r, int ganhou) {
     // se o número do tabuleiro não estiver guardado no array, aparece o resultado
-    if(r->minitab[0] != r->aux || r->minitab[1] != r->aux || r->minitab[2] != r->aux ||
-        r->minitab[3] != r->aux || r->minitab[4] != r->aux || r->minitab[5] != r->aux ||
-        r->minitab[6] != r->aux || r->minitab[7] != r->aux || r->minitab[8] != r->aux) {
+    //if(r->minitab[0] != r->aux || r->minitab[1] != r->aux || r->minitab[2] != r->aux ||
+        //r->minitab[3] != r->aux || r->minitab[4] != r->aux || r->minitab[5] != r->aux ||
+        //r->minitab[6] != r->aux || r->minitab[7] != r->aux || r->minitab[8] != r->aux) {
 
         printf("\n------------------------------------\n");
         printf("|             RESULTADO            |\n");
         printf("------------------------------------\n\n");
 
         if(ganhou == 0)
-            printf("\nEmpate no jogo %d.\n\n", r->aux);
+            printf("\nEmpate no jogo %d.\n\n", r.aux);
         else
-            printf("\nO jogador %d ganhou o jogo %d.\n\n", ganhou, r->aux);
-
-        r->contadorjogos++;                     // número de jogos já terminados
-        printf("Numero de jogos terminados: %d\n", r->contadorjogos);
+            printf("\nO jogador %d ganhou o jogo %d.\n\n", ganhou, r.aux);
 
         printf("\n------------------------------------\n");
         printf("|        CONTINUACAO DO JOGO       |\n");
         printf("------------------------------------\n");
-    }
+    //}
 }
 
 void resultados_jogos(jogo r) {
@@ -296,7 +226,7 @@ void tabuleiro_final(jogo *r) {
     r->vencedortabfinal = 0;
     mat = criaMat(M, M);
 
-    for(int i=0; i < M*M; i++) {
+    for(int i=0; i < N; i++) {
         if(r->vencedortab[i] == 1)                  // Se o jogador 1 ganhou
             setPos(mat, i/M, i%M, 'X');
         else if(r->vencedortab[i] == 2)             // Se o jogador 2 ganhou

@@ -1,3 +1,5 @@
+// Rafaela Fonseca Santos nº 2017019717
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -18,7 +20,7 @@ int probEvento(float prob){
 
 
 // Função main () com alguns exemplos simples de utilizacao das funcoes
-int f(){
+int funcaomain(){
 
     int i;
 

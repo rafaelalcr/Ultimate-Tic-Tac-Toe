@@ -1,3 +1,5 @@
+// Rafaela Fonseca Santos nº 2017019717
+
 #include "matdin.h"
 
 void libertaMat(char** p, int nLin){

@@ -1,3 +1,5 @@
+// Rafaela Fonseca Santos nº 2017019717
+
 #include "menu.h"
 
 void menu() {
@@ -24,13 +26,13 @@ void menu() {
                 jogar_jogador(&r);
                 break;
             case 2:
-                jogarComputador(&s);
+                jogar_computador(&s);
                 break;
             case 3:
                 resultados_jogos(r);
                 break;
             case 4:
-                resultadosJogosComputador(s, 9);
+                resultados_jogosC(s);
                 break;
             default:
                 break;
