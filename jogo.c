@@ -25,7 +25,7 @@ void jogar_jogador(jogo *r) {
         jogada(r, mat, M, r->jogador);
         if(verifica(mat, r->aux) == 1 || verifica(mat, r->aux) == -1) {
             r->vencedor = r->jogador;
-            r->vencedortab[r->aux] = r->jogador;    // guarda num array quem ganha cada jogo
+            r->vencedortab[r->contadorjogos] = r->jogador;
             escreve_resultado(r, r->vencedor);
         }
         r->jogador = r->jogador % 2 + 1;
@@ -201,9 +201,19 @@ void resultados_jogos(jogo r) {
     printf("|        RESULTADO DOS JOGOS       |\n");
     printf("------------------------------------\n\n");
 
-    if(r.contadorjogos == 0)
-        printf("Sem resultados.\n\n");
-    else {
+    r.vencedortab[0] = 2;  r.minitab[0] = 5;
+    r.vencedortab[1] = 1;  r.minitab[1] = 3;
+    r.vencedortab[2] = 1;  r.minitab[2] = 4;
+    r.vencedortab[3] = 2;  r.minitab[3] = 6;
+    r.vencedortab[4] = 1;  r.minitab[4] = 2;
+    r.vencedortab[5] = 1;  r.minitab[5] = 1;
+    r.vencedortab[6] = 2;  r.minitab[6] = 7;
+    r.vencedortab[7] = 2;  r.minitab[7] = 9;
+    r.vencedortab[8] = 1;  r.minitab[8] = 8;
+
+    //if(r.contadorjogos == 0)
+      //  printf("Sem resultados.\n\n");
+    //else {
         for(int i=0; i < N; i++) {
             if(r.vencedortab[i] == 0)
                 printf("Houve um empate no jogo %d\n", r.minitab[i]);
@@ -211,7 +221,7 @@ void resultados_jogos(jogo r) {
                 printf("Jogador %d ganhou o jogo %d\n", r.vencedortab[i], r.minitab[i]);
         }
         tabuleiro_final(&r);
-    }
+    //}
 }
 
 void tabuleiro_final(jogo *r) {
@@ -223,13 +233,14 @@ void tabuleiro_final(jogo *r) {
     r->vencedortabfinal = 0;
     mat = criaMat(M, M);
 
-    for(int i=1; i <= N; i++) {
+
+    for(int i=0; i < N; i++) {
         if(r->vencedortab[i] == 1)                  // Se o jogador 1 ganhou
-            setPos(mat, (i-1)/M, (i-1)%M, 'X');
+            setPos(mat, i/M, i%M, 'X');
         else if(r->vencedortab[i] == 2)             // Se o jogador 2 ganhou
-            setPos(mat, (i-1)/M, (i-1)%M, 'O');
+            setPos(mat, i/M, i%M, 'O');
         else if(r->vencedortab[i] == 0)             // Se empatou
-            setPos(mat, (i-1)/M, (i-1)%M, '#');
+            setPos(mat, i/M, i%M, '#');
     }
 
     if(verifica_tabuleiro(mat, 0, 3, 0, 3) == 1)
