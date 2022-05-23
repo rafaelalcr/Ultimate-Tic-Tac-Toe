@@ -41,7 +41,7 @@ void escolhe_tabuleiroC(int posicao);
 int verificaC(char **p, int tabuleiro);
 int verifica_tabuleiroC(char **p, int nlin, int linMax, int ncol, int colMax);
 
-void escreve_resultadoC(jogoC s, int ganhou);
+void escreve_resultadoC(jogoC *s, int ganhou);
 void resultados_jogosC(jogoC s);
 void tabuleiro_finalC(jogoC *s);
 void escreve_resultadoFinalC(int ganhou);

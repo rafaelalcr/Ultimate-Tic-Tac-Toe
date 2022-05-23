@@ -5,8 +5,6 @@
 void jogar_computador(jogoC *s) {
     char **mat = NULL;
 
-    s->contadorjogos = 0;
-
     printf("------------------------------------\n");
     printf("|          INICIO DO JOGO          |\n");
     printf("------------------------------------\n");
@@ -17,31 +15,24 @@ void jogar_computador(jogoC *s) {
 
     mat = criaMat(N, N);
 
+    s->contadorjogos = 0;
+    s->vencedor = 0;
+    s->jogadas = 0;
+    s->jogador = 1;
+
     do {
-        s->vencedor = 0;
-        s->jogadas = 0;
-        s->jogador = 1;
-
-        do {
-            mostraMat(mat, N, N);
-            jogadaC(s, mat, N, s->jogador);
-            s->jogadas++;
-            if(verificaC(mat, s->aux) == 1 || verificaC(mat, s->aux) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
-                s->vencedor = s->jogador;
-                s->vencedortab[s->aux] = s->jogador;    // guarda num array quem ganha cada jogo
-                s->minitab[s->contadorjogos] = s->aux;  // guarda a ordem dos tabuleiros terminados
-                s->contadorjogos++;                     // número de jogos já terminados
-                printf("Numero de jogos terminados: %d\n", s->contadorjogos);
-                escreve_resultadoC(*s, s->vencedor);
-            }
-            s->jogador = s->jogador % 2 + 1;
-            escolhe_tabuleiroC(s->posicaojogada);
-        }while(s->vencedor == 0 || s->jogadas < N*N);
-
         mostraMat(mat, N, N);
+        jogadaC(s, mat, N, s->jogador);
+        if(verificaC(mat, s->aux) == 1 || verificaC(mat, s->aux) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
+            s->vencedor = s->jogador;
+            s->vencedortab[s->contadorjogos] = s->jogador;    // guarda num array quem ganha cada jogo
+            escreve_resultadoC(s, s->vencedor);
+        }
+        s->jogador = s->jogador % 2 + 1;
+        escolhe_tabuleiroC(s->posicaojogada);
+    }while(s->contadorjogos < N && s->jogadas < N*N);
 
-    } while (s->contadorjogos < N);
-
+    mostraMat(mat, N, N);
     libertaMat(mat, N);
 }
 
@@ -115,6 +106,7 @@ void escolhe_jogadaC(jogoC *s, char **p, int n, int x, int y, int n_jogador) {
         setPos(p, (s->posicaojogada-1)/n+x, (s->posicaojogada-1)%n+y, 'O');
 
     s->tabuleiro = s->posicaojogada;
+    s->jogadas++;
 }
 
 int verificaC(char **p, int tabuleiro) {
@@ -186,21 +178,30 @@ int verifica_tabuleiroC(char **p, int nlin, int linMax, int ncol, int colMax) {
     return 0;
 }
 
-void escreve_resultadoC(jogoC s, int ganhou) {
-    printf("\n------------------------------------\n");
-    printf("|             RESULTADO            |\n");
-    printf("------------------------------------\n");
+void escreve_resultadoC(jogoC *s, int ganhou) {
+    // se o número do tabuleiro não estiver guardado no array, aparece o resultado
+    if(s->minitab[0] != s->aux && s->minitab[1] != s->aux && s->minitab[2] != s->aux &&
+       s->minitab[3] != s->aux && s->minitab[4] != s->aux && s->minitab[5] != s->aux &&
+       s->minitab[6] != s->aux && s->minitab[7] != s->aux && s->minitab[8] != s->aux) {
 
-    if(ganhou == 0)
-        printf("\nEmpate no jogo %d.\n\n", s.aux);
-    else if(ganhou == 1)
-        printf("\nO jogador ganhou o jogo %d.\n\n", s.aux);
-    else if(ganhou == 2)
-        printf("\nO computador ganhou o jogo %d.\n\n", s.aux);
+        s->minitab[s->contadorjogos] = s->aux;
+        s->contadorjogos++;
 
-    printf("\n------------------------------------\n");
-    printf("|        CONTINUACAO DO JOGO       |\n");
-    printf("------------------------------------\n");
+        printf("\n------------------------------------\n");
+        printf("|             RESULTADO            |\n");
+        printf("------------------------------------\n");
+
+        if (ganhou == 0)
+            printf("\nEmpate no jogo %d.\n\n", s->aux);
+        else if (ganhou == 1)
+            printf("\nO jogador ganhou o jogo %d.\n\n", s->aux);
+        else if (ganhou == 2)
+            printf("\nO computador ganhou o jogo %d.\n\n", s->aux);
+
+        printf("\n------------------------------------\n");
+        printf("|        CONTINUACAO DO JOGO       |\n");
+        printf("------------------------------------\n");
+    }
 }
 
 void resultados_jogosC(jogoC s) {
@@ -233,13 +234,13 @@ void tabuleiro_finalC(jogoC *s) {
     s->vencedortabfinal = 0;
     mat = criaMat(M, M);
 
-    for(int i=0; i < N; i++) {
-        if(s->vencedortab[i] == 1)                  // Se o jogador ganhou
-            setPos(mat, i/M, i%M, 'X');
-        else if(s->vencedortab[i] == 2)             // Se o computador ganhou
-            setPos(mat, i/M, i%M, 'O');
-        else if(s->vencedortab[i] == 0)             // Se empatou
-            setPos(mat, i/M, i%M, '#');
+    for(int i = s->minitab[0]; i <= s->minitab[8]; i++) {   // percorre pela ordem dos jogos
+        if(s->vencedortab[i] == 1)
+            setPos(mat, (s->minitab[i]-1)/M, (s->minitab[i]-1)%M, 'X');
+        else if(s->vencedortab[i] == 2)
+            setPos(mat, (s->minitab[i]-1)/M, (s->minitab[i]-1)%M, 'O');
+        else if(s->vencedortab[i] == 0)
+            setPos(mat, (s->minitab[i]-1)/M, (s->minitab[i]-1)%M, '#');
     }
 
     if(verifica_tabuleiroC(mat, 0, 3, 0, 3) == 1)

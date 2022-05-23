@@ -30,7 +30,7 @@ void jogar_jogador(jogo *r) {
         }
         r->jogador = r->jogador % 2 + 1;
         escolhe_tabuleiro(r->posicaojogada);
-    }while(r->jogadas < N*N && r->contadorjogos < N);
+    }while(r->contadorjogos < N && r->jogadas < N*N);
 
     mostraMat(mat, N, N);
     libertaMat(mat, N);
@@ -177,9 +177,7 @@ void escreve_resultado(jogo *r, int ganhou) {
         r->minitab[6] != r->aux && r->minitab[7] != r->aux && r->minitab[8] != r->aux) {
 
         r->minitab[r->contadorjogos] = r->aux;
-        printf("Tabuleiro terminado: %d\n", r->minitab[r->contadorjogos]);
         r->contadorjogos++;
-        printf("Numero de jogos terminados: %d\n", r->contadorjogos);
 
         printf("\n------------------------------------\n");
         printf("|             RESULTADO            |\n");
@@ -201,19 +199,9 @@ void resultados_jogos(jogo r) {
     printf("|        RESULTADO DOS JOGOS       |\n");
     printf("------------------------------------\n\n");
 
-    r.vencedortab[0] = 2;  r.minitab[0] = 5;
-    r.vencedortab[1] = 1;  r.minitab[1] = 3;
-    r.vencedortab[2] = 1;  r.minitab[2] = 4;
-    r.vencedortab[3] = 2;  r.minitab[3] = 6;
-    r.vencedortab[4] = 1;  r.minitab[4] = 2;
-    r.vencedortab[5] = 1;  r.minitab[5] = 1;
-    r.vencedortab[6] = 2;  r.minitab[6] = 7;
-    r.vencedortab[7] = 2;  r.minitab[7] = 9;
-    r.vencedortab[8] = 1;  r.minitab[8] = 8;
-
-    //if(r.contadorjogos == 0)
-      //  printf("Sem resultados.\n\n");
-    //else {
+    if(r.contadorjogos == 0)
+        printf("Sem resultados.\n\n");
+    else {
         for(int i=0; i < N; i++) {
             if(r.vencedortab[i] == 0)
                 printf("Houve um empate no jogo %d\n", r.minitab[i]);
@@ -221,7 +209,7 @@ void resultados_jogos(jogo r) {
                 printf("Jogador %d ganhou o jogo %d\n", r.vencedortab[i], r.minitab[i]);
         }
         tabuleiro_final(&r);
-    //}
+    }
 }
 
 void tabuleiro_final(jogo *r) {
@@ -233,14 +221,13 @@ void tabuleiro_final(jogo *r) {
     r->vencedortabfinal = 0;
     mat = criaMat(M, M);
 
-
-    for(int i=0; i < N; i++) {
-        if(r->vencedortab[i] == 1)                  // Se o jogador 1 ganhou
-            setPos(mat, i/M, i%M, 'X');
-        else if(r->vencedortab[i] == 2)             // Se o jogador 2 ganhou
-            setPos(mat, i/M, i%M, 'O');
-        else if(r->vencedortab[i] == 0)             // Se empatou
-            setPos(mat, i/M, i%M, '#');
+    for(int i = r->minitab[0]; i <= r->minitab[8]; i++) {   // percorre pela ordem dos jogos
+        if(r->vencedortab[i] == 1)
+            setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, 'X');
+        else if(r->vencedortab[i] == 2)
+            setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, 'O');
+        else if(r->vencedortab[i] == 0)
+            setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, '#');
     }
 
     if(verifica_tabuleiro(mat, 0, 3, 0, 3) == 1)
