@@ -22,6 +22,7 @@ struct jogos {
     int jogadas;                // número de jogadas feitas pelo utilizador
     int tabuleiro;              // número do tabuleiro inicial e depois utilizado para verificação da escolha da jogada
     int aux;                    // variável auxiliar para guardar o número do tabuleiro anterior
+    int contadorjogadas[N];
 };
 
 /*
