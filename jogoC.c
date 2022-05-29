@@ -20,12 +20,22 @@ void jogar_computador(jogoC *s) {
     s->jogadas = 0;
     s->jogador = 1;
 
+    s->contadorjogadas[0] = 0;  s->contadorjogadas[1] = 0;  s->contadorjogadas[2] = 0;
+    s->contadorjogadas[3] = 0;  s->contadorjogadas[4] = 0;  s->contadorjogadas[5] = 0;
+    s->contadorjogadas[6] = 0;  s->contadorjogadas[7] = 0;  s->contadorjogadas[8] = 0;
+
     do {
         mostraMat(mat, N, N);
         jogadaC(s, mat, N, s->jogador);
+        s->contadorjogadas[s->aux-1]++;
         if(verificaC(mat, s->aux) == 1 || verificaC(mat, s->aux) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
             s->vencedor = s->jogador;
             s->vencedortab[s->contadorjogos] = s->jogador;    // guarda num array quem ganha cada jogo
+            escreve_resultadoC(s, s->vencedor);
+        }
+        else if(verificaC(mat, s->aux) == 0 && s->contadorjogadas[s->aux-1] == 9) {
+            s->vencedor = 0;
+            s->vencedortab[s->contadorjogos] = 0;
             escreve_resultadoC(s, s->vencedor);
         }
         s->jogador = s->jogador % 2 + 1;
@@ -159,6 +169,7 @@ int verifica_tabuleiroC(char **p, int nlin, int linMax, int ncol, int colMax) {
             return contador / abs(contador);
     }
 
+    //for (linha = nlin; linha < linMax; ++linha);        // vai para a linha pretendida
     contador = 0;
     for(coluna = ncol; coluna < colMax; ++coluna) {   // Verifica a Diagonal de cima para baixo da esquerda para direita
         contador += (p[coluna][coluna] == 'X')?  1 :
@@ -167,6 +178,7 @@ int verifica_tabuleiroC(char **p, int nlin, int linMax, int ncol, int colMax) {
     if (contador == 3 || contador == -3)
         return contador / abs(contador);
 
+    //for (linha = nlin; linha < linMax; ++linha);        // vai para a linha pretendida
     contador = 0;
     for (coluna = ncol; coluna < colMax; ++coluna) {  // Verifica a Diagonal de baixo para cima da esquerda para direita
         contador += (p[coluna][2 - coluna] == 'X') ? 1 :
@@ -227,14 +239,14 @@ void resultados_jogosC(jogoC s) {
 
 void tabuleiro_finalC(jogoC *s) {
     char **mat = NULL;
+
     printf("\n------------------------------------\n");
     printf("|          TABULEIRO FINAL         |\n");
     printf("------------------------------------\n\n");
 
-    s->vencedortabfinal = 0;
     mat = criaMat(M, M);
 
-    for(int i = s->minitab[0]; i <= s->minitab[8]; i++) {   // percorre pela ordem dos jogos
+    for(int i = 0; i < N; i++) {
         if(s->vencedortab[i] == 1)
             setPos(mat, (s->minitab[i]-1)/M, (s->minitab[i]-1)%M, 'X');
         else if(s->vencedortab[i] == 2)

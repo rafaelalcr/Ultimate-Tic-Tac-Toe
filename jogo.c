@@ -139,20 +139,19 @@ int verifica(char **p, int tabuleiro) {
 
 int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax) {
     int linha, coluna;
-    int contador;   // Se chegar a 3 então há 3 'X' em linha/coluna/diagonal
-                    // Se chegar a -3 então há 3 'O' em linha/coluna/diagonal
+    int contador;                                       // Se o contador chegar a 3, significa que há um vencedor
 
-    for(linha = nlin; linha < linMax; ++linha) {
+    for(linha = nlin; linha < linMax; ++linha) {        // Verifica Linha
         contador = 0;
         for (coluna = ncol; coluna < colMax; ++coluna) {
             contador += (p[linha][coluna] == 'X') ? 1 :
                         (p[linha][coluna] == 'O') ? -1 : 0;
         }
-        if (contador == 3 || contador == -3)        // Se contador = 3 'X' ou 3 'O'
-            return contador / abs(contador);        // Returna 1 ou -1
+        if (contador == 3 || contador == -3)            // Se contador = 3 'X' ou 3 'O'
+            return contador / abs(contador);            // Returna 1 ou -1
     }
 
-    for (coluna = ncol; coluna < colMax; ++coluna) {
+    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Coluna
         contador = 0;
         for (linha = nlin; linha < linMax; ++linha) {
             contador += (p[linha][coluna] == 'X') ? 1 :
@@ -162,21 +161,25 @@ int verifica_tabuleiro(char **p, int nlin, int linMax, int ncol, int colMax) {
             return contador / abs(contador);
     }
 
+    //for (linha = nlin; linha < linMax; ++linha);        // vai para a linha pretendida
     contador = 0;
-    for(coluna = ncol; coluna < colMax; ++coluna) {   // Verifica a Diagonal de cima para baixo da esquerda para direita
-        contador += (p[coluna][coluna] == 'X')?  1 :
-                    (p[coluna][coluna] == 'O')? -1 : 0;
+    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de cima -> baixo da esquerda -> direita
+        contador += (p[coluna][coluna] == 'X') ? 1 :
+                    (p[coluna][coluna] == 'O') ? -1 : 0;
     }
     if (contador == 3 || contador == -3)
         return contador / abs(contador);
 
+
+    //for (linha = nlin; linha < linMax; ++linha);        // vai para a linha pretendida
     contador = 0;
-    for (coluna = ncol; coluna < colMax; ++coluna) {  // Verifica a Diagonal de baixo para cima da esquerda para direita
+    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de baixo -> cima da esquerda -> direita
         contador += (p[coluna][2 - coluna] == 'X') ? 1 :
                     (p[coluna][2 - coluna] == 'O') ? -1 : 0;
     }
     if (contador == 3 || contador == -3)
         return contador / abs(contador);
+
 
     return 0;
 }
@@ -212,16 +215,6 @@ void resultados_jogos(jogo r) {
     printf("|        RESULTADO DOS JOGOS       |\n");
     printf("------------------------------------\n\n");
 
-    /*r->vencedortab[0] = 2;  r->minitab[0] = 5;
-    r->vencedortab[1] = 1;  r->minitab[1] = 1;
-    r->vencedortab[2] = 1;  r->minitab[2] = 2;
-    r->vencedortab[3] = 1;  r->minitab[3] = 3;
-    r->vencedortab[4] = 2;  r->minitab[4] = 7;
-    r->vencedortab[5] = 2;  r->minitab[5] = 4;
-    r->vencedortab[6] = 1;  r->minitab[6] = 8;
-    r->vencedortab[7] = 2;  r->minitab[7] = 6;
-    r->vencedortab[8] = 0;  r->minitab[8] = 9;*/
-
     if(r.contadorjogos == 0)
         printf("Sem resultados.\n\n");
     else {
@@ -237,11 +230,13 @@ void resultados_jogos(jogo r) {
 
 void tabuleiro_final(jogo *r) {
     char **mat = NULL;
+
     printf("\n------------------------------------\n");
     printf("|          TABULEIRO FINAL         |\n");
     printf("------------------------------------\n\n");
 
     mat = criaMat(M, M);
+
     for(int i = 0; i < N; i++) {
         if(r->vencedortab[i] == 1)
             setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, 'X');
@@ -250,15 +245,6 @@ void tabuleiro_final(jogo *r) {
         else if(r->vencedortab[i] == 0)
             setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, '#');
     }
-
-    /*for(int i = r->minitab[0]; i <= r->minitab[8]; i++) {   // percorre pela ordem dos jogos
-        if(r->vencedortab[i] == 1)
-            setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, 'X');
-        else if(r->vencedortab[i] == 2)
-            setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, 'O');
-        else if(r->vencedortab[i] == 0)
-            setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, '#');
-    }*/
 
     if(verifica_tabuleiro(mat, 0, 3, 0, 3) == 1)
         r->vencedortabfinal = 1;
