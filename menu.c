@@ -5,6 +5,7 @@
 void menu() {
     jogo r;
     jogoC s;
+    pjogada lista = NULL;
     int opcao;
     do {
         printf("------------------------------------\n");

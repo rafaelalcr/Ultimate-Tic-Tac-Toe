@@ -8,6 +8,7 @@
 #include "jogo.h"
 #include "jogoC.h"
 #include "resultados.h"
+#include "listaligada.h"
 
 void menu();
 

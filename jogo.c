@@ -7,6 +7,18 @@ void jogar_jogador(jogo *r) {
     char **mat = NULL;
     pjogada lista = NULL;
 
+    // permitir a continuação de um jogo anterior caso o ficheiro exista
+    int resposta;
+    FILE *f;
+    f = fopen("jogo.bin", "rb");
+    if(f != NULL) {
+        printf("Deseja recuperar o jogo? (Sim: 1)\n");
+        scanf("%d", &resposta);
+        if(resposta == 1)
+            lista = recuperalista("jogo.bin");
+        putchar('\n');
+    }
+
     printf("------------------------------------\n");
     printf("|          INICIO DO JOGO          |\n");
     printf("------------------------------------\n");
@@ -167,8 +179,7 @@ int verifica_tabuleiro(char **mat, int nlin, int linMax, int ncol, int colMax) {
 
     for (linha = nlin; linha < linMax; ++linha) {        // vai para a linha pretendida
         contador = 0;
-        for (coluna = ncol;
-             coluna < colMax; ++coluna) {    // Verifica Diagonal de cima para baixo da esquerda para direita
+        for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de cima para baixo da esquerda para direita
             contador += (mat[coluna][coluna] == 'X') ? 1 :
                         (mat[coluna][coluna] == 'O') ? -1 : 0;
         }
@@ -178,8 +189,7 @@ int verifica_tabuleiro(char **mat, int nlin, int linMax, int ncol, int colMax) {
 
     for (linha = nlin; linha < linMax; ++linha) {        // vai para a linha pretendida
         contador = 0;
-        for (coluna = ncol;
-             coluna < colMax; ++coluna) {    // Verifica Diagonal de baixo para cima da esquerda para direita
+        for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de baixo para cima da esquerda para direita
             contador += (mat[coluna][2 - coluna] == 'X') ? 1 :
                         (mat[coluna][2 - coluna] == 'O') ? -1 : 0;
         }

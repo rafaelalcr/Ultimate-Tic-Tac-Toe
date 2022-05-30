@@ -4,7 +4,7 @@
 
 void listajogadas(pjogada p) {
     int resposta, numero;
-    printf("-> Ver lista de jogadas? (Sim: 1/Nao: 0)\n");
+    printf("-> Ver lista de jogadas? (Sim: 1)\n");
     scanf("%d", &resposta);
     if (resposta == 1) {
         if (p == NULL)
@@ -39,7 +39,7 @@ pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao) {
     pjogada novo, aux;
     novo = malloc(sizeof(lista));
     if(novo == NULL) {
-        printf("Erro na alocacao de memoria\n");
+        printf("Erro na alocacao de memoria.\n");
         return p;
     }
     preenchelista(novo, jogador, tabuleiro, posicao);
@@ -70,11 +70,11 @@ void libertalista(pjogada p) {
 void gravalista(pjogada lista, char* nomeF) {
     FILE *f;
     f = fopen(nomeF, "w");
-    if(f == NULL)
-        printf("Erro de abertura\n");
+    if (f == NULL)
+        printf("Erro de abertura do ficheiro.\n");
     else {
         while (lista != NULL) {
-            fprintf(f, " Jogador %d # tabuleiro %d # posicao %d", lista->jogador, lista->tabuleiro, lista->posicao);
+            fprintf(f, " Jogador %d # tabuleiro %d # posicao %d\n", lista->jogador, lista->tabuleiro, lista->posicao);
             lista = lista->prox;
         }
         fclose(f);
@@ -87,21 +87,20 @@ pjogada recuperalista(char *nomeF){
     FILE *f;
     lista l;
     f = fopen(nomeF, "r");
-    if(f == NULL)
+    if (f == NULL)
         return NULL;
-    while(fscanf(f, " Jogador %d[^#] # Tabuleiro %d[^#] # Posicao %d",
-                 &l.jogador, &l.tabuleiro, &l.posicao) != EOF){
+    while (fscanf(f, " Jogador %d[^#] # Tabuleiro %d[^#] # Posicao %d", &l.jogador, &l.tabuleiro, &l.posicao) != EOF){
         l.prox = NULL;
         novo = malloc(sizeof(lista));
-        if(novo == NULL){
+        if (novo == NULL) {
             fclose(f);
             libertalista(listajogadas);
             return NULL;
         }
         *novo = l;
-        if(listajogadas == NULL)
+        if (listajogadas == NULL)
             listajogadas = novo;
-        else{
+        else {
             aux = listajogadas;
             while(aux->prox != NULL)
                 aux = aux->prox;
