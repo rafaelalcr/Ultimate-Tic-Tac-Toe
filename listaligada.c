@@ -3,36 +3,26 @@
 #include "listaligada.h"
 
 void listajogadas(pjogada p) {
-    char resposta;
-    int numero, diferenca;
-    printf("-> Ver lista de jogadas?");
-    scanf("%s", &resposta);
-    if(strcmp(&resposta, "sim") == 0) {
-        do {
-            printf("Numero de jogadas a visualizar?");
-            scanf("%d", &numero);
-        } while (numero < 1 || numero > 10);
-
-        if(p == NULL)
+    int resposta, numero;
+    printf("-> Ver lista de jogadas? (Sim: 1/Nao: 0)\n");
+    scanf("%d", &resposta);
+    if (resposta == 1) {
+        if (p == NULL)
             printf("Sem jogadas.\n");
-        /*else if(p->jogadas < numero) {
-            diferenca = numero - p->jogadas;
-            for(int i = 0; i < (numero - diferenca); i++) {
-                printf("# Jogador %d -> tabuleiro %d -> posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
-                p = p->prox;
-            }
-        }*/
         else {
-            for(int i=0; i<numero; i++) {
+            do {
+                printf("Numero de jogadas a visualizar?\n");
+                scanf("%d", &numero);
+            } while (numero < 1 || numero > 10);
+
+            for(int i = 0; i < numero; i++) {
                 printf("# Jogador %d -> tabuleiro %d -> posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
                 p = p->prox;
             }
         }
-        /*while(p != NULL) {
-            printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
-            p = p->prox;
-        }*/
     }
+    else if (resposta == 0)
+        printf("Sem visualizacao.\n");
 }
 
 void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas) {
