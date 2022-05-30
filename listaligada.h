@@ -18,5 +18,7 @@ void listajogadas(pjogada p);
 void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao);
 pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao);
 void libertalista(pjogada p);
+void gravalista(pjogada lista, char* nomeF);
+pjogada recuperalista(char *nomeF);
 
 #endif //TP2022_LISTALIGADA_H

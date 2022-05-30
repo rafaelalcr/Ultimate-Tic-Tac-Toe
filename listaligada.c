@@ -19,7 +19,7 @@ void listajogadas(pjogada p) {
                 p = p->prox;
 
             for(int i = 0; i < numero; i++) {   // mostra a lista pela última informação adicionada
-                printf("# Jogador %d -> tabuleiro %d -> posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
                 p = p->ant;
             }
         }
@@ -65,4 +65,49 @@ void libertalista(pjogada p) {
         p = p->prox;
         free(aux);
     }
+}
+
+void gravalista(pjogada lista, char* nomeF) {
+    FILE *f;
+    f = fopen(nomeF, "w");
+    if(f == NULL)
+        printf("Erro de abertura\n");
+    else {
+        while (lista != NULL) {
+            fprintf(f, " Jogador %d # tabuleiro %d # posicao %d", lista->jogador, lista->tabuleiro, lista->posicao);
+            lista = lista->prox;
+        }
+        fclose(f);
+    }
+    printf("\nJogo guardado em ficheiro.\n");
+}
+
+pjogada recuperalista(char *nomeF){
+    pjogada novo, aux, listajogadas = NULL;
+    FILE *f;
+    lista l;
+    f = fopen(nomeF, "r");
+    if(f == NULL)
+        return NULL;
+    while(fscanf(f, " Jogador %d[^#] # Tabuleiro %d[^#] # Posicao %d",
+                 &l.jogador, &l.tabuleiro, &l.posicao) != EOF){
+        l.prox = NULL;
+        novo = malloc(sizeof(lista));
+        if(novo == NULL){
+            fclose(f);
+            libertalista(listajogadas);
+            return NULL;
+        }
+        *novo = l;
+        if(listajogadas == NULL)
+            listajogadas = novo;
+        else{
+            aux = listajogadas;
+            while(aux->prox != NULL)
+                aux = aux->prox;
+            aux->prox = novo;
+        }
+    }
+    fclose(f);
+    return listajogadas;
 }

@@ -51,6 +51,7 @@ void jogar_jogador(jogo *r) {
 
     mostraMat(mat, N, N);
     libertaMat(mat, N);
+    gravalista(lista, "listajogadas.txt");
     libertalista(lista);
 }
 
@@ -164,25 +165,27 @@ int verifica_tabuleiro(char **mat, int nlin, int linMax, int ncol, int colMax) {
             return contador / abs(contador);
     }
 
-    for (linha = nlin; linha < linMax; ++linha);        // vai para a linha pretendida
-    contador = 0;
-    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de cima para baixo da esquerda para direita
-        contador += (mat[coluna][coluna] == 'X') ? 1 :
-                    (mat[coluna][coluna] == 'O') ? -1 : 0;
+    for (linha = nlin; linha < linMax; ++linha) {        // vai para a linha pretendida
+        contador = 0;
+        for (coluna = ncol;
+             coluna < colMax; ++coluna) {    // Verifica Diagonal de cima para baixo da esquerda para direita
+            contador += (mat[coluna][coluna] == 'X') ? 1 :
+                        (mat[coluna][coluna] == 'O') ? -1 : 0;
+        }
+        if (contador == 3 || contador == -3)
+            return contador / abs(contador);
     }
-    if (contador == 3 || contador == -3)
-        return contador / abs(contador);
 
-
-    for (linha = nlin; linha < linMax; ++linha);        // vai para a linha pretendida
-    contador = 0;
-    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de baixo para cima da esquerda para direita
-        contador += (mat[coluna][2 - coluna] == 'X') ? 1 :
-                    (mat[coluna][2 - coluna] == 'O') ? -1 : 0;
+    for (linha = nlin; linha < linMax; ++linha) {        // vai para a linha pretendida
+        contador = 0;
+        for (coluna = ncol;
+             coluna < colMax; ++coluna) {    // Verifica Diagonal de baixo para cima da esquerda para direita
+            contador += (mat[coluna][2 - coluna] == 'X') ? 1 :
+                        (mat[coluna][2 - coluna] == 'O') ? -1 : 0;
+        }
+        if (contador == 3 || contador == -3)
+            return contador / abs(contador);
     }
-    if (contador == 3 || contador == -3)
-        return contador / abs(contador);
-
 
     return 0;
 }
