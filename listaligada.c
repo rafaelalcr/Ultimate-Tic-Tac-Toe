@@ -15,9 +15,12 @@ void listajogadas(pjogada p) {
                 scanf("%d", &numero);
             } while (numero < 1 || numero > 10);
 
-            for(int i = 0; i < numero; i++) {
-                printf("# Jogador %d -> tabuleiro %d -> posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+            while(p->prox != NULL)          // vai até encontrar a última informação adicionada
                 p = p->prox;
+
+            for(int i = 0; i < numero; i++) {   // mostra a lista pela última informação adicionada
+                printf("# Jogador %d -> tabuleiro %d -> posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+                p = p->ant;
             }
         }
     }
@@ -25,28 +28,31 @@ void listajogadas(pjogada p) {
         printf("Sem visualizacao.\n");
 }
 
-void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas) {
+void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao) {
     p->jogador = jogador;
     p->tabuleiro = tabuleiro;
     p->posicao = posicao;
-    p->jogadas = jogadas;
     p->prox = NULL;
 }
 
-pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas) {
+pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao) {
     pjogada novo, aux;
     novo = malloc(sizeof(lista));
     if(novo == NULL) {
         printf("Erro na alocacao de memoria\n");
         return p;
     }
-    preenchelista(novo, jogador, tabuleiro, posicao, jogadas);
+    preenchelista(novo, jogador, tabuleiro, posicao);
     if(p == NULL)
         p = novo;
     else {
         aux = p;
         while(aux->prox != NULL)
             aux = aux->prox;
+        novo->prox = aux->prox;
+        if(aux->prox != NULL)
+            aux->prox->ant = novo;
+        novo->ant = aux;
         aux->prox = novo;
     }
     return p;

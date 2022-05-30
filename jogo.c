@@ -30,7 +30,7 @@ void jogar_jogador(jogo *r) {
         mostraMat(mat, N, N);
         listajogadas(lista);
         jogada(r, mat, M, r->jogador);
-        lista = inserejogada(lista, r->jogador, r->aux, r->posicaojogada, r->jogadas);
+        lista = inserejogada(lista, r->jogador, r->aux, r->posicaojogada);
         r->contadorjogadas[r->aux-1]++;
 
         if (verifica(mat, r->aux) == 1 || verifica(mat, r->aux) == -1) {

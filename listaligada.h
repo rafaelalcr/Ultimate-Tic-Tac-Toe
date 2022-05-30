@@ -10,13 +10,13 @@ struct listajogadas {
     int jogador;                // número do jogador que fez a jogada
     int tabuleiro;              // número do tabuleiro em que foi feita a jogada
     int posicao;                // posição da jogada
-    int jogadas;                // número de jogadas feitas
+    pjogada ant;
     pjogada prox;
 };
 
 void listajogadas(pjogada p);
-void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas);
-pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas);
+void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao);
+pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao);
 void libertalista(pjogada p);
 
 #endif //TP2022_LISTALIGADA_H
