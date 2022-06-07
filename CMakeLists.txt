@@ -10,4 +10,5 @@ add_executable(TP2022 main.c
         menu.c menu.h
         jogoC.c jogoC.h
         resultados.c resultados.h
-        listaligada.c listaligada.h)
+        listaligada.c listaligada.h
+        listaligadaC.c listaligadaC.h)

@@ -1,9 +1,26 @@
 // Rafaela Fonseca Santos nº 2017019717
 
 #include "jogoC.h"
+#include "listaligadaC.h"
+#include "resultados.h"
 
 void jogar_computador(jogoC *s) {
     char **mat = NULL;
+    pjogadaC lista = NULL;
+
+    // permitir a continuação de um jogo anterior caso o ficheiro exista
+    int resposta;
+    FILE *f;
+    f = fopen("jogoC.bin", "rb");
+    if(f != NULL) {
+        printf("Deseja recuperar o jogo? (Sim: 1)\n");
+        scanf("%d", &resposta);
+        if(resposta == 1) {
+            lista = recuperalistaC("jogoC.bin");
+            printf("Jogo recuperado.\n");
+        }
+        putchar('\n');
+    }
 
     printf("------------------------------------\n");
     printf("|          INICIO DO JOGO          |\n");
@@ -11,7 +28,7 @@ void jogar_computador(jogoC *s) {
 
     initRandom();
     s->tabuleiro = intUniformRnd(1, 9);
-    escolhe_tabuleiroC(s->tabuleiro);
+    printf("\n-> Jogar para o tabuleiro %d\n\n", s->tabuleiro);
 
     mat = criaMat(N, N);
 
@@ -26,8 +43,11 @@ void jogar_computador(jogoC *s) {
 
     do {
         mostraMat(mat, N, N);
+        listajogadasC(lista);
         jogadaC(s, mat, N, s->jogador);
+        lista = inserejogadaC(lista, s->jogador, s->aux, s->posicaojogada);
         s->contadorjogadas[s->aux-1]++;
+
         if(verificaC(mat, s->aux) == 1 || verificaC(mat, s->aux) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
             s->vencedor = s->jogador;
             s->vencedortab[s->contadorjogos] = s->jogador;    // guarda num array quem ganha cada jogo
@@ -38,17 +58,17 @@ void jogar_computador(jogoC *s) {
             s->vencedortab[s->contadorjogos] = 0;
             escreve_resultadoC(s, s->vencedor);
         }
+
         s->jogador = s->jogador % 2 + 1;
-        escolhe_tabuleiroC(s->posicaojogada);
+        printf("\n-> Jogar para o tabuleiro %d\n\n", s->posicaojogada);
     }while(s->contadorjogos < N && s->jogadas < N*N);
 
     mostraMat(mat, N, N);
     libertaMat(mat, N);
+    gravalistatxtC(lista, "listajogadasC.txt");
+    libertalistaC(lista);
 }
 
-void escolhe_tabuleiroC(int posicao) {
-    printf("\n-> Jogar para o tabuleiro %d\n\n", posicao);
-}
 
 void jogadaC(jogoC *s, char **p, int n, int n_jogador) {
     s->aux = 0;
@@ -169,115 +189,25 @@ int verifica_tabuleiroC(char **p, int nlin, int linMax, int ncol, int colMax) {
             return contador / abs(contador);
     }
 
-    //for (linha = nlin; linha < linMax; ++linha);        // vai para a linha pretendida
-    contador = 0;
-    for(coluna = ncol; coluna < colMax; ++coluna) {   // Verifica a Diagonal de cima para baixo da esquerda para direita
-        contador += (p[coluna][coluna] == 'X')?  1 :
-                    (p[coluna][coluna] == 'O')? -1 : 0;
+    for (linha = nlin; linha < linMax; ++linha) {        // vai para a linha pretendida
+        contador = 0;
+        for (coluna = ncol; coluna < colMax; ++coluna) {   // Verifica a Diagonal de cima para baixo da esquerda para direita
+            contador += (p[coluna][coluna] == 'X') ? 1 :
+                        (p[coluna][coluna] == 'O') ? -1 : 0;
+        }
+        if (contador == 3 || contador == -3)
+            return contador / abs(contador);
     }
-    if (contador == 3 || contador == -3)
-        return contador / abs(contador);
 
-    //for (linha = nlin; linha < linMax; ++linha);        // vai para a linha pretendida
-    contador = 0;
-    for (coluna = ncol; coluna < colMax; ++coluna) {  // Verifica a Diagonal de baixo para cima da esquerda para direita
-        contador += (p[coluna][2 - coluna] == 'X') ? 1 :
-                    (p[coluna][2 - coluna] == 'O') ? -1 : 0;
+    for (linha = nlin; linha < linMax; ++linha) {        // vai para a linha pretendida
+        contador = 0;
+        for (coluna = ncol; coluna < colMax; ++coluna) {  // Verifica a Diagonal de baixo para cima da esquerda para direita
+            contador += (p[coluna][2 - coluna] == 'X') ? 1 :
+                        (p[coluna][2 - coluna] == 'O') ? -1 : 0;
+        }
+        if (contador == 3 || contador == -3)
+            return contador / abs(contador);
     }
-    if (contador == 3 || contador == -3)
-        return contador / abs(contador);
 
     return 0;
 }
-
-void escreve_resultadoC(jogoC *s, int ganhou) {
-    // se o número do tabuleiro não estiver guardado no array, aparece o resultado
-    if(s->minitab[0] != s->aux && s->minitab[1] != s->aux && s->minitab[2] != s->aux &&
-       s->minitab[3] != s->aux && s->minitab[4] != s->aux && s->minitab[5] != s->aux &&
-       s->minitab[6] != s->aux && s->minitab[7] != s->aux && s->minitab[8] != s->aux) {
-
-        s->minitab[s->contadorjogos] = s->aux;
-        s->contadorjogos++;
-
-        printf("\n------------------------------------\n");
-        printf("|             RESULTADO            |\n");
-        printf("------------------------------------\n");
-
-        if (ganhou == 0)
-            printf("\nEmpate no jogo %d.\n\n", s->aux);
-        else if (ganhou == 1)
-            printf("\nO jogador ganhou o jogo %d.\n\n", s->aux);
-        else if (ganhou == 2)
-            printf("\nO computador ganhou o jogo %d.\n\n", s->aux);
-
-        printf("\n------------------------------------\n");
-        printf("|        CONTINUACAO DO JOGO       |\n");
-        printf("------------------------------------\n");
-    }
-}
-
-void resultados_jogosC(jogoC s) {
-    printf("------------------------------------\n");
-    printf("|        RESULTADO DOS JOGOS       |\n");
-    printf("------------------------------------\n\n");
-
-    if(s.contadorjogos == 0) {
-        printf("Sem resultados.\n\n");
-    }
-    else {
-        for(int i=0; i < N; i++) {
-            if(s.vencedortab[i] == 1)
-                printf("Jogador ganhou o jogo %d\n", s.minitab[i]);
-            else if(s.vencedortab[i] == 2)
-                printf("Computador ganhou o jogo %d\n", s.minitab[i]);
-            else if(s.vencedortab[i] == 0)
-                printf("Houve um empate no jogo %d\n", s.minitab[i]);
-        }
-        tabuleiro_finalC(&s);
-    }
-}
-
-void tabuleiro_finalC(jogoC *s) {
-    char **mat = NULL;
-
-    printf("\n------------------------------------\n");
-    printf("|          TABULEIRO FINAL         |\n");
-    printf("------------------------------------\n\n");
-
-    mat = criaMat(M, M);
-
-    for(int i = 0; i < N; i++) {
-        if(s->vencedortab[i] == 1)
-            setPos(mat, (s->minitab[i]-1)/M, (s->minitab[i]-1)%M, 'X');
-        else if(s->vencedortab[i] == 2)
-            setPos(mat, (s->minitab[i]-1)/M, (s->minitab[i]-1)%M, 'O');
-        else if(s->vencedortab[i] == 0)
-            setPos(mat, (s->minitab[i]-1)/M, (s->minitab[i]-1)%M, '#');
-    }
-
-    if(verifica_tabuleiroC(mat, 0, 3, 0, 3) == 1)
-        s->vencedortabfinal = 1;
-    else if(verifica_tabuleiroC(mat, 0, 3, 0, 3) == -1)
-        s->vencedortabfinal = 2;
-    else if(verifica_tabuleiroC(mat, 0, 3, 0, 3) == 0)
-        s->vencedortabfinal = 0;
-
-    mostraMat(mat, M, M);
-    escreve_resultadoFinalC(s->vencedortabfinal);
-    libertaMat(mat, M);
-    putchar('\n');
-}
-
-void escreve_resultadoFinalC(int ganhou) {
-    printf("\n------------------------------------\n");
-    printf("|          RESULTADO FINAL         |\n");
-    printf("------------------------------------\n\n");
-
-    if(ganhou == 0)
-        printf("\nEmpate.\n\n");
-    else if(ganhou == 1)
-        printf("\nGanhou o jogador.\n\n");
-    else if(ganhou == 2)
-        printf("\nGanhou o computador.\n\n");
-}
-

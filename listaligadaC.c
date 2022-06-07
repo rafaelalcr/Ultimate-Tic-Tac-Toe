@@ -1,8 +1,8 @@
 // Rafaela Fonseca Santos nº 2017019717
 
-#include "listaligada.h"
+#include "listaligadaC.h"
 
-void listajogadas(pjogada p) {
+void listajogadasC(pjogadaC p) {
     int resposta, numero;
 
     printf("-> Ver lista de jogadas? (Sim: 1/Nao: 0)\n");
@@ -28,33 +28,33 @@ void listajogadas(pjogada p) {
     }
 }
 
-int interrompejogo(pjogada p) {
+int interrompejogoC(pjogadaC p) {
     // perguntar ao utilizador se quer interromper o jogo
     int resposta;
     printf("-> Interromper o jogo? (Sim: 1/Nao: 0)\n");
     scanf("%d", &resposta);
     if (resposta == 1) {
-        gravalistabin(p, "jogo.bin");
+        gravalistabinC(p, "jogoC.bin");
         return 1;
     }
     return 0;
 }
 
-void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao) {
+void preenchelistaC(pjogadaC p, int jogador, int tabuleiro, int posicao) {
     p->jogador = jogador;
     p->tabuleiro = tabuleiro;
     p->posicao = posicao;
     p->prox = NULL;
 }
 
-pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao) {
-    pjogada novo, aux;
-    novo = malloc(sizeof(lista));
+pjogadaC inserejogadaC(pjogadaC p, int jogador, int tabuleiro, int posicao) {
+    pjogadaC novo, aux;
+    novo = malloc(sizeof(listaC));
     if(novo == NULL) {
         printf("Erro na alocacao de memoria.\n");
         return p;
     }
-    preenchelista(novo, jogador, tabuleiro, posicao);
+    preenchelistaC(novo, jogador, tabuleiro, posicao);
     if(p == NULL)
         p = novo;
     else {
@@ -70,8 +70,8 @@ pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao) {
     return p;
 }
 
-void libertalista(pjogada p) {
-    pjogada aux;
+void libertalistaC(pjogadaC p) {
+    pjogadaC aux;
     while (p != NULL) {
         aux = p;
         p = p->prox;
@@ -79,7 +79,7 @@ void libertalista(pjogada p) {
     }
 }
 
-void gravalistatxt(pjogada lista, char* nomeF) {
+void gravalistatxtC(pjogadaC lista, char* nomeF) {
     FILE *f;
     f = fopen(nomeF, "w");
     if (f == NULL)
@@ -95,7 +95,7 @@ void gravalistatxt(pjogada lista, char* nomeF) {
     printf("\nJogo guardado em ficheiro de texto.\n");
 }
 
-void gravalistabin(pjogada lista, char* nomeF) {
+void gravalistabinC(pjogadaC lista, char* nomeF) {
     FILE *f;
     f = fopen(nomeF, "wb");
     if (f == NULL)
@@ -111,7 +111,7 @@ void gravalistabin(pjogada lista, char* nomeF) {
     printf("\nJogo guardado em ficheiro binario.\n\n");
 }
 
-void lelistabin(pjogada lista, char* nomeF) {
+void lelistabinC(pjogadaC lista, char* nomeF) {
     FILE *f;
     f = fopen(nomeF, "wb");
     if (f == NULL)
@@ -128,19 +128,19 @@ void lelistabin(pjogada lista, char* nomeF) {
     fclose(f);
 }
 
-pjogada recuperalista(char *nomeF){
-    pjogada novo, aux, listajogadas = NULL;
+pjogadaC recuperalistaC(char *nomeF){
+    pjogadaC novo, aux, listajogadas = NULL;
     FILE *f;
-    lista l;
+    listaC l;
     f = fopen(nomeF, "rb");
     if (f == NULL)
         return NULL;
     while (fscanf(f, " Jogador %d[^#] # Tabuleiro %d[^#] # Posicao %d", &l.jogador, &l.tabuleiro, &l.posicao) != EOF){
         l.prox = NULL;
-        novo = malloc(sizeof(lista));
+        novo = malloc(sizeof(listaC));
         if (novo == NULL) {
             fclose(f);
-            libertalista(listajogadas);
+            libertalistaC(listajogadas);
             return NULL;
         }
         *novo = l;

@@ -9,10 +9,12 @@ int main() {
 }
 
 // TODO
-//  -> guardar o jogo num ficheiro binário quando há interrupção
-//  -> guardar o jogo num ficheiro de texto quando o jogo acabar
-//  -> antes de cada jogada, perguntar ao utilizador se quer ver as jogadas anteriores
-//  -> a sucessão de jogadas realizadas devem ser mantidas numa lista ligada simples
-//  -> encontrar forma de conseguir passar para o tabuleiro seguinte consoante a posição jogada, nada haver com listas ligadas
-//  -> lista ligada é só para as jogadas, ou seja, utilizar o p->prox e p->ant para as visualização das jogadas
-//  -> impedir nas jogadas que vá para um tabuleiro terminado
+//  -> voltar para o menu quando há a interrupção do jogo
+//  -> recuperar a informação do ficheiro binário
+//  -> verificação das diagonais
+//  -> passar para outro tabuleiro aleatório quando atinge o limite de jogadas num tabuleiro
+//  -> às vezes não deteta quando o resultado
+//  -> impedir que no menu seja aceite caracteres introduzidos
+//  -> na gravação da lista num ficheiro de texto, é preciso indicar o nome do ficheiro
+//  -> depois da indicação do nome do ficheiro de texto, o programa termina e nenhum ficheiro é criado
+//  -> guardar no ficheiro binário os valores do array de vencedores e dos tabuleiros terminados

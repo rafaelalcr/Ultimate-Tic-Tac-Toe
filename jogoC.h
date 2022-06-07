@@ -25,26 +25,11 @@ struct jogosC {
     int contadorjogadas[N];     // array que guarda o número de jogadas feitas em cada tabuleiro
 };
 
-/*
-typedef struct jogadas jogada, *pjogada;
-struct jogadas {
-    int jogador;                // número do jogador que fez a jogada
-    int tabuleiro;              // número do tabuleiro em que foi feita a jogada
-    int posicao;                // posição da jogada
-    pjogada prox;
-};*/
-
 void jogar_computador(jogoC *s);
 void jogadaC(jogoC *s, char **p, int n, int n_jogador);
 void escolhe_jogadaC(jogoC *s, char **p, int n, int x, int y, int n_jogador);
-void escolhe_tabuleiroC(int posicao);
-
 int verificaC(char **p, int tabuleiro);
 int verifica_tabuleiroC(char **p, int nlin, int linMax, int ncol, int colMax);
 
-void escreve_resultadoC(jogoC *s, int ganhou);
-void resultados_jogosC(jogoC s);
-void tabuleiro_finalC(jogoC *s);
-void escreve_resultadoFinalC(int ganhou);
 
 #endif //TP2022_JOGOC_H

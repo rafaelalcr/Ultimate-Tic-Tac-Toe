@@ -2,6 +2,7 @@
 
 #include "jogo.h"
 #include "listaligada.h"
+#include "resultados.h"
 
 void jogar_jogador(jogo *r) {
     char **mat = NULL;
@@ -14,8 +15,10 @@ void jogar_jogador(jogo *r) {
     if(f != NULL) {
         printf("Deseja recuperar o jogo? (Sim: 1)\n");
         scanf("%d", &resposta);
-        if(resposta == 1)
+        if(resposta == 1) {
             lista = recuperalista("jogo.bin");
+            printf("Jogo recuperado.\n");
+        }
         putchar('\n');
     }
 
@@ -38,8 +41,11 @@ void jogar_jogador(jogo *r) {
     r->contadorjogadas[3] = 0;  r->contadorjogadas[4] = 0;  r->contadorjogadas[5] = 0;
     r->contadorjogadas[6] = 0;  r->contadorjogadas[7] = 0;  r->contadorjogadas[8] = 0;
 
+    int x;
     do {
         mostraMat(mat, N, N);
+        x = interrompejogo(lista);
+        printf("X: %d\n", x);
         listajogadas(lista);
         jogada(r, mat, M, r->jogador);
         lista = inserejogada(lista, r->jogador, r->aux, r->posicaojogada);
@@ -58,12 +64,11 @@ void jogar_jogador(jogo *r) {
 
         r->jogador = r->jogador % 2 + 1;
         printf("\n-> Jogar para o tabuleiro %d\n\n", r->posicaojogada);
-
-    } while (r->contadorjogos < N && r->jogadas < N*N);
+    } while ((r->contadorjogos < N && r->jogadas < N*N) || x != 1);
 
     mostraMat(mat, N, N);
     libertaMat(mat, N);
-    gravalista(lista, "listajogadas.txt");
+    gravalistatxt(lista, "listajogadas.txt");
     libertalista(lista);
 }
 
@@ -198,28 +203,4 @@ int verifica_tabuleiro(char **mat, int nlin, int linMax, int ncol, int colMax) {
     }
 
     return 0;
-}
-
-void escreve_resultado(jogo *r, int ganhou) {
-    // se o número do tabuleiro não estiver guardado no array, aparece o resultado
-    if (r->minitab[0] != r->aux && r->minitab[1] != r->aux && r->minitab[2] != r->aux &&
-        r->minitab[3] != r->aux && r->minitab[4] != r->aux && r->minitab[5] != r->aux &&
-        r->minitab[6] != r->aux && r->minitab[7] != r->aux && r->minitab[8] != r->aux) {
-
-        r->minitab[r->contadorjogos] = r->aux;
-        r->contadorjogos++;
-
-        printf("\n------------------------------------\n");
-        printf("|             RESULTADO            |\n");
-        printf("------------------------------------\n\n");
-
-        if (ganhou == 0)
-            printf("\nEmpate no jogo %d.\n\n", r->aux);
-        else
-            printf("\nO jogador %d ganhou o jogo %d.\n\n", ganhou, r->aux);
-
-        printf("\n------------------------------------\n");
-        printf("|        CONTINUACAO DO JOGO       |\n");
-        printf("------------------------------------\n");
-    }
 }
