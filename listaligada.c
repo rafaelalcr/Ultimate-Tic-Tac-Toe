@@ -3,12 +3,20 @@
 #include "listaligada.h"
 
 pjogada recuperarjogo(pjogada p) {
-    int resposta;
+    int resposta, value;
     FILE *f;
+
     f = fopen("jogo.bin", "rb");
+
     if(f != NULL) {
         printf("Deseja recuperar o jogo? (Sim: 1/Nao: 0)\n");
-        scanf("%d", &resposta);
+        value = scanf("%d", &resposta);
+
+        if (value == 0) {
+            fputs ("Opcao invalida.\n\n", stderr);
+            empty_stdin();
+        }
+
         if(resposta == 1) {
             p = recuperalista("jogo.bin");
             printf("Jogo recuperado.\n");
@@ -18,58 +26,22 @@ pjogada recuperarjogo(pjogada p) {
     return p;
 }
 
-void listajogadas(pjogada p) {
-    int resposta, numero;
-
-    printf("-> Ver lista de jogadas? (Sim: 1/Nao: 0)\n");
-    scanf("%d", &resposta);
-
-    if (resposta == 1) {
-        if (p == NULL)
-            printf("Sem jogadas.\n");
-        else {
-            do {
-                printf("Numero de jogadas a visualizar?\n");
-                scanf("%d", &numero);
-            } while (numero < 1 || numero > 10);
-
-            while(p->prox != NULL)          // vai até encontrar a última informação adicionada
-                p = p->prox;
-
-            for(int i = 0; i < numero; i++) {   // mostra a lista pela última informação adicionada
-                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
-                p = p->ant;
-            }
-        }
-    }
-}
-
-int interrompejogo(pjogada p) {
-    int resposta;
-    printf("-> Interromper o jogo? (Sim: 1/Nao: 0)\n");
-    scanf("%d", &resposta);
-    if (resposta == 1) {
-        gravalistabin(p, "jogo.bin");
-        return 1;
-    }
-    return 0;
-}
-
-void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao) {
+void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas) {
     p->jogador = jogador;
     p->tabuleiro = tabuleiro;
     p->posicao = posicao;
+    p->jogadas = jogadas;
     p->prox = NULL;
 }
 
-pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao) {
+pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas) {
     pjogada novo, aux;
     novo = malloc(sizeof(lista));
     if(novo == NULL) {
         printf("Erro na alocacao de memoria.\n");
         return p;
     }
-    preenchelista(novo, jogador, tabuleiro, posicao);
+    preenchelista(novo, jogador, tabuleiro, posicao, jogadas);
     if(p == NULL)
         p = novo;
     else {
@@ -83,6 +55,63 @@ pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao) {
         aux->prox = novo;
     }
     return p;
+}
+
+void listajogadas(pjogada p) {
+    int resposta, numero, diferenca, value;
+
+    printf("-> Ver lista de jogadas? (Sim: 1/Nao: 0)\n");
+    value = scanf("%d", &resposta);
+
+    if (value == 0) {
+        fputs ("Opcao invalida.\n\n", stderr);
+        empty_stdin();
+    }
+
+    if (resposta == 1) {
+        if (p == NULL)
+            printf("Sem jogadas.\n");
+
+        do {
+            printf("Numero de jogadas a visualizar?\n");
+            scanf("%d", &numero);
+        } while (numero < 1 || numero > 10);
+
+        while(p->prox != NULL)              // vai até encontrar a última informação da lista
+            p = p->prox;
+
+        if(numero > p->jogadas) {
+            diferenca = numero - p->jogadas;
+            for(int i = 0; i < numero - diferenca; i++) {   // mostra a lista pela última informação adicionada
+                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+                p = p->ant;
+            }
+        }
+        else if(numero <= p->jogadas) {
+            for(int i = 0; i < numero; i++) {   // mostra a lista pela última informação adicionada
+                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+                p = p->ant;
+            }
+        }
+    }
+}
+
+int interrompejogo(pjogada p) {
+    int resposta, value;
+
+    printf("-> Interromper o jogo? (Sim: 1/Nao: 0)\n");
+    value = scanf("%d", &resposta);
+
+    if (value == 0) {
+        fputs ("Opcao invalida.\n\n", stderr);
+        empty_stdin();
+    }
+
+    if (resposta == 1) {
+        gravalistabin(p, "jogo.bin");
+        return 1;
+    }
+    return 0;
 }
 
 void libertalista(pjogada p) {

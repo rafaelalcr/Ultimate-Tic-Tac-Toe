@@ -13,4 +13,7 @@ int intUniformRnd(int a, int b);
 // Devolve o valor 1 com probabilidade prob. Caso contrario, devolve 0
 int probEvento(float prob);
 
+// Impedir que o menu entre num ciclo infinito quando é introduzido algo que não é um inteiro
+void empty_stdin();
+
 #endif //TP2022_UTILS_H

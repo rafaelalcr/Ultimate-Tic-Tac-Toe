@@ -8,6 +8,7 @@ void escreve_resultado(jogo *r, int ganhou) {
         r->minitab[3] != r->aux && r->minitab[4] != r->aux && r->minitab[5] != r->aux &&
         r->minitab[6] != r->aux && r->minitab[7] != r->aux && r->minitab[8] != r->aux) {
 
+        r->vencedortab[r->contadorjogos] = ganhou;
         r->minitab[r->contadorjogos] = r->aux;
         r->contadorjogos++;
 
@@ -22,7 +23,7 @@ void escreve_resultado(jogo *r, int ganhou) {
 
         printf("\n------------------------------------\n");
         printf("|        CONTINUACAO DO JOGO       |\n");
-        printf("------------------------------------\n");
+        printf("------------------------------------\n\n");
     }
 }
 
@@ -108,7 +109,7 @@ void escreve_resultadoC(jogoC *s, int ganhou) {
 
         printf("\n------------------------------------\n");
         printf("|        CONTINUACAO DO JOGO       |\n");
-        printf("------------------------------------\n");
+        printf("------------------------------------\n\n");
     }
 }
 

@@ -43,27 +43,27 @@ void jogar_jogador(jogo *r) {
 
     do {
         mostraMat(mat, N, N);
-        r->interrupcao = interrompejogo(lista);
-        listajogadas(lista);
         jogada(r, mat, M, r->jogador);
-        lista = inserejogada(lista, r->jogador, r->aux, r->posicaojogada);
-        r->contadorjogadas[r->aux-1]++;
+        lista = inserejogada(lista, r->jogador, r->aux, r->posicaojogada, r->jogadas);
 
         if (verifica(mat, r->aux) == 1 || verifica(mat, r->aux) == -1) {
             r->vencedor = r->jogador;
-            r->vencedortab[r->contadorjogos] = r->jogador;
+            mostraMat(mat, N, N);
             escreve_resultado(r, r->vencedor);
-        }
-        else if (verifica(mat, r->aux) == 0 && r->contadorjogadas[r->aux-1] == 9) {
+
+        } else if (verifica(mat, r->aux) == 0 && r->contadorjogadas[r->aux - 1] == 9) {
             r->vencedor = 0;
-            r->vencedortab[r->contadorjogos] = 0;
+            mostraMat(mat, N, N);
             escreve_resultado(r, r->vencedor);
         }
+
+        listajogadas(lista);
+        //r->interrupcao = interrompejogo(lista);
 
         r->jogador = r->jogador % 2 + 1;
         printf("\n-> Jogar para o tabuleiro %d\n\n", r->posicaojogada);
 
-    } while (r->contadorjogos < N && r->jogadas < N*N && r->interrupcao != 1);
+    } while (r->contadorjogos < N && r->jogadas < N * N /*&& r->interrupcao != 1*/);
 
     mostraMat(mat, N, N);
     libertaMat(mat, N);
@@ -114,14 +114,24 @@ void jogada(jogo *r, char **mat, int n, int n_jogador) {
         default:
             break;
     }
+
+    r->contadorjogadas[r->aux - 1]++;   // aux-1 porque o aux começa com valor 1, array tem que começar com índice 0
 }
 
 void escolhe_jogada(jogo *r, char **mat, int n, int x, int y, int n_jogador) {
+    int value;
+
     do {
         printf("Posicao: ");
-        scanf("%d", &r->posicaojogada);
+        value = scanf("%d", &r->posicaojogada);
         putchar('\n');
-    } while(r->posicaojogada < 1 || r->posicaojogada > N || mat[(r->posicaojogada-1)/n+x][(r->posicaojogada-1)%n+y] != '_');
+
+        if (value == 0) {
+            fputs ("Opcao invalida.\n\n", stderr);
+            empty_stdin();
+        }
+
+    } while(r->posicaojogada<1 || r->posicaojogada>N || mat[(r->posicaojogada-1)/n+x][(r->posicaojogada-1)%n+y] != '_');
 
     if(n_jogador == 1)
         setPos(mat, (r->posicaojogada-1)/n+x, (r->posicaojogada-1)%n+y, 'X');
@@ -181,25 +191,23 @@ int verifica_tabuleiro(char **mat, int nlin, int linMax, int ncol, int colMax) {
             return contador / abs(contador);
     }
 
-    for (linha = nlin; linha < linMax; ++linha) {        // vai para a linha pretendida
-        contador = 0;
-        for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de cima para baixo da esquerda para direita
-            contador += (mat[coluna][coluna] == 'X') ? 1 :
-                        (mat[coluna][coluna] == 'O') ? -1 : 0;
-        }
-        if (contador == 3 || contador == -3)
-            return contador / abs(contador);
+    for (linha = nlin; linha < linMax; ++linha) ;        // vai para a linha pretendida
+    contador = 0;
+    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de cima para baixo da esquerda para direita
+        contador += (mat[coluna][coluna] == 'X') ? 1 :
+                    (mat[coluna][coluna] == 'O') ? -1 : 0;
     }
+    if (contador == 3 || contador == -3)
+        return contador / abs(contador);
 
-    for (linha = nlin; linha < linMax; ++linha) {        // vai para a linha pretendida
-        contador = 0;
-        for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de baixo para cima da esquerda para direita
-            contador += (mat[coluna][2 - coluna] == 'X') ? 1 :
-                        (mat[coluna][2 - coluna] == 'O') ? -1 : 0;
-        }
-        if (contador == 3 || contador == -3)
-            return contador / abs(contador);
+    for (linha = nlin; linha < linMax; ++linha) ;        // vai para a linha pretendida
+    contador = 0;
+    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de baixo para cima da esquerda para direita
+        contador += (mat[coluna][2 - coluna] == 'X') ? 1 :
+                    (mat[coluna][2 - coluna] == 'O') ? -1 : 0;
     }
+    if (contador == 3 || contador == -3)
+        return contador / abs(contador);
 
     return 0;
 }
