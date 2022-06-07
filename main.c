@@ -9,11 +9,10 @@ int main() {
 }
 
 // TODO
-//  -> voltar para o menu quando há a interrupção do jogo
-//  -> recuperar a informação do ficheiro binário
+//  -> recuperar a informação do ficheiro binário, o programa trava ao tentar recuperar
 //  -> verificação das diagonais
 //  -> passar para outro tabuleiro aleatório quando atinge o limite de jogadas num tabuleiro
-//  -> às vezes não deteta quando o resultado
+//  -> às vezes não deteta quando o resultado ou deteta um resultado que não aconteceu
 //  -> na gravação da lista num ficheiro de texto, é preciso indicar o nome do ficheiro
 //  -> depois da indicação do nome do ficheiro de texto, o programa termina e nenhum ficheiro é criado
-//  -> guardar no ficheiro binário os valores do array de vencedores e dos tabuleiros terminados
+//  -> guardar nos ficheiros os valores do array de vencedores e dos tabuleiros terminados

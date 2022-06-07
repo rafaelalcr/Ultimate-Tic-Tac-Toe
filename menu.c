@@ -5,7 +5,7 @@
 void menu() {
     jogo r;
     jogoC s;
-    int opcao, value;
+    int opcao, valor;
     do {
         printf("------------------------------------\n");
         printf("|               MENU               |\n");
@@ -18,10 +18,10 @@ void menu() {
         printf("5 - Terminar Jogo\n");
         printf("------------------------------------\n");
         printf("Opcao: ");
-        value = scanf("%d", &opcao);
+        valor = scanf("%d", &opcao);
         putchar('\n');
 
-        if (value == 0) {   // impedir que seja introduzido algo diferente de um inteiro
+        if (valor == 0) {   // impedir que seja introduzido algo diferente de um inteiro
             fputs ("Opcao invalida.\n\n", stderr);
             empty_stdin();
         }

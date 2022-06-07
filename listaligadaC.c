@@ -3,12 +3,20 @@
 #include "listaligadaC.h"
 
 pjogadaC recuperarjogoC(pjogadaC p) {
-    int resposta;
+    int resposta, valor;
     FILE *f;
+
     f = fopen("jogoC.bin", "rb");
+
     if(f != NULL) {
         printf("Deseja recuperar o jogo? (Sim: 1/Nao: 0)\n");
-        scanf("%d", &resposta);
+        valor = scanf("%d", &resposta);
+
+        if (valor == 0) {
+            fputs ("Opcao invalida.\n\n", stderr);
+            empty_stdin();
+        }
+
         if(resposta == 1) {
             p = recuperalistaC("jogo.bin");
             printf("Jogo recuperado.\n");
@@ -16,43 +24,6 @@ pjogadaC recuperarjogoC(pjogadaC p) {
         putchar('\n');
     }
     return p;
-}
-
-void listajogadasC(pjogadaC p) {
-    int resposta, numero;
-
-    printf("-> Ver lista de jogadas? (Sim: 1/Nao: 0)\n");
-    scanf("%d", &resposta);
-
-    if (resposta == 1) {
-        if (p == NULL)
-            printf("Sem jogadas.\n");
-        else {
-            do {
-                printf("Numero de jogadas a visualizar?\n");
-                scanf("%d", &numero);
-            } while (numero < 1 || numero > 10);
-
-            while(p->prox != NULL)          // vai até encontrar a última informação adicionada
-                p = p->prox;
-
-            for(int i = 0; i < numero; i++) {   // mostra a lista pela última informação adicionada
-                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
-                p = p->ant;
-            }
-        }
-    }
-}
-
-int interrompejogoC(pjogadaC p) {
-    int resposta;
-    printf("-> Interromper o jogo? (Sim: 1/Nao: 0)\n");
-    scanf("%d", &resposta);
-    if (resposta == 1) {
-        gravalistabinC(p, "jogoC.bin");
-        return 1;
-    }
-    return 0;
 }
 
 void preenchelistaC(pjogadaC p, int jogador, int tabuleiro, int posicao) {
@@ -85,6 +56,64 @@ pjogadaC inserejogadaC(pjogadaC p, int jogador, int tabuleiro, int posicao) {
     return p;
 }
 
+void listajogadasC(pjogadaC p) {
+    int resposta, numero, diferenca, valor;
+
+    printf("-> Ver lista de jogadas? (Sim: 1/Nao: 0)\n");
+    valor = scanf("%d", &resposta);
+
+    if (valor == 0) {
+        fputs ("Opcao invalida.\n\n", stderr);
+        empty_stdin();
+    }
+
+    if (resposta == 1) {
+        if (p == NULL)
+            printf("Sem jogadas.\n");
+
+        do {
+            printf("Numero de jogadas a visualizar?\n");
+            scanf("%d", &numero);
+        } while (numero < 1 || numero > 10);
+
+        while(p->prox != NULL)
+            p = p->prox;
+
+        if(numero > p->jogadas) {
+            diferenca = numero - p->jogadas;
+            for(int i = 0; i < numero - diferenca; i++) {
+                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+                p = p->ant;
+            }
+        }
+        else if(numero <= p->jogadas) {
+            for(int i = 0; i < numero; i++) {
+                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+                p = p->ant;
+            }
+        }
+    }
+}
+
+int interrompejogoC(pjogadaC p) {
+    int resposta, valor;
+
+    printf("-> Interromper o jogo? (Sim: 1/Nao: 0)\n");
+    valor = scanf("%d", &resposta);
+
+    if (valor == 0) {
+        fputs ("Opcao invalida.\n\n", stderr);
+        empty_stdin();
+    }
+
+    if (resposta == 1) {
+        gravalistabinC(p, "jogoC.bin");
+        return 1;
+    }
+    return 0;
+}
+
+
 void libertalistaC(pjogadaC p) {
     pjogadaC aux;
     while (p != NULL) {
@@ -101,13 +130,13 @@ void gravalistatxtC(pjogadaC p, char* nomeF) {
         printf("Erro de abertura do ficheiro.\n");
 
     while (p != NULL) {
-        fprintf(f, " Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
         p = p->prox;
     }
 
     fclose(f);
 
-    printf("\nJogo guardado em ficheiro de texto.\n");
+    printf("\nJogo guardado em ficheiro de texto.\n\n");
 }
 
 void gravalistabinC(pjogadaC p, char* nomeF) {
@@ -117,7 +146,7 @@ void gravalistabinC(pjogadaC p, char* nomeF) {
         printf("Erro de abertura do ficheiro.\n");
 
     while (p != NULL) {
-        fprintf(f, " Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
         p = p->prox;
     }
 

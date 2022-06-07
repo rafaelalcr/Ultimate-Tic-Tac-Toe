@@ -3,16 +3,16 @@
 #include "listaligada.h"
 
 pjogada recuperarjogo(pjogada p) {
-    int resposta, value;
+    int resposta, valor;
     FILE *f;
 
     f = fopen("jogo.bin", "rb");
 
     if(f != NULL) {
         printf("Deseja recuperar o jogo? (Sim: 1/Nao: 0)\n");
-        value = scanf("%d", &resposta);
+        valor = scanf("%d", &resposta);
 
-        if (value == 0) {
+        if (valor == 0) {
             fputs ("Opcao invalida.\n\n", stderr);
             empty_stdin();
         }
@@ -58,12 +58,12 @@ pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao, int jog
 }
 
 void listajogadas(pjogada p) {
-    int resposta, numero, diferenca, value;
+    int resposta, numero, diferenca, valor;
 
     printf("-> Ver lista de jogadas? (Sim: 1/Nao: 0)\n");
-    value = scanf("%d", &resposta);
+    valor = scanf("%d", &resposta);
 
-    if (value == 0) {
+    if (valor == 0) {
         fputs ("Opcao invalida.\n\n", stderr);
         empty_stdin();
     }
@@ -97,12 +97,12 @@ void listajogadas(pjogada p) {
 }
 
 int interrompejogo(pjogada p) {
-    int resposta, value;
+    int resposta, valor;
 
     printf("-> Interromper o jogo? (Sim: 1/Nao: 0)\n");
-    value = scanf("%d", &resposta);
+    valor = scanf("%d", &resposta);
 
-    if (value == 0) {
+    if (valor == 0) {
         fputs ("Opcao invalida.\n\n", stderr);
         empty_stdin();
     }
@@ -130,13 +130,13 @@ void gravalistatxt(pjogada p, char* nomeF) {
         printf("Erro de abertura do ficheiro.\n");
 
     while (p != NULL) {
-        fprintf(f, " Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
         p = p->prox;
     }
 
     fclose(f);
 
-    printf("\nJogo guardado em ficheiro de texto.\n");
+    printf("\nJogo guardado em ficheiro de texto.\n\n");
 }
 
 void gravalistabin(pjogada p, char* nomeF) {
@@ -146,7 +146,7 @@ void gravalistabin(pjogada p, char* nomeF) {
         printf("Erro de abertura do ficheiro.\n");
 
     while (p != NULL) {
-        fprintf(f, " Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
         p = p->prox;
     }
 

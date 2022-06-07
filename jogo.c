@@ -5,21 +5,21 @@
 #include "resultados.h"
 
 void inicializar(jogo *r) {
-    r->contadorjogos = 0;
+    r->jogos = 0;
     r->vencedor = 0;
     r->jogadas = 0;
     r->jogador = 1;
     r->interrupcao = 0;
 
-    r->contadorjogadas[0] = 0;
-    r->contadorjogadas[1] = 0;
-    r->contadorjogadas[2] = 0;
-    r->contadorjogadas[3] = 0;
-    r->contadorjogadas[4] = 0;
-    r->contadorjogadas[5] = 0;
-    r->contadorjogadas[6] = 0;
-    r->contadorjogadas[7] = 0;
-    r->contadorjogadas[8] = 0;
+    r->jogadastab[0] = 0;
+    r->jogadastab[1] = 0;
+    r->jogadastab[2] = 0;
+    r->jogadastab[3] = 0;
+    r->jogadastab[4] = 0;
+    r->jogadastab[5] = 0;
+    r->jogadastab[6] = 0;
+    r->jogadastab[7] = 0;
+    r->jogadastab[8] = 0;
 }
 
 void inicio_jogo(jogo *r) {
@@ -44,28 +44,29 @@ void jogar_jogador(jogo *r) {
     do {
         mostraMat(mat, N, N);
         jogada(r, mat, M, r->jogador);
-        lista = inserejogada(lista, r->jogador, r->aux, r->posicaojogada, r->jogadas);
+        lista = inserejogada(lista, r->jogador, r->aux, r->posicao, r->jogadas);
 
         if (verifica(mat, r->aux) == 1 || verifica(mat, r->aux) == -1) {
             r->vencedor = r->jogador;
             mostraMat(mat, N, N);
             escreve_resultado(r, r->vencedor);
 
-        } else if (verifica(mat, r->aux) == 0 && r->contadorjogadas[r->aux - 1] == 9) {
+        } else if (verifica(mat, r->aux) == 0 && r->jogadastab[r->aux - 1] == 9) {
             r->vencedor = 0;
             mostraMat(mat, N, N);
             escreve_resultado(r, r->vencedor);
         }
 
         listajogadas(lista);
-        //r->interrupcao = interrompejogo(lista);
+        r->interrupcao = interrompejogo(lista);
 
-        r->jogador = r->jogador % 2 + 1;
-        printf("\n-> Jogar para o tabuleiro %d\n\n", r->posicaojogada);
+        if(r->interrupcao != 1) {
+            r->jogador = r->jogador % 2 + 1;
+            printf("\n-> Jogar para o tabuleiro %d\n\n", r->posicao);
+        }
 
-    } while (r->contadorjogos < N && r->jogadas < N * N /*&& r->interrupcao != 1*/);
+    } while (r->interrupcao != 1 && r->jogos < N && r->jogadas < N*N);
 
-    mostraMat(mat, N, N);
     libertaMat(mat, N);
     gravalistatxt(lista, "listajogadas.txt");
     libertalista(lista);
@@ -115,30 +116,30 @@ void jogada(jogo *r, char **mat, int n, int n_jogador) {
             break;
     }
 
-    r->contadorjogadas[r->aux - 1]++;   // aux-1 porque o aux começa com valor 1, array tem que começar com índice 0
+    r->jogadastab[r->aux - 1]++;   // aux-1 porque o aux começa com valor 1, array tem que começar com índice 0
 }
 
 void escolhe_jogada(jogo *r, char **mat, int n, int x, int y, int n_jogador) {
-    int value;
+    int valor;
 
     do {
         printf("Posicao: ");
-        value = scanf("%d", &r->posicaojogada);
+        valor = scanf("%d", &r->posicao);
         putchar('\n');
 
-        if (value == 0) {
+        if (valor == 0) {
             fputs ("Opcao invalida.\n\n", stderr);
             empty_stdin();
         }
 
-    } while(r->posicaojogada<1 || r->posicaojogada>N || mat[(r->posicaojogada-1)/n+x][(r->posicaojogada-1)%n+y] != '_');
+    } while(r->posicao < 1 || r->posicao > N || mat[(r->posicao-1)/n+x][(r->posicao-1)%n+y] != '_');
 
     if(n_jogador == 1)
-        setPos(mat, (r->posicaojogada-1)/n+x, (r->posicaojogada-1)%n+y, 'X');
+        setPos(mat, (r->posicao-1)/n+x, (r->posicao-1)%n+y, 'X');
     else
-        setPos(mat, (r->posicaojogada-1)/n+x, (r->posicaojogada-1)%n+y, 'O');
+        setPos(mat, (r->posicao-1)/n+x, (r->posicao-1)%n+y, 'O');
 
-    r->tabuleiro = r->posicaojogada;
+    r->tabuleiro = r->posicao;
     r->jogadas++;
 }
 

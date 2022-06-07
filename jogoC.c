@@ -2,24 +2,24 @@
 
 #include "jogoC.h"
 #include "listaligadaC.h"
-#include "resultados.h"
+#include "resultadosC.h"
 
 void inicializarC(jogoC *s) {
-    s->contadorjogos = 0;
+    s->jogos = 0;
     s->vencedor = 0;
     s->jogadas = 0;
     s->jogador = 1;
     s->interrupcao = 0;
 
-    s->contadorjogadas[0] = 0;
-    s->contadorjogadas[1] = 0;
-    s->contadorjogadas[2] = 0;
-    s->contadorjogadas[3] = 0;
-    s->contadorjogadas[4] = 0;
-    s->contadorjogadas[5] = 0;
-    s->contadorjogadas[6] = 0;
-    s->contadorjogadas[7] = 0;
-    s->contadorjogadas[8] = 0;
+    s->jogadastab[0] = 0;
+    s->jogadastab[1] = 0;
+    s->jogadastab[2] = 0;
+    s->jogadastab[3] = 0;
+    s->jogadastab[4] = 0;
+    s->jogadastab[5] = 0;
+    s->jogadastab[6] = 0;
+    s->jogadastab[7] = 0;
+    s->jogadastab[8] = 0;
 
 }
 
@@ -44,33 +44,34 @@ void jogar_computador(jogoC *s) {
 
     do {
         mostraMat(mat, N, N);
-        s->interrupcao = interrompejogoC(lista);
-        listajogadasC(lista);
         jogadaC(s, mat, N, s->jogador);
-        lista = inserejogadaC(lista, s->jogador, s->aux, s->posicaojogada);
-        s->contadorjogadas[s->aux-1]++;
+        lista = inserejogadaC(lista, s->jogador, s->aux, s->posicao);
 
-        if (verificaC(mat, s->aux) == 1 || verificaC(mat, s->aux) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
+        if (verificaC(mat, s->aux) == 1 || verificaC(mat, s->aux) == -1) {
             s->vencedor = s->jogador;
-            s->vencedortab[s->contadorjogos] = s->jogador;    // guarda num array quem ganha cada jogo
+            mostraMat(mat, N, N);
             escreve_resultadoC(s, s->vencedor);
         }
-        else if (verificaC(mat, s->aux) == 0 && s->contadorjogadas[s->aux-1] == 9) {
+        else if (verificaC(mat, s->aux) == 0 && s->jogadastab[s->aux-1] == 9) {
             s->vencedor = 0;
-            s->vencedortab[s->contadorjogos] = 0;
+            mostraMat(mat, N, N);
             escreve_resultadoC(s, s->vencedor);
         }
 
-        s->jogador = s->jogador % 2 + 1;
-        printf("\n-> Jogar para o tabuleiro %d\n\n", s->posicaojogada);
-    } while(s->contadorjogos < N && s->jogadas < N*N && s->interrupcao != 1);
+        listajogadasC(lista);
+        s->interrupcao = interrompejogoC(lista);
 
-    mostraMat(mat, N, N);
+        if(s->interrupcao != 1) {
+            s->jogador = s->jogador % 2 + 1;
+            printf("\n-> Jogar para o tabuleiro %d\n\n", s->posicao);
+        }
+
+    } while(s->interrupcao != 1 && s->jogos < N && s->jogadas < N*N);
+
     libertaMat(mat, N);
     gravalistatxtC(lista, "listajogadasC.txt");
     libertalistaC(lista);
 }
-
 
 void jogadaC(jogoC *s, char **p, int n, int n_jogador) {
     s->aux = 0;
@@ -114,6 +115,8 @@ void jogadaC(jogoC *s, char **p, int n, int n_jogador) {
         default:
             break;
     }
+
+    s->jogadastab[s->aux-1]++;
 }
 
 void escolhe_jogadaC(jogoC *s, char **p, int n, int x, int y, int n_jogador) {
@@ -121,23 +124,23 @@ void escolhe_jogadaC(jogoC *s, char **p, int n, int x, int y, int n_jogador) {
         printf("\n-> Vez do jogador\n");
         do{
             printf("Posicao: ");
-            scanf("%d", &s->posicaojogada);
+            scanf("%d", &s->posicao);
             putchar('\n');
-        }while(s->posicaojogada < 1 || s->posicaojogada > N || p[(s->posicaojogada-1)/n+x][(s->posicaojogada-1)%n+y] != '_');
+        }while(s->posicao < 1 || s->posicao > N || p[(s->posicao-1)/n+x][(s->posicao-1)%n+y] != '_');
     }
     else if(n_jogador == 2) {
         printf("\n-> Vez do computador\n");
         do {
-            s->posicaojogada = intUniformRnd(1, 9);
-        } while(s->posicaojogada < 1 || s->posicaojogada > N || p[(s->posicaojogada-1)/n+x][(s->posicaojogada-1)%n+y] != '_');
+            s->posicao = intUniformRnd(1, 9);
+        } while(s->posicao < 1 || s->posicao > N || p[(s->posicao-1)/n+x][(s->posicao-1)%n+y] != '_');
     }
 
     if(n_jogador == 1)
-        setPos(p, (s->posicaojogada-1)/n+x, (s->posicaojogada-1)%n+y, 'X');
+        setPos(p, (s->posicao-1)/n+x, (s->posicao-1)%n+y, 'X');
     else
-        setPos(p, (s->posicaojogada-1)/n+x, (s->posicaojogada-1)%n+y, 'O');
+        setPos(p, (s->posicao-1)/n+x, (s->posicao-1)%n+y, 'O');
 
-    s->tabuleiro = s->posicaojogada;
+    s->tabuleiro = s->posicao;
     s->jogadas++;
 }
 
