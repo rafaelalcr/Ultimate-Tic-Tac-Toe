@@ -2,6 +2,22 @@
 
 #include "listaligadaC.h"
 
+pjogadaC recuperarjogoC(pjogadaC p) {
+    int resposta;
+    FILE *f;
+    f = fopen("jogoC.bin", "rb");
+    if(f != NULL) {
+        printf("Deseja recuperar o jogo? (Sim: 1/Nao: 0)\n");
+        scanf("%d", &resposta);
+        if(resposta == 1) {
+            p = recuperalistaC("jogo.bin");
+            printf("Jogo recuperado.\n");
+        }
+        putchar('\n');
+    }
+    return p;
+}
+
 void listajogadasC(pjogadaC p) {
     int resposta, numero;
 
@@ -29,7 +45,6 @@ void listajogadasC(pjogadaC p) {
 }
 
 int interrompejogoC(pjogadaC p) {
-    // perguntar ao utilizador se quer interromper o jogo
     int resposta;
     printf("-> Interromper o jogo? (Sim: 1/Nao: 0)\n");
     scanf("%d", &resposta);
@@ -79,15 +94,15 @@ void libertalistaC(pjogadaC p) {
     }
 }
 
-void gravalistatxtC(pjogadaC lista, char* nomeF) {
+void gravalistatxtC(pjogadaC p, char* nomeF) {
     FILE *f;
     f = fopen(nomeF, "w");
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    while (lista != NULL) {
-        fprintf(f, " Jogador %d # tabuleiro %d # posicao %d\n", lista->jogador, lista->tabuleiro, lista->posicao);
-        lista = lista->prox;
+    while (p != NULL) {
+        fprintf(f, " Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+        p = p->prox;
     }
 
     fclose(f);
@@ -95,15 +110,15 @@ void gravalistatxtC(pjogadaC lista, char* nomeF) {
     printf("\nJogo guardado em ficheiro de texto.\n");
 }
 
-void gravalistabinC(pjogadaC lista, char* nomeF) {
+void gravalistabinC(pjogadaC p, char* nomeF) {
     FILE *f;
     f = fopen(nomeF, "wb");
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    while (lista != NULL) {
-        fprintf(f, " Jogador %d # tabuleiro %d # posicao %d\n", lista->jogador, lista->tabuleiro, lista->posicao);
-        lista = lista->prox;
+    while (p != NULL) {
+        fprintf(f, " Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+        p = p->prox;
     }
 
     fclose(f);
@@ -111,18 +126,18 @@ void gravalistabinC(pjogadaC lista, char* nomeF) {
     printf("\nJogo guardado em ficheiro binario.\n\n");
 }
 
-void lelistabinC(pjogadaC lista, char* nomeF) {
+void lelistabinC(pjogadaC p, char* nomeF) {
     FILE *f;
     f = fopen(nomeF, "wb");
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    fscanf(f, " Jogador %d # tabuleiro %d # posicao %d\n", &lista->jogador, &lista->tabuleiro, &lista->posicao);
+    fscanf(f, " Jogador %d # tabuleiro %d # posicao %d\n", &p->jogador, &p->tabuleiro, &p->posicao);
 
     // verifica se a lista funciona
-    while (lista != NULL) {
-        printf("Jogador %d # tabuleiro %d # posicao %d\n", lista->jogador, lista->tabuleiro, lista->posicao);
-        lista = lista->prox;
+    while (p != NULL) {
+        printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+        p = p->prox;
     }
 
     fclose(f);

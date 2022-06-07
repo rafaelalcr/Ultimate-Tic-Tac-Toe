@@ -4,24 +4,25 @@
 #include "listaligada.h"
 #include "resultados.h"
 
-void jogar_jogador(jogo *r) {
-    char **mat = NULL;
-    pjogada lista = NULL;
+void inicializar(jogo *r) {
+    r->contadorjogos = 0;
+    r->vencedor = 0;
+    r->jogadas = 0;
+    r->jogador = 1;
+    r->interrupcao = 0;
 
-    // permitir a continuação de um jogo anterior caso o ficheiro exista
-    int resposta;
-    FILE *f;
-    f = fopen("jogo.bin", "rb");
-    if(f != NULL) {
-        printf("Deseja recuperar o jogo? (Sim: 1)\n");
-        scanf("%d", &resposta);
-        if(resposta == 1) {
-            lista = recuperalista("jogo.bin");
-            printf("Jogo recuperado.\n");
-        }
-        putchar('\n');
-    }
+    r->contadorjogadas[0] = 0;
+    r->contadorjogadas[1] = 0;
+    r->contadorjogadas[2] = 0;
+    r->contadorjogadas[3] = 0;
+    r->contadorjogadas[4] = 0;
+    r->contadorjogadas[5] = 0;
+    r->contadorjogadas[6] = 0;
+    r->contadorjogadas[7] = 0;
+    r->contadorjogadas[8] = 0;
+}
 
+void inicio_jogo(jogo *r) {
     printf("------------------------------------\n");
     printf("|          INICIO DO JOGO          |\n");
     printf("------------------------------------\n");
@@ -29,23 +30,20 @@ void jogar_jogador(jogo *r) {
     initRandom();
     r->tabuleiro = intUniformRnd(1, 9);
     printf("\n-> Jogar para o tabuleiro %d\n\n", r->tabuleiro);
+}
 
+void jogar_jogador(jogo *r) {
+    char **mat = NULL;
+    pjogada lista = NULL;
+
+    lista = recuperarjogo(lista);
+    inicio_jogo(r);
     mat = criaMat(N, N);
+    inicializar(r);
 
-    r->contadorjogos = 0;
-    r->vencedor = 0;
-    r->jogadas = 0;
-    r->jogador = 1;
-
-    r->contadorjogadas[0] = 0;  r->contadorjogadas[1] = 0;  r->contadorjogadas[2] = 0;
-    r->contadorjogadas[3] = 0;  r->contadorjogadas[4] = 0;  r->contadorjogadas[5] = 0;
-    r->contadorjogadas[6] = 0;  r->contadorjogadas[7] = 0;  r->contadorjogadas[8] = 0;
-
-    int x;
     do {
         mostraMat(mat, N, N);
-        x = interrompejogo(lista);
-        printf("X: %d\n", x);
+        r->interrupcao = interrompejogo(lista);
         listajogadas(lista);
         jogada(r, mat, M, r->jogador);
         lista = inserejogada(lista, r->jogador, r->aux, r->posicaojogada);
@@ -64,7 +62,8 @@ void jogar_jogador(jogo *r) {
 
         r->jogador = r->jogador % 2 + 1;
         printf("\n-> Jogar para o tabuleiro %d\n\n", r->posicaojogada);
-    } while ((r->contadorjogos < N && r->jogadas < N*N) || x != 1);
+
+    } while (r->contadorjogos < N && r->jogadas < N*N && r->interrupcao != 1);
 
     mostraMat(mat, N, N);
     libertaMat(mat, N);

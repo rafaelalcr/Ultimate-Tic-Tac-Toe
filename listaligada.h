@@ -16,14 +16,15 @@ struct listajogadas {
     pjogada prox;
 };
 
+pjogada recuperarjogo(pjogada p);           // permitir a continuação de um jogo anterior caso o ficheiro exista
 void listajogadas(pjogada p);
-int interrompejogo(pjogada p);
+int interrompejogo(pjogada p);              // perguntar ao utilizador se quer interromper o jogo
 void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao);
 pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao);
 void libertalista(pjogada p);
-void gravalistatxt(pjogada lista, char* nomeF);
-void gravalistabin(pjogada lista, char* nomeF);
-void lelistabin(pjogada lista, char* nomeF);
+void gravalistatxt(pjogada p, char* nomeF);
+void gravalistabin(pjogada p, char* nomeF);
+void lelistabin(pjogada p, char* nomeF);
 pjogada recuperalista(char *nomeF);
 
 

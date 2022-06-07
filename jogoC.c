@@ -4,24 +4,26 @@
 #include "listaligadaC.h"
 #include "resultados.h"
 
-void jogar_computador(jogoC *s) {
-    char **mat = NULL;
-    pjogadaC lista = NULL;
+void inicializarC(jogoC *s) {
+    s->contadorjogos = 0;
+    s->vencedor = 0;
+    s->jogadas = 0;
+    s->jogador = 1;
+    s->interrupcao = 0;
 
-    // permitir a continuação de um jogo anterior caso o ficheiro exista
-    int resposta;
-    FILE *f;
-    f = fopen("jogoC.bin", "rb");
-    if(f != NULL) {
-        printf("Deseja recuperar o jogo? (Sim: 1)\n");
-        scanf("%d", &resposta);
-        if(resposta == 1) {
-            lista = recuperalistaC("jogoC.bin");
-            printf("Jogo recuperado.\n");
-        }
-        putchar('\n');
-    }
+    s->contadorjogadas[0] = 0;
+    s->contadorjogadas[1] = 0;
+    s->contadorjogadas[2] = 0;
+    s->contadorjogadas[3] = 0;
+    s->contadorjogadas[4] = 0;
+    s->contadorjogadas[5] = 0;
+    s->contadorjogadas[6] = 0;
+    s->contadorjogadas[7] = 0;
+    s->contadorjogadas[8] = 0;
 
+}
+
+void inicio_jogoC(jogoC *s) {
     printf("------------------------------------\n");
     printf("|          INICIO DO JOGO          |\n");
     printf("------------------------------------\n");
@@ -29,31 +31,31 @@ void jogar_computador(jogoC *s) {
     initRandom();
     s->tabuleiro = intUniformRnd(1, 9);
     printf("\n-> Jogar para o tabuleiro %d\n\n", s->tabuleiro);
+}
 
+void jogar_computador(jogoC *s) {
+    char **mat = NULL;
+    pjogadaC lista = NULL;
+
+    lista = recuperarjogoC(lista);
+    inicio_jogoC(s);
     mat = criaMat(N, N);
-
-    s->contadorjogos = 0;
-    s->vencedor = 0;
-    s->jogadas = 0;
-    s->jogador = 1;
-
-    s->contadorjogadas[0] = 0;  s->contadorjogadas[1] = 0;  s->contadorjogadas[2] = 0;
-    s->contadorjogadas[3] = 0;  s->contadorjogadas[4] = 0;  s->contadorjogadas[5] = 0;
-    s->contadorjogadas[6] = 0;  s->contadorjogadas[7] = 0;  s->contadorjogadas[8] = 0;
+    inicializarC(s);
 
     do {
         mostraMat(mat, N, N);
+        s->interrupcao = interrompejogoC(lista);
         listajogadasC(lista);
         jogadaC(s, mat, N, s->jogador);
         lista = inserejogadaC(lista, s->jogador, s->aux, s->posicaojogada);
         s->contadorjogadas[s->aux-1]++;
 
-        if(verificaC(mat, s->aux) == 1 || verificaC(mat, s->aux) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
+        if (verificaC(mat, s->aux) == 1 || verificaC(mat, s->aux) == -1) {     // Se returnar 1 ('X') ou -1 ('O')
             s->vencedor = s->jogador;
             s->vencedortab[s->contadorjogos] = s->jogador;    // guarda num array quem ganha cada jogo
             escreve_resultadoC(s, s->vencedor);
         }
-        else if(verificaC(mat, s->aux) == 0 && s->contadorjogadas[s->aux-1] == 9) {
+        else if (verificaC(mat, s->aux) == 0 && s->contadorjogadas[s->aux-1] == 9) {
             s->vencedor = 0;
             s->vencedortab[s->contadorjogos] = 0;
             escreve_resultadoC(s, s->vencedor);
@@ -61,7 +63,7 @@ void jogar_computador(jogoC *s) {
 
         s->jogador = s->jogador % 2 + 1;
         printf("\n-> Jogar para o tabuleiro %d\n\n", s->posicaojogada);
-    }while(s->contadorjogos < N && s->jogadas < N*N);
+    } while(s->contadorjogos < N && s->jogadas < N*N && s->interrupcao != 1);
 
     mostraMat(mat, N, N);
     libertaMat(mat, N);

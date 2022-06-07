@@ -16,14 +16,15 @@ struct listajogadasC {
     pjogadaC prox;
 };
 
+pjogadaC recuperarjogoC(pjogadaC p);
 void listajogadasC(pjogadaC p);
 int interrompejogoC(pjogadaC p);
 void preenchelistaC(pjogadaC p, int jogador, int tabuleiro, int posicao);
 pjogadaC inserejogadaC(pjogadaC p, int jogador, int tabuleiro, int posicao);
 void libertalistaC(pjogadaC p);
-void gravalistatxtC(pjogadaC lista, char* nomeF);
-void gravalistabinC(pjogadaC lista, char* nomeF);
-void lelistabinC(pjogadaC lista, char* nomeF);
+void gravalistatxtC(pjogadaC p, char* nomeF);
+void gravalistabinC(pjogadaC p, char* nomeF);
+void lelistabinC(pjogadaC p, char* nomeF);
 pjogadaC recuperalistaC(char *nomeF);
 
 #endif //TP2022_LISTALIGADAC_H

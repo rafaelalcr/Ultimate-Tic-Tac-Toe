@@ -23,8 +23,11 @@ struct jogosC {
     int tabuleiro;              // número do tabuleiro inicial e depois utilizado para verificação da escolha da jogada
     int aux;                    // variável auxiliar para guardar o número do tabuleiro anterior
     int contadorjogadas[N];     // array que guarda o número de jogadas feitas em cada tabuleiro
+    int interrupcao;            // indica se houve interrupção do jogo (1 se sim, 0 se não)
 };
 
+void inicializarC(jogoC *s);
+void inicio_jogoC(jogoC *s);
 void jogar_computador(jogoC *s);
 void jogadaC(jogoC *s, char **p, int n, int n_jogador);
 void escolhe_jogadaC(jogoC *s, char **p, int n, int x, int y, int n_jogador);
