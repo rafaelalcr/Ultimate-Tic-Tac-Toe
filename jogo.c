@@ -44,7 +44,8 @@ void jogar_jogador(jogo *r) {
     do {
         mostraMat(mat, N, N);
         jogada(r, mat, M, r->jogador);
-        lista = inserejogada(lista, r->jogador, r->aux, r->posicao, r->jogadas);
+        lista = insereinfo(lista, r->jogador, r->aux, r->posicao, r->jogadas, r->jogos,
+                             &r->vencedortab[r->jogos], &r->minitab[r->jogos], &r->jogadastab[r->aux - 1]);
 
         if (verifica(mat, r->aux) == 1 || verifica(mat, r->aux) == -1) {
             r->vencedor = r->jogador;
@@ -67,8 +68,8 @@ void jogar_jogador(jogo *r) {
 
     } while (r->interrupcao != 1 && r->jogos < N && r->jogadas < N*N);
 
-    libertaMat(mat, N);
     gravalistatxt(lista, "listajogadas.txt");
+    libertaMat(mat, N);
     libertalista(lista);
 }
 
@@ -170,20 +171,22 @@ int verifica(char **mat, int tabuleiro) {
 
 int verifica_tabuleiro(char **mat, int nlin, int linMax, int ncol, int colMax) {
     int linha, coluna;
-    int contador;                                       // Se o contador chegar a 3, significa que há um vencedor
+    int contador;                                           // Se o contador chegar a 3, significa que há um vencedor
 
-    for (linha = nlin; linha < linMax; ++linha) {        // Verifica Linha
-        contador = 0;
+    // Verifica Linha
+    contador = 0;
+    for (linha = nlin; linha < linMax; ++linha) {
         for (coluna = ncol; coluna < colMax; ++coluna) {
             contador += (mat[linha][coluna] == 'X') ? 1 :
                         (mat[linha][coluna] == 'O') ? -1 : 0;
         }
-        if (contador == 3 || contador == -3)            // Se contador = 3 'X' ou 3 'O'
-            return contador / abs(contador);            // Returna 1 ou -1
+        if (contador == 3 || contador == -3)                // Se contador = 3 'X' ou 3 'O'
+            return contador / abs(contador);                // Returna 1 ou -1
     }
 
-    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Coluna
-        contador = 0;
+    // Verifica Coluna
+    contador = 0;
+    for (coluna = ncol; coluna < colMax; ++coluna) {
         for (linha = nlin; linha < linMax; ++linha) {
             contador += (mat[linha][coluna] == 'X') ? 1 :
                         (mat[linha][coluna] == 'O') ? -1 : 0;
@@ -192,18 +195,18 @@ int verifica_tabuleiro(char **mat, int nlin, int linMax, int ncol, int colMax) {
             return contador / abs(contador);
     }
 
-    for (linha = nlin; linha < linMax; ++linha) ;        // vai para a linha pretendida
+    // Verifica Diagonal de cima para baixo da esquerda para direita
     contador = 0;
-    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de cima para baixo da esquerda para direita
+    for (coluna = ncol; coluna < colMax; ++coluna) {
         contador += (mat[coluna][coluna] == 'X') ? 1 :
                     (mat[coluna][coluna] == 'O') ? -1 : 0;
     }
     if (contador == 3 || contador == -3)
         return contador / abs(contador);
 
-    for (linha = nlin; linha < linMax; ++linha) ;        // vai para a linha pretendida
+    // Verifica Diagonal de baixo para cima da esquerda para direita
     contador = 0;
-    for (coluna = ncol; coluna < colMax; ++coluna) {    // Verifica Diagonal de baixo para cima da esquerda para direita
+    for (coluna = ncol; coluna < colMax; ++coluna) {
         contador += (mat[coluna][2 - coluna] == 'X') ? 1 :
                     (mat[coluna][2 - coluna] == 'O') ? -1 : 0;
     }

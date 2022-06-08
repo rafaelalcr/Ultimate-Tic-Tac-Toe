@@ -26,22 +26,28 @@ pjogada recuperarjogo(pjogada p) {
     return p;
 }
 
-void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas) {
+void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas, int jogos,
+                   const int *vencedortab, const int *minitab, const int *jogadastab) {
     p->jogador = jogador;
     p->tabuleiro = tabuleiro;
     p->posicao = posicao;
     p->jogadas = jogadas;
+    p->jogos = jogos;
+    p->vencedortab[p->jogos] = *vencedortab;
+    p->minitab[p->jogos] = *minitab;
+    p->jogadastab[p->tabuleiro - 1] = *jogadastab;
     p->prox = NULL;
 }
 
-pjogada inserejogada(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas) {
+pjogada insereinfo(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas, int jogos,
+                     const int *vencedortab, const int *minitab, const int *jogadastab) {
     pjogada novo, aux;
     novo = malloc(sizeof(lista));
     if(novo == NULL) {
         printf("Erro na alocacao de memoria.\n");
         return p;
     }
-    preenchelista(novo, jogador, tabuleiro, posicao, jogadas);
+    preenchelista(novo, jogador, tabuleiro, posicao, jogadas, jogos, vencedortab, minitab, jogadastab);
     if(p == NULL)
         p = novo;
     else {
@@ -129,6 +135,25 @@ void gravalistatxt(pjogada p, char* nomeF) {
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
+    fprintf(f, "Numero de jogos terminados: %d\n", p->jogos);
+    fprintf(f, "Numero de jogadas feitas: %d\n", p->jogadas);
+
+    fprintf(f, "Vencedores dos tabuleiros: ");
+    for(int i=0; i < p->jogos; i++) {
+        fprintf(f, " %d", p->vencedortab[i]);
+    }
+
+    fprintf(f, "\nOrdem dos tabuleiros terminados: ");
+    for(int i=0; i < p->jogos; i++) {
+        fprintf(f, " %d", p->minitab[i]);
+    }
+
+    fprintf(f, "\nNumero de jogadas realizadas por tabuleiro: ");
+    for(int i=0; i<N; i++) {
+        fprintf(f, " %d", p->jogadastab[i]);
+    }
+
+    fprintf(f, "\nLista de jogadas: \n");
     while (p != NULL) {
         fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
         p = p->prox;
@@ -144,6 +169,26 @@ void gravalistabin(pjogada p, char* nomeF) {
     f = fopen(nomeF, "wb");
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
+
+    fprintf(f, "Numero de jogos terminados: %d\n", p->jogos);
+    fprintf(f, "Numero de jogadas feitas: %d\n", p->jogadas);
+
+    fprintf(f, "Vencedores dos tabuleiros: ");
+    for(int i=0; i<N; i++) {
+        fprintf(f, " %d", p->vencedortab[i]);
+    }
+
+    fprintf(f, "\nOrdem dos tabuleiros terminados: ");
+    for(int i=0; i<N; i++) {
+        fprintf(f, " %d", p->minitab[i]);
+    }
+
+    fprintf(f, "\nNumero de jogadas realizadas por tabuleiro: ");
+    for(int i=0; i<N; i++) {
+        fprintf(f, " %d", p->jogadastab[i]);
+    }
+
+    fprintf(f, "\nLista de jogadas: \n");
 
     while (p != NULL) {
         fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);

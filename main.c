@@ -9,10 +9,10 @@ int main() {
 }
 
 // TODO
-//  -> recuperar a informação do ficheiro binário, o programa trava ao tentar recuperar
-//  -> verificação das diagonais
+//  -> FICHEIRO BINÁRIO: o programa trava ao tentar recuperar a informação
+//  -> FICHEIRO TEXTO:
+//      -> é preciso pedir ao utilizador o nome do ficheiro
+//      -> quando se indica o nome, o programa termina sem a criação do ficheiro
+//      -> os valores do nº de jogos e de jogadas, tal como os valores dos arrays estão errados
+//  -> verificação das diagonais, às vezes não deteta quando o resultado ou deteta um resultado que não aconteceu
 //  -> passar para outro tabuleiro aleatório quando atinge o limite de jogadas num tabuleiro
-//  -> às vezes não deteta quando o resultado ou deteta um resultado que não aconteceu
-//  -> na gravação da lista num ficheiro de texto, é preciso indicar o nome do ficheiro
-//  -> depois da indicação do nome do ficheiro de texto, o programa termina e nenhum ficheiro é criado
-//  -> guardar nos ficheiros os valores do array de vencedores e dos tabuleiros terminados
