@@ -74,9 +74,8 @@ void jogar_jogador(jogo *r) {
 
     } while (r->interrupcao != 1 && r->njogos < N && r->njogadas < N*N);
 
-    //if(r->interrupcao == 0)   // o jogo é guardado só quando todos os tabuleiros foram terminados
+    if(r->interrupcao == 0)   // o jogo é guardado só quando todos os tabuleiros foram terminados
         gravalistatxt(lista);
-
     libertaMat(mat, N);
     libertalista(lista);
 }

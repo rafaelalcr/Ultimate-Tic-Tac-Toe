@@ -30,6 +30,7 @@ void libertalista(pjogada p);
 void escreveinfo(pjogada p, FILE *f);
 void gravalistatxt(pjogada p);
 void gravalistabin(pjogada p, char* nomeF);
+void leinfo(pjogada p, FILE *f);
 void lelistabin(pjogada p, char* nomeF);
 pjogada recuperalista(char *nomeF);
 

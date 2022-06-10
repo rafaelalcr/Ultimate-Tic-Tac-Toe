@@ -200,17 +200,37 @@ void gravalistabin(pjogada p, char* nomeF) {
     printf("\nJogo guardado em ficheiro binario.\n\n");
 }
 
+void leinfo(pjogada p, FILE *f) {
+    while(p->prox != NULL)
+        p = p->prox;
+
+    fscanf(f, "Total de jogos terminados: %d", &p->njogos);
+    fscanf(f, " Total de jogadas realizadas: %d", &p->njogadas);
+
+    fscanf(f, " Ordem dos vencedores dos tabuleiros:");
+    for(int i = 0; i < N; i++)
+        fscanf(f, " %d", &p->tab_vencedores[i]);
+
+    fscanf(f, " Ordem dos tabuleiros terminados:");
+    for(int i = 0; i < N; i++)
+        fscanf(f, " %d", &p->tab_terminados[i]);
+
+    fscanf(f, " Numero de jogadas realizadas:");
+    for(int i = 0; i < N; i++)
+        fscanf(f, " %d", &p->tab_jogadas[i]);
+}
+
 void lelistabin(pjogada p, char* nomeF) {
     FILE *f;
     f = fopen(nomeF, "wb");
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    fscanf(f, " Jogador %d # Tabuleiro %d # Posicao %d\n", &p->njogador, &p->ntabuleiro, &p->posicao);
+    leinfo(p, f);
 
-    // verifica se a lista funciona
+    fscanf(f, " Lista de jogadas:");
     while (p != NULL) {
-        printf("Jogador %d # Tabuleiro %d # Posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
+        fscanf(f, " Jogador %d # Tabuleiro %d # Posicao %d", &p->njogador, &p->ntabuleiro, &p->posicao);
         p = p->prox;
     }
 
