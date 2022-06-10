@@ -119,7 +119,7 @@ int interrompejogo(pjogada p) {
     }
 
     if (resposta == 1) {
-        //gravalistabin(p, "jogo.bin");
+        gravalistabin(p, "jogo.bin");
         return 1;
     }
     return 0;
@@ -134,44 +134,26 @@ void libertalista(pjogada p) {
     }
 }
 
-void escreveinfo1(pjogada p, FILE *f) {
+void escreveinfo(pjogada p, FILE *f) {
     while(p->prox != NULL)
         p = p->prox;
 
     fprintf(f, "Total de jogos terminados: %d\n", p->njogos);
     fprintf(f, "Total de jogadas realizadas: %d\n", p->njogadas);
-    fprintf(f, "\n");
-}
 
-void escreveinfo2(pjogada p, FILE *f) {
     fprintf(f, "Ordem dos vencedores dos tabuleiros:");
-    for(int i=0; i<p->njogos; i++)
+    for(int i = 0; i < N; i++)
         fprintf(f, " %d", p->tab_vencedores[i]);
     fprintf(f, "\n");
-}
 
-void escreveinfo3(pjogada p, FILE *f) {
     fprintf(f, "Ordem dos tabuleiros terminados:");
-    for(int i=0; i<p->njogos; i++)
+    for(int i = 0; i < N; i++)
         fprintf(f, " %d", p->tab_terminados[i]);
-    fprintf(f, "\n\n");
-}
-
-void escreveinfo4(pjogada p, FILE *f) {
-    fprintf(f, "Numero de jogadas realizadas:\n");
-    while(p->prox != NULL)
-        p = p->prox;
-    for(int i=0; i<N; i++)
-        fprintf(f, "Tabuleiro %d: %d\n", i+1, p->tab_jogadas[i]);
     fprintf(f, "\n");
-}
 
-void escreveinfo5(pjogada p, FILE *f) {
-    fprintf(f, "Lista de jogadas: \n");
-    while (p != NULL) {
-        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
-        p = p->prox;
-    }
+    fprintf(f, "Numero de jogadas realizadas:\n");
+    for(int i = 0; i < N; i++)
+        fprintf(f, "Tabuleiro %d: %d\n", i+1, p->tab_jogadas[i]);
 }
 
 void gravalistatxt(pjogada p, char* nomeF) {
@@ -180,11 +162,13 @@ void gravalistatxt(pjogada p, char* nomeF) {
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    escreveinfo1(p, f);
-    escreveinfo2(p, f);
-    escreveinfo3(p, f);
-    escreveinfo4(p, f);
-    escreveinfo5(p, f);
+    escreveinfo(p, f);
+
+    fprintf(f, "Lista de jogadas: \n");
+    while (p != NULL) {
+        fprintf(f, "Jogador %d # Tabuleiro %d # Posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
+        p = p->prox;
+    }
 
     fclose(f);
 
@@ -197,14 +181,11 @@ void gravalistabin(pjogada p, char* nomeF) {
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    escreveinfo1(p, f);
-    escreveinfo2(p, f);
-    escreveinfo3(p, f);
-    escreveinfo4(p, f);
+    escreveinfo(p, f);
 
-    fprintf(f, "\nLista de jogadas: \n");
+    fprintf(f, "Lista de jogadas: \n");
     while (p != NULL) {
-        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
+        fprintf(f, "Jogador %d # Tabuleiro %d # Posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
         p = p->prox;
     }
 
@@ -219,11 +200,11 @@ void lelistabin(pjogada p, char* nomeF) {
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    fscanf(f, " Jogador %d # tabuleiro %d # posicao %d\n", &p->njogador, &p->ntabuleiro, &p->posicao);
+    fscanf(f, " Jogador %d # Tabuleiro %d # Posicao %d\n", &p->njogador, &p->ntabuleiro, &p->posicao);
 
     // verifica se a lista funciona
     while (p != NULL) {
-        printf("Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
+        printf("Jogador %d # Tabuleiro %d # Posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
         p = p->prox;
     }
 

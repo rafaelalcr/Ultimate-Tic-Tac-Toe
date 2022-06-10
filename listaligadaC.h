@@ -27,11 +27,7 @@ pjogadaC insereinfoC(pjogadaC p, int njogador, int ntabuleiro, int posicao, int 
 void listajogadasC(pjogadaC p);
 int interrompejogoC(pjogadaC p);
 void libertalistaC(pjogadaC p);
-void escreveinfo1(pjogadaC p, FILE *f);
-void escreveinfo2(pjogadaC p, FILE *f);
-void escreveinfo3(pjogadaC p, FILE *f);
-void escreveinfo4(pjogadaC p, FILE *f);
-void escreveinfo5(pjogadaC p, FILE *f);
+void escreveinfoC(pjogadaC p, FILE *f);
 void gravalistatxtC(pjogadaC p, char* nomeF);
 void gravalistabinC(pjogadaC p, char* nomeF);
 void lelistabinC(pjogadaC p, char* nomeF);

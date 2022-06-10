@@ -3,27 +3,30 @@
 #include "resultadosC.h"
 
 void escreve_resultadoC(jogoC *s, int ganhou) {
-    for(int i=0; i<N; i++) {
-        if(s->tab_terminados[i] != s->ntabuleiro_ant) { // só mostra o resultado se o nº do tabuleiro não estiver no array
-            s->tab_vencedores[s->njogos] = ganhou;
-            s->tab_vencedores[s->njogos] = s->ntabuleiro_ant;
-            s->njogos++;
+    if (s->tab_terminados[0] != s->ntabuleiro_ant && s->tab_terminados[1] != s->ntabuleiro_ant &&
+        s->tab_terminados[2] != s->ntabuleiro_ant && s->tab_terminados[3] != s->ntabuleiro_ant &&
+        s->tab_terminados[4] != s->ntabuleiro_ant && s->tab_terminados[5] != s->ntabuleiro_ant &&
+        s->tab_terminados[6] != s->ntabuleiro_ant && s->tab_terminados[7] != s->ntabuleiro_ant &&
+        s->tab_terminados[8] != s->ntabuleiro_ant) {
 
-            printf("\n------------------------------------\n");
-            printf("|             RESULTADO            |\n");
-            printf("------------------------------------\n");
+        s->tab_vencedores[s->njogos] = ganhou;
+        s->tab_terminados[s->njogos] = s->ntabuleiro_ant;
+        s->njogos++;
 
-            if (ganhou == VITORIA_JOGADOR1)
-                printf("\nO jogador ganhou o jogo %d.\n\n", s->ntabuleiro_ant);
-            else if (ganhou == VITORIA_JOGADOR2)
-                printf("\nO Computador ganhou o jogo %d.\n\n", s->ntabuleiro_ant);
-            else if (ganhou == EMPATE)
-                printf("\nEmpate no jogo %d.\n\n", s->ntabuleiro_ant);
+        printf("\n------------------------------------\n");
+        printf("|             RESULTADO            |\n");
+        printf("------------------------------------\n");
 
-            printf("\n------------------------------------\n");
-            printf("|        CONTINUACAO DO JOGO       |\n");
-            printf("------------------------------------\n\n");
-        }
+        if (ganhou == VITORIA_JOGADOR1)
+            printf("\nO jogador ganhou o jogo %d.\n\n", s->ntabuleiro_ant);
+        else if (ganhou == VITORIA_JOGADOR2)
+            printf("\nO Computador ganhou o jogo %d.\n\n", s->ntabuleiro_ant);
+        else if (ganhou == EMPATE)
+            printf("\nEmpate no jogo %d.\n\n", s->ntabuleiro_ant);
+
+        printf("\n------------------------------------\n");
+        printf("|        CONTINUACAO DO JOGO       |\n");
+        printf("------------------------------------\n\n");
     }
 }
 
