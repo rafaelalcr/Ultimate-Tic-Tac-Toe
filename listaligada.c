@@ -26,39 +26,44 @@ pjogada recuperarjogo(pjogada p) {
     return p;
 }
 
-void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas, int jogos,
-                   const int *vencedortab, const int *minitab, const int *jogadastab) {
-    p->jogador = jogador;
-    p->tabuleiro = tabuleiro;
+void preenchelista(pjogada p, int njogador, int ntabuleiro, int posicao, int njogadas, int njogos,
+                   int *tab_vencedores, int *tab_terminados, int *tab_jogadas) {
+    p->njogador = njogador;
+    p->ntabuleiro = ntabuleiro;
     p->posicao = posicao;
-    p->jogadas = jogadas;
-    p->jogos = jogos;
-    p->vencedortab[p->jogos] = *vencedortab;
-    p->minitab[p->jogos] = *minitab;
-    p->jogadastab[p->tabuleiro - 1] = *jogadastab;
+    p->njogadas = njogadas;
+    p->njogos = njogos;
+    for(int i=0; i<N;i++) {
+        p->tab_vencedores[i] = tab_vencedores[i];
+        p->tab_terminados[i] = tab_terminados[i];
+        p->tab_jogadas[i] = tab_jogadas[i];
+    }
     p->prox = NULL;
 }
 
-pjogada insereinfo(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas, int jogos,
-                     const int *vencedortab, const int *minitab, const int *jogadastab) {
+pjogada insereinfo(pjogada p, int njogador, int ntabuleiro, int posicao, int njogadas, int njogos,
+                   int *tab_vencedores, int *tab_terminados, int *tab_jogadas) {
     pjogada novo, aux;
     novo = malloc(sizeof(lista));
+
     if(novo == NULL) {
         printf("Erro na alocacao de memoria.\n");
         return p;
     }
-    preenchelista(novo, jogador, tabuleiro, posicao, jogadas, jogos, vencedortab, minitab, jogadastab);
-    if(p == NULL)
+
+    preenchelista(novo, njogador, ntabuleiro, posicao, njogadas, njogos, tab_vencedores, tab_terminados, tab_jogadas);
+
+    if(p == NULL)                   // caso a lista esteja vazia
         p = novo;
     else {
         aux = p;
-        while(aux->prox != NULL)
-            aux = aux->prox;
-        novo->prox = aux->prox;
+        while(aux->prox != NULL)    // enquanto a lista não chegar ao fim
+            aux = aux->prox;        // avança
+        novo->prox = aux->prox;     // a próxima estrutura que "novo" aponta é igual à próxima estrutura que "aux" aponta
         if(aux->prox != NULL)
-            aux->prox->ant = novo;
-        novo->ant = aux;
-        aux->prox = novo;
+            aux->prox->ant = novo;  // onde está a estrutura "aux" situada na lista fica a estrutura "novo"
+        novo->ant = aux;            // o anterior da estrutura "novo" é a estrutura "aux"
+        aux->prox = novo;           // a próxima estrutura do "aux" é a estrutura "novo"
     }
     return p;
 }
@@ -86,16 +91,16 @@ void listajogadas(pjogada p) {
         while(p->prox != NULL)              // vai até encontrar a última informação da lista
             p = p->prox;
 
-        if(numero > p->jogadas) {
-            diferenca = numero - p->jogadas;
+        if(numero > p->njogadas) {
+            diferenca = numero - p->njogadas;
             for(int i = 0; i < numero - diferenca; i++) {   // mostra a lista pela última informação adicionada
-                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
                 p = p->ant;
             }
         }
-        else if(numero <= p->jogadas) {
+        else if(numero <= p->njogadas) {
             for(int i = 0; i < numero; i++) {   // mostra a lista pela última informação adicionada
-                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
                 p = p->ant;
             }
         }
@@ -114,7 +119,7 @@ int interrompejogo(pjogada p) {
     }
 
     if (resposta == 1) {
-        gravalistabin(p, "jogo.bin");
+        //gravalistabin(p, "jogo.bin");
         return 1;
     }
     return 0;
@@ -129,35 +134,57 @@ void libertalista(pjogada p) {
     }
 }
 
+void escreveinfo1(pjogada p, FILE *f) {
+    while(p->prox != NULL)
+        p = p->prox;
+
+    fprintf(f, "Total de jogos terminados: %d\n", p->njogos);
+    fprintf(f, "Total de jogadas realizadas: %d\n", p->njogadas);
+    fprintf(f, "\n");
+}
+
+void escreveinfo2(pjogada p, FILE *f) {
+    fprintf(f, "Ordem dos vencedores dos tabuleiros:");
+    for(int i=0; i<p->njogos; i++)
+        fprintf(f, " %d", p->tab_vencedores[i]);
+    fprintf(f, "\n");
+}
+
+void escreveinfo3(pjogada p, FILE *f) {
+    fprintf(f, "Ordem dos tabuleiros terminados:");
+    for(int i=0; i<p->njogos; i++)
+        fprintf(f, " %d", p->tab_terminados[i]);
+    fprintf(f, "\n\n");
+}
+
+void escreveinfo4(pjogada p, FILE *f) {
+    fprintf(f, "Numero de jogadas realizadas:\n");
+    while(p->prox != NULL)
+        p = p->prox;
+    for(int i=0; i<N; i++)
+        fprintf(f, "Tabuleiro %d: %d\n", i+1, p->tab_jogadas[i]);
+    fprintf(f, "\n");
+}
+
+void escreveinfo5(pjogada p, FILE *f) {
+    fprintf(f, "Lista de jogadas: \n");
+    while (p != NULL) {
+        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
+        p = p->prox;
+    }
+}
+
 void gravalistatxt(pjogada p, char* nomeF) {
     FILE *f;
     f = fopen(nomeF, "w");
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    fprintf(f, "Numero de jogos terminados: %d\n", p->jogos);
-    fprintf(f, "Numero de jogadas feitas: %d\n", p->jogadas);
-
-    fprintf(f, "Vencedores dos tabuleiros: ");
-    for(int i=0; i < p->jogos; i++) {
-        fprintf(f, " %d", p->vencedortab[i]);
-    }
-
-    fprintf(f, "\nOrdem dos tabuleiros terminados: ");
-    for(int i=0; i < p->jogos; i++) {
-        fprintf(f, " %d", p->minitab[i]);
-    }
-
-    fprintf(f, "\nNumero de jogadas realizadas por tabuleiro: ");
-    for(int i=0; i<N; i++) {
-        fprintf(f, " %d", p->jogadastab[i]);
-    }
-
-    fprintf(f, "\nLista de jogadas: \n");
-    while (p != NULL) {
-        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
-        p = p->prox;
-    }
+    escreveinfo1(p, f);
+    escreveinfo2(p, f);
+    escreveinfo3(p, f);
+    escreveinfo4(p, f);
+    escreveinfo5(p, f);
 
     fclose(f);
 
@@ -170,28 +197,14 @@ void gravalistabin(pjogada p, char* nomeF) {
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    fprintf(f, "Numero de jogos terminados: %d\n", p->jogos);
-    fprintf(f, "Numero de jogadas feitas: %d\n", p->jogadas);
-
-    fprintf(f, "Vencedores dos tabuleiros: ");
-    for(int i=0; i<N; i++) {
-        fprintf(f, " %d", p->vencedortab[i]);
-    }
-
-    fprintf(f, "\nOrdem dos tabuleiros terminados: ");
-    for(int i=0; i<N; i++) {
-        fprintf(f, " %d", p->minitab[i]);
-    }
-
-    fprintf(f, "\nNumero de jogadas realizadas por tabuleiro: ");
-    for(int i=0; i<N; i++) {
-        fprintf(f, " %d", p->jogadastab[i]);
-    }
+    escreveinfo1(p, f);
+    escreveinfo2(p, f);
+    escreveinfo3(p, f);
+    escreveinfo4(p, f);
 
     fprintf(f, "\nLista de jogadas: \n");
-
     while (p != NULL) {
-        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+        fprintf(f, "Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
         p = p->prox;
     }
 
@@ -206,11 +219,11 @@ void lelistabin(pjogada p, char* nomeF) {
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    fscanf(f, " Jogador %d # tabuleiro %d # posicao %d\n", &p->jogador, &p->tabuleiro, &p->posicao);
+    fscanf(f, " Jogador %d # tabuleiro %d # posicao %d\n", &p->njogador, &p->ntabuleiro, &p->posicao);
 
     // verifica se a lista funciona
     while (p != NULL) {
-        printf("Jogador %d # tabuleiro %d # posicao %d\n", p->jogador, p->tabuleiro, p->posicao);
+        printf("Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
         p = p->prox;
     }
 
@@ -224,7 +237,7 @@ pjogada recuperalista(char *nomeF){
     f = fopen(nomeF, "rb");
     if (f == NULL)
         return NULL;
-    while (fscanf(f, " Jogador %d[^#] # Tabuleiro %d[^#] # Posicao %d", &l.jogador, &l.tabuleiro, &l.posicao) != EOF){
+    while (fscanf(f, " Jogador %d # Tabuleiro %d # Posicao %d", &l.njogador, &l.ntabuleiro, &l.posicao) != EOF){
         l.prox = NULL;
         novo = malloc(sizeof(lista));
         if (novo == NULL) {

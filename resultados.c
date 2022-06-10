@@ -3,27 +3,27 @@
 #include "resultados.h"
 
 void escreve_resultado(jogo *r, int ganhou) {
-    // se o número do tabuleiro não estiver guardado no array, aparece o resultado
-    if (r->minitab[0] != r->aux && r->minitab[1] != r->aux && r->minitab[2] != r->aux &&
-        r->minitab[3] != r->aux && r->minitab[4] != r->aux && r->minitab[5] != r->aux &&
-        r->minitab[6] != r->aux && r->minitab[7] != r->aux && r->minitab[8] != r->aux) {
+    for(int i=0; i<N; i++) {
+        if(r->tab_terminados[i] != r->ntabuleiro_ant) { // só mostra o resultado se o nº do tabuleiro não estiver no array
+            r->tab_vencedores[r->njogos] = ganhou;
+            r->tab_vencedores[r->njogos] = r->ntabuleiro_ant;
+            r->njogos++;
 
-        r->vencedortab[r->jogos] = ganhou;
-        r->minitab[r->jogos] = r->aux;
-        r->jogos++;
+            printf("\n------------------------------------\n");
+            printf("|             RESULTADO            |\n");
+            printf("------------------------------------\n\n");
 
-        printf("\n------------------------------------\n");
-        printf("|             RESULTADO            |\n");
-        printf("------------------------------------\n\n");
+            if (ganhou == VITORIA_JOGADOR1)
+                printf("\nO jogador %d ganhou o jogo %d.\n\n", VITORIA_JOGADOR1, r->ntabuleiro_ant);
+            else if (ganhou == VITORIA_JOGADOR2)
+                printf("\nO jogador %d ganhou o jogo %d.\n\n", VITORIA_JOGADOR2, r->ntabuleiro_ant);
+            else if (ganhou == EMPATE)
+                printf("\nEmpate no jogo %d.\n\n", r->ntabuleiro_ant);
 
-        if (ganhou == 0)
-            printf("\nEmpate no jogo %d.\n\n", r->aux);
-        else
-            printf("\nO jogador %d ganhou o jogo %d.\n\n", ganhou, r->aux);
-
-        printf("\n------------------------------------\n");
-        printf("|        CONTINUACAO DO JOGO       |\n");
-        printf("------------------------------------\n\n");
+            printf("\n------------------------------------\n");
+            printf("|        CONTINUACAO DO JOGO       |\n");
+            printf("------------------------------------\n\n");
+        }
     }
 }
 
@@ -32,14 +32,16 @@ void resultados_jogos(jogo r) {
     printf("|        RESULTADO DOS JOGOS       |\n");
     printf("------------------------------------\n\n");
 
-    if(r.jogos == 0)
+    if(r.njogos == 0)
         printf("Sem resultados.\n\n");
     else {
         for(int i=0; i < N; i++) {
-            if(r.vencedortab[i] == 0)
-                printf("Houve um empate no jogo %d\n", r.minitab[i]);
-            else
-                printf("Jogador %d ganhou o jogo %d\n", r.vencedortab[i], r.minitab[i]);
+            if (r.tab_vencedores[i] == VITORIA_JOGADOR1)
+                printf("Jogador %d ganhou o jogo %d\n", VITORIA_JOGADOR1, r.tab_terminados[i]);
+            else if (r.tab_vencedores[i] == VITORIA_JOGADOR2)
+                printf("Jogador %d ganhou o jogo %d\n", VITORIA_JOGADOR2, r.tab_terminados[i]);
+            else if (r.tab_vencedores[i] == EMPATE)
+                printf("Houve um empate no jogo %d\n", r.tab_terminados[i]);
         }
         tabuleiro_final(&r);
     }
@@ -55,20 +57,20 @@ void tabuleiro_final(jogo *r) {
     mat = criaMat(M, M);
 
     for(int i = 0; i < N; i++) {
-        if(r->vencedortab[i] == 1)
-            setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, 'X');
-        else if(r->vencedortab[i] == 2)
-            setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, 'O');
-        else if(r->vencedortab[i] == 0)
-            setPos(mat, (r->minitab[i]-1)/M, (r->minitab[i]-1)%M, '#');
+        if(r->tab_vencedores[i] == VITORIA_JOGADOR1)
+            setPos(mat, (r->tab_terminados[i]-1)/M, (r->tab_terminados[i]-1)%M, 'X');
+        else if(r->tab_vencedores[i] == VITORIA_JOGADOR2)
+            setPos(mat, (r->tab_terminados[i]-1)/M, (r->tab_terminados[i]-1)%M, 'O');
+        else if(r->tab_vencedores[i] == EMPATE)
+            setPos(mat, (r->tab_terminados[i]-1)/M, (r->tab_terminados[i]-1)%M, '#');
     }
 
     if(verifica_tabuleiro(mat, 0, 3, 0, 3) == 1)
-        r->vencedortabfinal = 1;
+        r->vencedortabfinal = VITORIA_JOGADOR1;
     else if(verifica_tabuleiro(mat, 0, 3, 0, 3) == -1)
-        r->vencedortabfinal = 2;
+        r->vencedortabfinal = VITORIA_JOGADOR2;
     else if(verifica_tabuleiro(mat, 0, 3, 0, 3) == 0)
-        r->vencedortabfinal = 0;
+        r->vencedortabfinal = EMPATE;
 
     mostraMatFinal(mat, M, M);
     escreve_resultadoFinal(r->vencedortabfinal);
@@ -81,8 +83,10 @@ void escreve_resultadoFinal(int ganhou) {
     printf("|          RESULTADO FINAL         |\n");
     printf("------------------------------------\n\n");
 
-    if(ganhou == 0)
+    if (ganhou == VITORIA_JOGADOR1)
+        printf("\nGanhou o jogador %d.\n\n", VITORIA_JOGADOR1);
+    else if (ganhou == VITORIA_JOGADOR2)
+        printf("\nGanhou o jogador %d.\n\n", VITORIA_JOGADOR2);
+    else if (ganhou == EMPATE)
         printf("\nEmpate.\n\n");
-    else
-        printf("\nGanhou o jogador %d.\n\n", ganhou);
 }

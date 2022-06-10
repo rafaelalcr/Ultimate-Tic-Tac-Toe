@@ -13,6 +13,6 @@ int main() {
 //  -> FICHEIRO TEXTO:
 //      -> é preciso pedir ao utilizador o nome do ficheiro
 //      -> quando se indica o nome, o programa termina sem a criação do ficheiro
-//      -> os valores do nº de jogos e de jogadas, tal como os valores dos arrays estão errados
-//  -> verificação das diagonais, às vezes não deteta quando o resultado ou deteta um resultado que não aconteceu
+//      -> os valores dos arrays estão errados
+//  -> às vezes deteta um resultado inexistente ou não deteta o resultado existente
 //  -> passar para outro tabuleiro aleatório quando atinge o limite de jogadas num tabuleiro

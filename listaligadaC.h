@@ -7,22 +7,31 @@
 
 typedef struct listajogadasC listaC, *pjogadaC;
 struct listajogadasC {
-    int jogador;                // número do jogador que fez a jogada
-    int tabuleiro;              // número do tabuleiro em que foi feita a jogada
+    int njogador;               // número do jogador que fez a jogada
+    int ntabuleiro;              // número do tabuleiro em que foi feita a jogada
     int posicao;                // posição da jogada
-    int jogadas;                // número de jogadas feitas pelo utilizador/computador
-    int vencedores[N];          // array com os resultados dos mini tabuleiros (1, 2 ou 0)
-    int terminados[N];          // array com a ordem dos mini tabuleiros terminados
+    int njogadas;               // número de jogadas feitas pelo utilizador
+    int njogos;                 // número de jogos terminados
+    int tab_vencedores[N];      // array com os resultados dos mini tabuleiros (1, 2 ou 3)
+    int tab_terminados[N];      // array com a ordem dos mini tabuleiros terminados
+    int tab_jogadas[N];         // array que guarda o número de jogadas feitas em cada tabuleiro
     pjogadaC ant;
     pjogadaC prox;
 };
 
 pjogadaC recuperarjogoC(pjogadaC p);
-void preenchelistaC(pjogadaC p, int jogador, int tabuleiro, int posicao);
-pjogadaC inserejogadaC(pjogadaC p, int jogador, int tabuleiro, int posicao);
+void preenchelistaC(pjogadaC p, int njogador, int ntabuleiro, int posicao, int njogadas, int njogos,
+                    int *tab_vencedores, int *tab_terminados, int *tab_jogadas);
+pjogadaC insereinfoC(pjogadaC p, int njogador, int ntabuleiro, int posicao, int njogadas, int njogos,
+                     int *tab_vencedores, int *tab_terminados, int *tab_jogadas);
 void listajogadasC(pjogadaC p);
 int interrompejogoC(pjogadaC p);
 void libertalistaC(pjogadaC p);
+void escreveinfo1(pjogadaC p, FILE *f);
+void escreveinfo2(pjogadaC p, FILE *f);
+void escreveinfo3(pjogadaC p, FILE *f);
+void escreveinfo4(pjogadaC p, FILE *f);
+void escreveinfo5(pjogadaC p, FILE *f);
 void gravalistatxtC(pjogadaC p, char* nomeF);
 void gravalistabinC(pjogadaC p, char* nomeF);
 void lelistabinC(pjogadaC p, char* nomeF);

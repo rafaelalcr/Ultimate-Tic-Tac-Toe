@@ -7,26 +7,31 @@
 
 typedef struct listajogadas lista, *pjogada;
 struct listajogadas {
-    int jogador;                // número do jogador que fez a jogada
-    int tabuleiro;              // número do tabuleiro em que foi feita a jogada
+    int njogador;               // número do jogador que fez a jogada
+    int ntabuleiro;              // número do tabuleiro em que foi feita a jogada
     int posicao;                // posição da jogada
-    int jogadas;                // número de jogadas feitas pelo utilizador
-    int jogos;                  // número de jogos terminados
-    int vencedortab[N];         // array com os resultados dos mini tabuleiros (1, 2 ou 0)
-    int minitab[N];             // array com a ordem dos mini tabuleiros terminados
-    int jogadastab[N];          // array que guarda o número de jogadas feitas em cada tabuleiro
+    int njogadas;               // número de jogadas feitas pelo utilizador
+    int njogos;                 // número de jogos terminados
+    int tab_vencedores[N];      // array com os resultados dos mini tabuleiros (1, 2 ou 3)
+    int tab_terminados[N];      // array com a ordem dos mini tabuleiros terminados
+    int tab_jogadas[N];         // array que guarda o número de jogadas feitas em cada tabuleiro
     pjogada ant;
     pjogada prox;
 };
 
-pjogada recuperarjogo(pjogada p);           // permitir a continuação de um jogo anterior caso o ficheiro exista
-void preenchelista(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas, int jogos,
-                   const int *vencedortab, const int *minitab, const int *jogadastab);
-pjogada insereinfo(pjogada p, int jogador, int tabuleiro, int posicao, int jogadas, int jogos,
-                     const int *vencedortab, const int *minitab, const int *jogadastab);
+pjogada recuperarjogo(pjogada p);
+void preenchelista(pjogada p, int njogador, int ntabuleiro, int posicao, int njogadas, int njogos,
+                   int *tab_vencedores, int *tab_terminados, int *tab_jogadas);
+pjogada insereinfo(pjogada p, int njogador, int ntabuleiro, int posicao, int njogadas, int njogos,
+                   int *tab_vencedores, int *tab_terminados, int *tab_jogadas);
 void listajogadas(pjogada p);
-int interrompejogo(pjogada p);              // perguntar ao utilizador se quer interromper o jogo
+int interrompejogo(pjogada p);
 void libertalista(pjogada p);
+void escreveinfo1(pjogada p, FILE *f);
+void escreveinfo2(pjogada p, FILE *f);
+void escreveinfo3(pjogada p, FILE *f);
+void escreveinfo4(pjogada p, FILE *f);
+void escreveinfo5(pjogada p, FILE *f);
 void gravalistatxt(pjogada p, char* nomeF);
 void gravalistabin(pjogada p, char* nomeF);
 void lelistabin(pjogada p, char* nomeF);
