@@ -157,8 +157,13 @@ void escreveinfoC(pjogadaC p, FILE *f) {
     fprintf(f, "\n");
 }
 
-void gravalistatxtC(pjogadaC p, char* nomeF) {
+void gravalistatxtC(pjogadaC p) {
     FILE *f;
+    char nomeF[15];
+
+    printf("Nome do ficheiro?");
+    scanf("%s", nomeF);
+
     f = fopen(nomeF, "w");
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");

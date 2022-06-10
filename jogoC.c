@@ -76,7 +76,8 @@ void jogar_computador(jogoC *s) {
     } while(s->interrupcao != 1 && s->njogos < N && s->njogadas < N*N);
 
     //if(r->interrupcao == 0)
-    gravalistatxtC(lista, "listajogadasC.txt");
+        gravalistatxtC(lista);
+
     libertaMat(mat, N);
     libertalistaC(lista);
 }

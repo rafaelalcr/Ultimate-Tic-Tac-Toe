@@ -36,7 +36,7 @@ void inicio_jogo(jogo *r) {
 }
 
 void jogar_jogador(jogo *r) {
-    char **mat = NULL;
+    char **mat = NULL, *nomeF = NULL;
     pjogada lista = NULL;
 
     inicializar(r);
@@ -75,7 +75,8 @@ void jogar_jogador(jogo *r) {
     } while (r->interrupcao != 1 && r->njogos < N && r->njogadas < N*N);
 
     //if(r->interrupcao == 0)   // o jogo é guardado só quando todos os tabuleiros foram terminados
-        gravalistatxt(lista, "listajogadas.txt");
+        gravalistatxt(lista);
+
     libertaMat(mat, N);
     libertalista(lista);
 }

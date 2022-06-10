@@ -28,7 +28,7 @@ void listajogadasC(pjogadaC p);
 int interrompejogoC(pjogadaC p);
 void libertalistaC(pjogadaC p);
 void escreveinfoC(pjogadaC p, FILE *f);
-void gravalistatxtC(pjogadaC p, char* nomeF);
+void gravalistatxtC(pjogadaC p);
 void gravalistabinC(pjogadaC p, char* nomeF);
 void lelistabinC(pjogadaC p, char* nomeF);
 pjogadaC recuperalistaC(char *nomeF);
