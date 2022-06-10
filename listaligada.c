@@ -151,9 +151,10 @@ void escreveinfo(pjogada p, FILE *f) {
         fprintf(f, " %d", p->tab_terminados[i]);
     fprintf(f, "\n");
 
-    fprintf(f, "Numero de jogadas realizadas:\n");
+    fprintf(f, "Numero de jogadas realizadas:");
     for(int i = 0; i < N; i++)
-        fprintf(f, "Tabuleiro %d: %d\n", i+1, p->tab_jogadas[i]);
+        fprintf(f, " %d", p->tab_jogadas[i]);
+    fprintf(f, "\n");
 }
 
 void gravalistatxt(pjogada p, char* nomeF) {
