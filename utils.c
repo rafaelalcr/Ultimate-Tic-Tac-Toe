@@ -13,9 +13,3 @@ void initRandom(){
 int intUniformRnd(int a, int b){
     return a + rand()%(b-a+1);
 }
-
-void empty_stdin (void) { /* simple helper-function to empty stdin */
-    int c = getchar();
-    while (c != '\n' && c != EOF)
-        c = getchar();
-}

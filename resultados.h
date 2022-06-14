@@ -5,10 +5,10 @@
 
 #include "jogo.h"
 
-void escreve_resultado(jogo *r, int ganhou);
-void resultados_jogos(jogo r);
-void tabuleiro_final(jogo *r);
+void escreve_resultado(jogo *r, char **tab, int ganhou);
 void escreve_resultadoFinal(int ganhou);
+void escreve_resultadoC(jogo *r, char **tab, int ganhou);
+void escreve_resultadoFinalC(int ganhou);
 
 
 #endif //TP2022_RESULTADOS_H

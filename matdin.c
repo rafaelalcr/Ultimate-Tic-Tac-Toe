@@ -33,10 +33,6 @@ void setPos(char **p, int x, int y, char c){
     p[x][y] = c;
 }
 
-char getPos(char **p, int x, int y){
-    return p[x][y];
-}
-
 void mostraMat(char **p, int nLin, int nCol){
     printf("  ______________    ______________    ______________\n");
     for(int i=0; i<nLin; i++){
@@ -55,6 +51,10 @@ void mostraMat(char **p, int nLin, int nCol){
 }
 
 void mostraMatFinal(char **p, int nLin, int nCol){
+    printf("------------------------------------\n");
+    printf("|          TABULEIRO FINAL         |\n");
+    printf("------------------------------------\n\n");
+
     printf("  ______________\n");
     for(int i=0; i<nLin; i++){
         printf(" | ");

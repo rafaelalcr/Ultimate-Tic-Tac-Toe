@@ -4,7 +4,13 @@
 #include "listaligada.h"
 #include "resultados.h"
 
-void inicializar(jogo *r) {
+void jogar_jogador(jogo *r) {
+    char **mat = NULL, **tab = NULL;
+    pjogada lista = NULL;
+
+    mat = criaMat(N, N);
+    tab = criaMat(M, M);
+
     r->njogos = 0;
     r->njogadas = 0;
     r->posicao = 0;
@@ -14,6 +20,7 @@ void inicializar(jogo *r) {
     r->ntabuleiro = 0;
     r->ntabuleiro_ant = 0;
     r->interrupcao = 0;
+    r->estadojogo = EM_JOGO;
 
     for(int i=0; i<N; i++)
         r->tab_jogadas[i] = EM_JOGO;
@@ -21,28 +28,18 @@ void inicializar(jogo *r) {
     for(int i=0; i<N; i++)
         r->tab_terminados[i] = EM_JOGO;
 
-    for(int i=0; i<N; i++)
-        r->tab_vencedores[i] = EM_JOGO;
-}
+    lista = recuperarjogo(lista);
 
-void inicio_jogo(jogo *r) {
     printf("------------------------------------\n");
     printf("|          INICIO DO JOGO          |\n");
     printf("------------------------------------\n");
 
     initRandom();
     r->ntabuleiro = intUniformRnd(1, 9);
-    printf("\n-> Jogar para o tabuleiro %d\n\n", r->ntabuleiro);
-}
 
-void jogar_jogador(jogo *r) {
-    char **mat = NULL, *nomeF = NULL;
-    pjogada lista = NULL;
-
-    inicializar(r);
-    lista = recuperarjogo(lista);
-    inicio_jogo(r);
-    mat = criaMat(N, N);
+    printf("\n------------------------------------\n");
+    printf("|            TABULEIRO %d          |\n", r->ntabuleiro);
+    printf("------------------------------------\n\n");
 
     do {
         mostraMat(mat, N, N);
@@ -51,32 +48,54 @@ void jogar_jogador(jogo *r) {
         if (verifica(mat, r->ntabuleiro_ant) == 1 || verifica(mat, r->ntabuleiro_ant) == -1) {
             r->vencedor = r->njogador;
             mostraMat(mat, N, N);
-            escreve_resultado(r, r->vencedor);
-
-        } else if (verifica(mat, r->ntabuleiro_ant) == 0 && r->tab_jogadas[r->ntabuleiro_ant - 1] == 9) {
+            escreve_resultado(r, tab, r->vencedor);
+        }
+        else if (verifica(mat, r->ntabuleiro_ant) == 0 && r->tab_jogadas[r->ntabuleiro_ant - 1] == 9) {
             r->vencedor = EMPATE;
             mostraMat(mat, N, N);
-            escreve_resultado(r, r->vencedor);
+            escreve_resultado(r, tab, r->vencedor);
         }
 
-        lista = insereinfo(lista, r->njogador, r->ntabuleiro_ant, r->posicao, r->njogadas, r->njogos,
-                           r->tab_vencedores, r->tab_terminados, r->tab_jogadas);
+        lista = insereinfo(lista, r->njogador, r->ntabuleiro_ant, r->posicao, r->njogadas);
 
-        if (r->njogos < N && r->njogadas < N*N) {   // para não aparecer quando o jogo tiver terminado
+        // verifica o tabuleiro final 3x3
+        if(verifica_tabuleiro(tab, 0, 3, 0, 3) == 1) {
+            r->vencedortabfinal = VITORIA_JOGADOR1;
+            mostraMatFinal(tab, M, M);
+            escreve_resultadoFinal(r->vencedortabfinal);
+            r->estadojogo = JOGO_TERMINADO;
+        }
+        else if(verifica_tabuleiro(tab, 0, 3, 0, 3) == -1) {
+            r->vencedortabfinal = VITORIA_JOGADOR2;
+            mostraMatFinal(tab, M, M);
+            escreve_resultadoFinal(r->vencedortabfinal);
+            r->estadojogo = JOGO_TERMINADO;
+        }
+        else if(verifica_tabuleiro(tab, 0, 3, 0, 3) == 0 && r->njogos == 9) {
+            r->vencedortabfinal = EMPATE;
+            mostraMatFinal(tab, M, M);
+            escreve_resultadoFinal(r->vencedortabfinal);
+            r->estadojogo = JOGO_TERMINADO;
+        }
+
+        if(r->estadojogo != JOGO_TERMINADO) {
             listajogadas(lista);
             r->interrupcao = interrompejogo(lista);
         }
 
-        if (r->interrupcao != 1 && r->njogos < N && r->njogadas < N*N) {
+        if (r->interrupcao != 1 && r->estadojogo != JOGO_TERMINADO) {
             r->njogador = r->njogador % 2 + 1;
-            printf("\n-> Jogar para o tabuleiro %d\n\n", r->posicao);
+            printf("\n------------------------------------\n");
+            printf("|            TABULEIRO %d          |\n", r->ntabuleiro);
+            printf("------------------------------------\n\n");
         }
 
-    } while (r->interrupcao != 1 && r->njogos < N && r->njogadas < N*N);
+    } while (r->interrupcao != 1 && r->estadojogo != JOGO_TERMINADO && r->njogos < N && r->njogadas < N*N);
 
-    if(r->interrupcao == 0)   // o jogo é guardado só quando todos os tabuleiros foram terminados
+    if(r->interrupcao == 0 && r->estadojogo == JOGO_TERMINADO)
         gravalistatxt(lista);
     libertaMat(mat, N);
+    libertaMat(tab, M);
     libertalista(lista);
 }
 
@@ -127,18 +146,9 @@ void jogada(jogo *r, char **mat, int dim, int njogador) {
 }
 
 void escolhe_jogada(jogo *r, char **mat, int dim, int x, int y, int njogador) {
-    int valor;
-
     do {
         printf("Posicao: ");
-        valor = scanf("%d", &r->posicao);
-        putchar('\n');
-
-        if (valor == 0) {
-            fputs ("Opcao invalida.\n\n", stderr);
-            empty_stdin();
-        }
-
+        scanf("%d", &r->posicao);
     } while(r->posicao < 1 || r->posicao > N || mat[(r->posicao-1)/dim + x][(r->posicao-1)%dim + y] != '_');
 
     if(njogador == 1)
@@ -148,6 +158,7 @@ void escolhe_jogada(jogo *r, char **mat, int dim, int x, int y, int njogador) {
 
     r->ntabuleiro = r->posicao;
     r->njogadas++;
+    putchar('\n');
 }
 
 int verifica(char **mat, int ntabuleiro) {
@@ -180,8 +191,8 @@ int verifica_tabuleiro(char **mat, int linInicial, int linMax, int colInicial, i
     int contador;
 
     // Verifica Linhas
-    contador = 0;
     for (linha = linInicial; linha < linMax; ++linha) {
+        contador = 0;
         for (coluna = colInicial; coluna < colMax; ++coluna) {
             contador += (mat[linha][coluna] == 'X') ? 1 :
                         (mat[linha][coluna] == 'O') ? -1 : 0;
@@ -191,8 +202,8 @@ int verifica_tabuleiro(char **mat, int linInicial, int linMax, int colInicial, i
     }
 
     // Verifica Colunas
-    contador = 0;
     for (coluna = colInicial; coluna < colMax; ++coluna) {
+        contador = 0;
         for (linha = linInicial; linha < linMax; ++linha) {
             contador += (mat[linha][coluna] == 'X') ? 1 :
                         (mat[linha][coluna] == 'O') ? -1 : 0;
@@ -201,7 +212,8 @@ int verifica_tabuleiro(char **mat, int linInicial, int linMax, int colInicial, i
             return contador / abs(contador);
     }
 
-    /*              Verifica Diagonal \               */
+    //              Verifica Diagonal \
+
     contador = 0;
     for (linha = linInicial; linha < linMax; ++linha) {
         contador += (mat[linha][linha] == 'X') ? 1 :
@@ -210,7 +222,8 @@ int verifica_tabuleiro(char **mat, int linInicial, int linMax, int colInicial, i
     if (contador == 3 || contador == -3)
         return contador / abs(contador);
 
-    /*               Verifica Diagonal /                  */
+    //               Verifica Diagonal /
+
     contador = 0;
     for (linha = linInicial, coluna = 2; linha < linMax && coluna >= 0; ++linha, --coluna) {
         contador += (mat[linha][coluna] == 'X') ? 1 :
