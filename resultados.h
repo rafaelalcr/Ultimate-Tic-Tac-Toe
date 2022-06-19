@@ -10,5 +10,4 @@ void escreve_resultadoFinal(int ganhou);
 void escreve_resultadoC(jogo *r, char **tab, int ganhou);
 void escreve_resultadoFinalC(int ganhou);
 
-
 #endif //TP2022_RESULTADOS_H

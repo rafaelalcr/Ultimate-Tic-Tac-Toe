@@ -4,25 +4,26 @@
 
 void libertaMat(char** p, int nLin){
     for(int i=0; i<nLin; i++)
-        free(p[i]);
-    free(p);
+        free(p[i]);     // liberta a memória reservada para o tamanho das linhas
+    free(p);            // liberta o resta da memória que ficou reservada para o tamanho das colunas
 }
 
 char** criaMat(int nLin, int nCol){
     char **p = NULL;
     int i, j;
 
-    p = malloc(sizeof(char*) * nLin);
-    if(p == NULL)
+    p = malloc(sizeof(char*) * nLin);   // reserva espaço na memória com o tamanho do número de linhas
+
+    if(p == NULL)                       // verifica-se se a matriz está vazia
         return NULL;
 
     for(i=0; i<nLin; i++){
-        p[i] = malloc(sizeof(char) * nCol);
-        if(p[i] == NULL){
-            libertaMat(p, i-1);
+        p[i] = malloc(sizeof(char) * nCol); // reserva espaço na memória com o tamanho do número de colunas
+        if(p[i] == NULL){                   // verifica-se se a matriz está vazia
+            libertaMat(p, i-1);             // se estiver vazia, é libertada a memória
             return NULL;
         }
-        for(j=0; j<nCol; j++)
+        for(j=0; j<nCol; j++)               // imprime o desenho da matriz
             p[i][j] = '_';
         }
 

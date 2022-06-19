@@ -40,5 +40,4 @@ void escolhe_jogada(jogo *r, char **mat, int dim, int x, int y, int njogador);
 int verifica(char **mat, int ntabuleiro);
 int verifica_tabuleiro(char **mat, int linInicial, int linMax, int colInicial, int colMax);
 
-
 #endif //TP2022_JOGO_H

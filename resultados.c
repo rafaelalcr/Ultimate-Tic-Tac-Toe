@@ -10,6 +10,7 @@ void escreve_resultado(jogo *r, char **tab, int ganhou) {
         r->tab_terminados[4] != r->ntabuleiro_ant && r->tab_terminados[5] != r->ntabuleiro_ant &&
         r->tab_terminados[6] != r->ntabuleiro_ant && r->tab_terminados[7] != r->ntabuleiro_ant &&
         r->tab_terminados[8] != r->ntabuleiro_ant) {
+
         r->tab_terminados[r->njogos] = r->ntabuleiro_ant;
         r->njogos++;
 
@@ -51,11 +52,13 @@ void escreve_resultadoFinal(int ganhou) {
 }
 
 void escreve_resultadoC(jogo *r, char **tab, int ganhou) {
+
    if (r->tab_terminados[0] != r->ntabuleiro_ant && r->tab_terminados[1] != r->ntabuleiro_ant &&
-       r->tab_terminados[2] != r->ntabuleiro_ant && r->tab_terminados[3] != r->ntabuleiro_ant &&
-       r->tab_terminados[4] != r->ntabuleiro_ant && r->tab_terminados[5] != r->ntabuleiro_ant &&
-       r->tab_terminados[6] != r->ntabuleiro_ant && r->tab_terminados[7] != r->ntabuleiro_ant &&
-       r->tab_terminados[8] != r->ntabuleiro_ant) {
+        r->tab_terminados[2] != r->ntabuleiro_ant && r->tab_terminados[3] != r->ntabuleiro_ant &&
+        r->tab_terminados[4] != r->ntabuleiro_ant && r->tab_terminados[5] != r->ntabuleiro_ant &&
+        r->tab_terminados[6] != r->ntabuleiro_ant && r->tab_terminados[7] != r->ntabuleiro_ant &&
+        r->tab_terminados[8] != r->ntabuleiro_ant) {
+
         r->tab_terminados[r->njogos] = r->ntabuleiro_ant;
         r->njogos++;
 

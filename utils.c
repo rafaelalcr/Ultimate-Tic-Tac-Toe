@@ -6,10 +6,10 @@
 
 #include "utils.h"
 
-void initRandom(){
+void initRandom() {
     srand(time(NULL));
 }
 
-int intUniformRnd(int a, int b){
+int intUniformRnd(int a, int b) {
     return a + rand()%(b-a+1);
 }
