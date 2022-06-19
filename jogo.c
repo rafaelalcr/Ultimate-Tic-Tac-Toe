@@ -56,7 +56,7 @@ void jogar_jogador(jogo *r) {
             escreve_resultado(r, tab, r->vencedor);
         }
 
-        lista = insereinfo(lista, r->njogador, r->ntabuleiro_ant, r->posicao, r->njogadas);
+        lista = insereinfo(lista, r->njogador, r->ntabuleiro_ant, r->posicao);
 
         // verifica o tabuleiro final 3x3
         if(verifica_tabuleiro(tab, 0, 3, 0, 3) == 1) {
@@ -138,11 +138,12 @@ void jogada(jogo *r, char **mat, int dim, int njogador) {
         case 9:
             escolhe_jogada(r, mat, dim, 6, 6, njogador);
             r->ntabuleiro_ant = 9;
+            break;
         default:
             break;
     }
 
-    r->tab_jogadas[r->ntabuleiro_ant - 1]++;   // aux-1 porque o aux começa com valor 1, array tem que começar com índice 0
+    r->tab_jogadas[r->ntabuleiro_ant - 1]++;
 }
 
 void escolhe_jogada(jogo *r, char **mat, int dim, int x, int y, int njogador) {

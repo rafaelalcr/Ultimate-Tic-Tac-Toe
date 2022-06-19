@@ -1,6 +1,5 @@
 // Rafaela Fonseca Santos nº 2017019717
 
-#include <unistd.h>
 #include "listaligada.h"
 
 pjogada recuperarjogo(pjogada p) {
@@ -15,7 +14,7 @@ pjogada recuperarjogo(pjogada p) {
 
         if (resposta == 1) {
             p = recuperalista("jogo.bin");
-            printf("Jogo recuperado.\n");
+            printf("Funcionalidade nao implementada.\n");
         }
         putchar('\n');
     }
@@ -25,48 +24,14 @@ pjogada recuperarjogo(pjogada p) {
     return p;
 }
 
-pjogada recuperalista(char *nomeF){
-    pjogada novo, aux, listainfo = NULL;
-    FILE *f;
-    lista l;
-
-    f = fopen(nomeF, "rb");
-    if (f == NULL)
-        printf("Erro de abertura do ficheiro.\n");
-
-    while (fread(&l, sizeof(int), 3, f) != EOF){
-        l.prox = NULL;
-        novo = malloc(sizeof(lista));
-        if (novo == NULL) {
-            fclose(f);
-            libertalista(listainfo);
-            return NULL;
-        }
-        *novo = l;
-        if (listainfo == NULL)
-            listainfo = novo;
-        else {
-            aux = listainfo;
-            while(aux->prox != NULL)
-                aux = aux->prox;
-            aux->prox = novo;
-        }
-    }
-
-    fclose(f);
-
-    return listainfo;
-}
-
-void preenchelista(pjogada p, int njogador, int ntabuleiro, int posicao, int njogadas) {
+void preenchelista(pjogada p, int njogador, int ntabuleiro, int posicao) {
     p->njogador = njogador;
     p->ntabuleiro = ntabuleiro;
     p->posicao = posicao;
-    p->njogadas = njogadas;
     p->prox = NULL;
 }
 
-pjogada insereinfo(pjogada p, int njogador, int ntabuleiro, int posicao, int njogadas) {
+pjogada insereinfo(pjogada p, int njogador, int ntabuleiro, int posicao) {
     pjogada novo, aux;
     novo = malloc(sizeof(lista));
 
@@ -75,7 +40,7 @@ pjogada insereinfo(pjogada p, int njogador, int ntabuleiro, int posicao, int njo
         return p;
     }
 
-    preenchelista(novo, njogador, ntabuleiro, posicao, njogadas);
+    preenchelista(novo, njogador, ntabuleiro, posicao);
 
     if(p == NULL)                   // caso a lista esteja vazia
         p = novo;
@@ -83,14 +48,14 @@ pjogada insereinfo(pjogada p, int njogador, int ntabuleiro, int posicao, int njo
         aux = p;
         while(aux->prox != NULL)    // enquanto a lista não chegar ao fim
             aux = aux->prox;        // avança
-        novo->ant = aux;            // o anterior elemento do "novo" é o elemento "aux"
-        aux->prox = novo;           // o próximo elemento do "aux" é o elemento "novo"
+        novo->ant = aux;
+        aux->prox = novo;
     }
     return p;
 }
 
 void listajogadas(pjogada p) {
-    int resposta, numero, diferenca;
+    int resposta, numero;
 
     do {
         printf("-> Ver lista de jogadas? (Sim: 1/Nao: 0)\n");
@@ -106,21 +71,15 @@ void listajogadas(pjogada p) {
             scanf("%d", &numero);
         } while (numero < 1 || numero > 10);
 
-        while(p->prox != NULL)              // vai até encontrar a última informação da lista
+        while(p->prox != NULL)      // vai até ao final das jogadas
             p = p->prox;
 
-        if(numero > p->njogadas) {
-            diferenca = numero - p->njogadas;
-            for(int i = 0; i < numero - diferenca; i++) {   // mostra a lista pela última informação adicionada
-                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
-                p = p->ant;
-            }
-        }
-        else if(numero <= p->njogadas) {
-            for(int i = 0; i < numero; i++) {   // mostra a lista pela última informação adicionada
-                printf("Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
-                p = p->ant;
-            }
+        for(int i=1; i<numero; i++) // recua o número de jogadas
+            p = p->ant;
+
+        while(p != NULL) {          // mostra a partir do número de jogdas que se quer ver
+            printf("Jogador %d # tabuleiro %d # posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
+            p = p->prox;
         }
     }
 }
@@ -149,13 +108,6 @@ int interrompejogo(pjogada p) {
     return 0;
 }
 
-void escreveinfo(pjogada p, FILE *f) {
-    while(p->prox != NULL)
-        p = p->prox;
-
-    fprintf(f, "%d", p->njogadas);
-}
-
 void gravalistatxt(pjogada p) {
     FILE *f;
     char nomeF[15];
@@ -167,8 +119,7 @@ void gravalistatxt(pjogada p) {
     if (f == NULL)
         printf("Erro de abertura do ficheiro.\n");
 
-    escreveinfo(p, f);
-
+    fprintf(f, "Lista de jogadas\n");
     while (p != NULL) {
         fprintf(f, "Jogador %d # Tabuleiro %d # Posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
         p = p->prox;
@@ -186,7 +137,7 @@ void gravalistabin(pjogada p, char* nomeF) {
         printf("Erro de abertura do ficheiro.\n");
 
     while (p != NULL) {
-        fprintf(f, "%d # %d # %d", p->njogador, p->ntabuleiro, p->posicao);
+        fprintf(f, "Jogador %d # Tabuleiro %d # Posicao %d\n", p->njogador, p->ntabuleiro, p->posicao);
         p = p->prox;
     }
 

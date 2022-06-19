@@ -53,7 +53,7 @@ void jogar_computador(jogo *r) {
             escreve_resultadoC(r, tab, r->vencedor);
         }
 
-        lista = insereinfo(lista, r->njogador, r->ntabuleiro_ant, r->posicao, r->njogadas);
+        lista = insereinfo(lista, r->njogador, r->ntabuleiro_ant, r->posicao);
 
         // verifica o tabuleiro final 3x3
         if(verifica_tabuleiro(tab, 0, 3, 0, 3) == 1) {
@@ -75,7 +75,7 @@ void jogar_computador(jogo *r) {
             r->estadojogo = JOGO_TERMINADO;
         }
 
-        if(r->estadojogo != JOGO_TERMINADO) {
+        if(r->njogador != 2 && r->estadojogo != JOGO_TERMINADO) {
             listajogadas(lista);
             r->interrupcao = interrompejogo(lista);
         }
@@ -133,6 +133,7 @@ void jogadaC(jogo *r, char **mat, int dim, int njogador) {
         case 9:
             escolhe_jogadaC(r, mat, dim, 6, 6, njogador);
             r->ntabuleiro_ant = 9;
+            break;
         default:
             break;
     }
@@ -155,6 +156,7 @@ void escolhe_jogadaC(jogo *r, char **mat, int dim, int x, int y, int njogador) {
         do {
             r->posicao = intUniformRnd(1, 9);
         } while(r->posicao < 1 || r->posicao > N || mat[(r->posicao-1)/dim + x][(r->posicao-1)%dim + y] != '_');
+        printf("Posicao: %d\n", r->posicao);
     }
 
     if(njogador == 1)
