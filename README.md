@@ -1,3 +1,1 @@
-# P
-
-Ultimate Tic-tac-toe
+# Ultimate Tic-tac-toe
