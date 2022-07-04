@@ -1,5 +1,3 @@
-// Rafaela Fonseca Santos nº 2017019717
-
 #include "listaligada.h"
 
 pjogada recuperarjogo(pjogada p) {
