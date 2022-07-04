@@ -1,5 +1,3 @@
-// Rafaela Fonseca Santos nº 2017019717
-
 #ifndef TP2022_JOGOC_H
 #define TP2022_JOGOC_H
 
