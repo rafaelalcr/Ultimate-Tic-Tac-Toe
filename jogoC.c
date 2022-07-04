@@ -1,5 +1,3 @@
-// Rafaela Fonseca Santos nº 2017019717
-
 #include "jogoC.h"
 
 void jogar_computador(jogo *r) {
