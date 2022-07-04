@@ -1,5 +1,3 @@
-// Rafaela Fonseca Santos nº 2017019717
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
