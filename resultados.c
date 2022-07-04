@@ -1,5 +1,3 @@
-// Rafaela Fonseca Santos nº 2017019717
-
 #include "resultados.h"
 
 void escreve_resultado(jogo *r, char **tab, int ganhou) {
